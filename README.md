@@ -43,7 +43,7 @@
    --file Dockerfile .
 
     docker ps -a  
-    docker rm  spring-native-aws-lambda                                                                                                                                
+    docker rm spring-native-aws-lambda                                                                                                                                
     docker run --name spring-native-aws-lambda spring-native-aws-lambda:0.0.1-SNAPSHOT                                                            
     docker cp spring-native-aws-lambda:app/target/ .
     ```

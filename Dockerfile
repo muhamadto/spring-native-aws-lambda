@@ -1,4 +1,4 @@
-FROM centos:7 AS spring-native-aws-lambda-builder
+FROM amazonlinux:2 AS spring-native-aws-lambda-builder
 
 ENV GRAALVM_VERSION=21.1.0
 ENV FILE_NAME=graalvm-ce-java11-linux-amd64-${GRAALVM_VERSION}.tar.gz
@@ -47,4 +47,3 @@ RUN rm -f ${FILE_NAME}
 RUN ${JAVA_HOME}/bin/gu install native-image
 
 RUN ./mvnw -ntp package -Pnative-image
-

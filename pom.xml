@@ -20,7 +20,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
-    <spring-cloud.version>2020.0.3</spring-cloud.version>
+    <spring-cloud.version>2020.0.2</spring-cloud.version>
     <aws-lambda-events.version>2.0.2</aws-lambda-events.version>
     <spring-native.version>0.10.0</spring-native.version>
     <native.build.args/>
@@ -67,11 +67,6 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.20</version>
-    </dependency>
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20190722</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

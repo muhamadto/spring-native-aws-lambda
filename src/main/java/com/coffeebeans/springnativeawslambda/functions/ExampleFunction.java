@@ -10,13 +10,14 @@ public class ExampleFunction implements Function<Request, Response> {
 
   @Override
   public Response apply(final Request request) {
-    log.info("Converting request into a response, duh!");
-    final Response response = this.createResponse(request);
-    log.info("Converted request into a response!");
-    return response;
-  }
+    log.info("Converting request into a response...");
 
-  private Response createResponse(final Request request) {
-    return Response.builder().name(request.getName()).saved(true).build();
+    final Response response = Response.builder()
+        .name(request.getName())
+        .saved(true)
+        .build();
+
+    log.info("Converted request into a response.");
+    return response;
   }
 }
