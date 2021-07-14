@@ -1,4 +1,6 @@
 Apache [spring-native-aws-lambda]
 Copyright 2021 Mohamed Hamtou
 
-This product includes software developed at Spring Initializr project https://start.spring.io/
+This product includes software developed by:
+* Spring Initializr project https://start.spring.io/, as well as
+* spring-projects-experimental - https://github.com/spring-projects-experimental/spring-native/tree/main/samples/cloud-function-aws
