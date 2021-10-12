@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.4.5</version>
+    <version>2.5.5</version>
     <relativePath/>
   </parent>
 
@@ -20,9 +20,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
-    <spring-cloud.version>2020.0.2</spring-cloud.version>
-    <aws-lambda-events.version>2.0.2</aws-lambda-events.version>
-    <spring-native.version>0.10.0</spring-native.version>
+    <spring-cloud.version>2020.0.3</spring-cloud.version>
+    <aws-lambda-events.version>3.10.0</aws-lambda-events.version>
+    <spring-native.version>0.10.4</spring-native.version>
     <native.build.args/>
   </properties>
 
@@ -55,7 +55,7 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-lambda-java-core</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
