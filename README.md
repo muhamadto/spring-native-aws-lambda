@@ -3,12 +3,13 @@
 ## Building and Running
 
 ### Locally
+
 1. Run the following commands
     ```shell
     ./mvnw -ntp clean package -Pnative-image
     target/spring-native-aws-lambda
     ```
-    The service starts in less than 200 ms
+   The service starts in less than 200 ms
    ```shell
    2021-05-28 11:05:29.221  INFO 15449 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : Started SpringNativeAwsLambdaApplication in 0.024 seconds (JVM running for 0.027)
    Started
@@ -32,6 +33,7 @@
        }
    ]
    ```
+
 ### AWS environment
 
 1. Run the following commands locally
@@ -51,3 +53,42 @@
 3. Set the handler to `exampleFunction`
 4. Test,
 5. Et voila! It runs with 500 ms for cold start.
+
+# Maven Repository
+
+This project uses experimental dependencies from Spring. 
+
+* One way to pul them is to add `repositories` and `pluginRepositories` elements to `pom.xml`. 
+
+* An alternative add them to `settings.xml` as following
+
+```xml
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <profiles>
+    <profile>
+      <id>spring-native-demo</id>
+      <repositories>
+        <repository>
+          <id>spring-releases</id>
+          <name>Spring Releases</name>
+          <url>https://repo.spring.io/release</url>
+        </repository>
+      </repositories>
+
+      <pluginRepositories>
+        <pluginRepository>
+          <id>spring-releases</id>
+          <name>Spring Releases</name>
+          <url>https://repo.spring.io/release</url>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>spring-native-demo</activeProfile>
+  </activeProfiles>
+</settings>
+```
