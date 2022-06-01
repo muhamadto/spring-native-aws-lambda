@@ -1,5 +1,11 @@
 # spring-native-aws-lambda
 
+## Versions
+1. Java Version: 11
+2. Spring Native Version: 0.10.5
+3. Spring Cloud Version: 2020.0.4
+4. AWS Lambda Events Version: 3.10.0
+
 ## Building and Running
 
 ### Locally
