@@ -12,8 +12,8 @@
 
 1. Run the following commands
     ```shell
-    ./mvnw -ntp clean package -Pnative-image
-    target/spring-native-aws-lambda
+    $ ./mvnw -ntp clean package -Pnative-image
+    $ target/spring-native-aws-lambda
     ```
    The service starts in less than 200 ms
    ```shell
@@ -24,7 +24,7 @@
    ```
 2. Make a call
     ```shell
-    curl --location --request POST 'http://localhost:8080/exampleFunction' \
+   $ curl --location --request POST 'http://localhost:8080/exampleFunction' \
    --header 'Content-Type: application/json' \
    --data-raw '{
         "name": "CoffeeBeans"
@@ -44,16 +44,16 @@
 
 1. Run the following commands locally
     ```shell
-    mkdir target
+    $ mkdir target
     
-    docker build --no-cache \
-   --tag spring-native-aws-lambda:0.0.1-SNAPSHOT \
-   --file Dockerfile .
+    $ docker build --no-cache \
+      --tag spring-native-aws-lambda:0.0.1-SNAPSHOT \
+      --file Dockerfile .
 
-    docker ps -a  
-    docker rm spring-native-aws-lambda                                                                                                                                
-    docker run --name spring-native-aws-lambda spring-native-aws-lambda:0.0.1-SNAPSHOT                                                            
-    docker cp spring-native-aws-lambda:app/target/ .
+    $ docker ps -a  
+    $ docker rm spring-native-aws-lambda                                                                                                                                
+    $ docker run --name spring-native-aws-lambda spring-native-aws-lambda:0.0.1-SNAPSHOT                                                            
+    $ docker cp spring-native-aws-lambda:app/target/ .
     ```
 2. Upload the *spring-native-aws-lambda-0.0.1-SNAPSHOT-native-zip.zip* file to aws lambda,
 3. Set the handler to `exampleFunction`
