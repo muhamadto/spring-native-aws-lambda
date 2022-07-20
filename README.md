@@ -12,7 +12,7 @@
 
 1. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean package -Pnative-image
+    $ ./mvnw -ntp clean package -Pnative-image --settings ./settings-spring-native.xml
     $ target/spring-native-aws-lambda
     ```
    The service starts in less than 200 ms

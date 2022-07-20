@@ -1,0 +1,27 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <profiles>
+    <profile>
+      <id>spring-native-demo</id>
+      <repositories>
+        <repository>
+          <id>spring-releases</id>
+          <name>Spring Releases</name>
+          <url>https://repo.spring.io/release</url>
+        </repository>
+      </repositories>
+
+      <pluginRepositories>
+        <pluginRepository>
+          <id>spring-releases</id>
+          <name>Spring Releases</name>
+          <url>https://repo.spring.io/release</url>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>spring-native-demo</activeProfile>
+  </activeProfiles>
+</settings>
