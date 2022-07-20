@@ -12,7 +12,7 @@
 
 1. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean package -Pnative-image
+    $ ./mvnw -ntp clean package -Pnative-image --settings ./settings-spring-native.xml
     $ target/spring-native-aws-lambda
     ```
    The service starts in less than 200 ms
@@ -66,7 +66,9 @@ This project uses experimental dependencies from Spring.
 
 * One way to pul them is to add `repositories` and `pluginRepositories` elements to `pom.xml`. 
 
-* An alternative add them to `settings.xml` as following
+* An alternative is to use the `./settings-spring-native.xml` file in this project.
+
+* Another alternative add them to `~/.m2/settings.xml` as following
 
 ```xml
 
