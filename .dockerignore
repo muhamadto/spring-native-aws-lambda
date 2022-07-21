@@ -1,0 +1,3 @@
+**
+!docker/
+!spring-native-aws-lambda-template/target/*.jar
