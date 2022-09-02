@@ -1,8 +1,8 @@
 FROM amazonlinux:2 AS spring-native-aws-lambda-builder
 
-ENV GRAALVM_VERSION=21.1.0
-ENV FILE_NAME=graalvm-ce-java11-linux-amd64-${GRAALVM_VERSION}.tar.gz
-ENV JAVA_HOME=./graalvm-ce-java11-${GRAALVM_VERSION}
+ENV GRAALVM_VERSION=22.2.0
+ENV FILE_NAME=graalvm-ce-java17-linux-amd64-${GRAALVM_VERSION}.tar.gz
+ENV JAVA_HOME=./graalvm-ce-java17-${GRAALVM_VERSION}
 
 RUN yum -y update
 RUN yum install -y wget tar gzip bzip2-devel ed gcc gcc-c++ gcc-gfortran \
@@ -21,4 +21,4 @@ RUN tar zxvf ${FILE_NAME}
 RUN rm -f ${FILE_NAME}
 RUN ${JAVA_HOME}/bin/gu install native-image
 
-RUN ./mvnw -ntp package -Pnative-image
+RUN ./mvnw -ntp package -Pnative

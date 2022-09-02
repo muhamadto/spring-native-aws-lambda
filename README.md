@@ -1,10 +1,10 @@
 # spring-native-aws-lambda
 
 ## Versions
-1. Java Version: 11
-2. Spring Native Version: 0.10.5
-3. Spring Cloud Version: 2020.0.4
-4. AWS Lambda Events Version: 3.10.0
+1. Java Version: 17
+2. Spring Native Version: 0.12.1
+3. Spring Cloud Version: 2021.0.3
+4. AWS Lambda Events Version: 3.11.0
 
 ## Building and Running
 
@@ -12,7 +12,7 @@
 
 1. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean package -Pnative-image --settings ./settings-spring-native.xml
+    $ ./mvnw -ntp clean package -Pnative --settings ./settings-spring-native.xml
     $ target/spring-native-aws-lambda
     ```
    The service starts in less than 200 ms
@@ -66,9 +66,7 @@ This project uses experimental dependencies from Spring.
 
 * One way to pul them is to add `repositories` and `pluginRepositories` elements to `pom.xml`. 
 
-* An alternative is to use the `./settings-spring-native.xml` file in this project.
-
-* Another alternative add them to `~/.m2/settings.xml` as following
+* An alternative add them to `settings.xml` as following
 
 ```xml
 
