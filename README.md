@@ -1,6 +1,8 @@
 # spring-native-aws-lambda
 
-## Versions
+![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=Your_GitHub_Username&show_icons=true)
+
+## Important Dependencies Versions
 1. Java Version: 17
 2. Spring Native Version: 0.12.1
 3. Spring Cloud Version: 2021.0.3
