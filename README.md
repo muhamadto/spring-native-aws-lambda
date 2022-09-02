@@ -1,6 +1,4 @@
-# spring-native-aws-lambda
-
-![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=Your_GitHub_Username&show_icons=true)
+# spring-native-aws-lambda [![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml)
 
 ## Important Dependencies Versions
 1. Java Version: 17
