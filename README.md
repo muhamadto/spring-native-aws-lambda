@@ -1,4 +1,5 @@
-# spring-native-aws-lambda [![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml)
+# spring-native-aws-lambda [![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml) [![contributors](./contributors.svg)](https://github.com/muhamadto/spring-native-aws-lambda/graphs/contributors)
+
 
 ## Important Dependencies Versions
 1. Java Version: 17
