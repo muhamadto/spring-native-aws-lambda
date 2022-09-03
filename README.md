@@ -1,10 +1,11 @@
 # spring-native-aws-lambda
 
-## Versions
-1. Java Version: 11
-2. Spring Native Version: 0.10.5
-3. Spring Cloud Version: 2020.0.4
-4. AWS Lambda Events Version: 3.10.0
+[![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml) [![contributors](./badges/contributors.svg)](https://github.com/muhamadto/spring-native-aws-lambda/graphs/contributors)
+[![jdk](./badges/jdk.svg)](https://jdk.java.net/17/)
+[![graalvm](./badges/graalvm.svg)](https://www.graalvm.org/release-notes/22_2/)
+[![spring-native](./badges/spring-native.svg)](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/)
+[![spring-cloud](./badges/spring-cloud.svg)](https://spring.io/projects/spring-cloud)
+[![aws-lambda-events](./badges/aws-lambda-events.svg)](https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-events)
 
 ## Building and Running
 
@@ -12,7 +13,7 @@
 
 1. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean package -Pnative-image --settings ./settings-spring-native.xml
+    $ ./mvnw -ntp clean package -Pnative --settings ./settings-spring-native.xml
     $ target/spring-native-aws-lambda
     ```
    The service starts in less than 200 ms

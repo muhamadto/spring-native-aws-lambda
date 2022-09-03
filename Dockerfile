@@ -1,6 +1,6 @@
 FROM amazonlinux:2 AS spring-native-aws-lambda-builder
 
-ENV GRAALVM_VERSION=22.1.0
+ENV GRAALVM_VERSION=22.2.0
 ENV FILE_NAME=graalvm-ce-java17-linux-amd64-${GRAALVM_VERSION}.tar.gz
 ENV JAVA_HOME=./graalvm-ce-java17-${GRAALVM_VERSION}
 

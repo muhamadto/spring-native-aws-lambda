@@ -7,7 +7,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.1</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <groupId>com.coffeebeans</groupId>
@@ -23,7 +23,7 @@
     <spring-cloud.version>2021.0.3</spring-cloud.version>
     <aws-lambda-events.version>3.11.0</aws-lambda-events.version>
     <spring-native.version>0.12.1</spring-native.version>
-    <repackage.classifier/>
+    <repackage.classifier />
     <native.build.args>
       --enable-url-protocols=http
       -H:+AddAllCharsets
@@ -160,7 +160,7 @@
 
   <profiles>
     <profile>
-      <id>native-image</id>
+      <id>native</id>
       <properties>
         <repackage.classifier>exec</repackage.classifier>
         <native-buildtools.version>0.9.13</native-buildtools.version>
@@ -218,5 +218,3 @@
     </profile>
   </profiles>
 </project>
-
-
