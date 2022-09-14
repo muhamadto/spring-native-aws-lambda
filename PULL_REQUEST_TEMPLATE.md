@@ -10,4 +10,3 @@
 - [ ] Describe what you did in the pull request description
 - [ ] Add Unit and Integration Tests - at least 80% unit tests for new code.
 - [ ] Added or updated documentation
-- [ ] All your commits have a `Signed-off-by` line in the message. ([more info](https://github.com/muhamadto/spring-native-aws-lambda/blob/java17/CODE_OF_CONDUCT.md#developer-certificate-of-origin))
