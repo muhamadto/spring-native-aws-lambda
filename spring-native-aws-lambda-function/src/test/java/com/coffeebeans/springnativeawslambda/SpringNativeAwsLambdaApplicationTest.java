@@ -19,7 +19,7 @@ class SpringNativeAwsLambdaApplicationTest {
   private AWSCustomRuntime aws;
 
   @Test
-  void testWithCustomRuntime() throws Exception {
+  void testWithCustomRuntime() {
     assertThat(aws.exchange("{\"name\": \"CoffeeBeans\"}").getPayload()).isEqualTo("{\"name\":\"CoffeeBeans\",\"saved\":true}");
   }
 

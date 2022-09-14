@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <profiles>
     <profile>
-      <id>spring-native-demo</id>
+      <id>spring</id>
       <repositories>
         <repository>
           <id>spring-releases</id>
@@ -22,6 +22,6 @@
     </profile>
   </profiles>
   <activeProfiles>
-    <activeProfile>spring-native-demo</activeProfile>
+    <activeProfile>spring</activeProfile>
   </activeProfiles>
 </settings>

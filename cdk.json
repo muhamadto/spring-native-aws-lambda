@@ -1,0 +1,3 @@
+{
+  "app": "mvn exec:java -pl spring-native-aws-lambda-cdk -Dexec.mainClass=com.coffeebeans.cdk.Application"
+}

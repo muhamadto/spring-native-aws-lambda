@@ -13,7 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-name: "CodeQL"
+name: "Build"
 
 on:
   push:
@@ -23,17 +23,10 @@ on:
     types: [ opened, synchronize, reopened ]
 
 jobs:
-  analyze:
-    name: Analyze
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
     strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'java' ]
+      fail-fast: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -43,30 +36,20 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
           cache: 'maven'
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+      - name: Cache Sonar packages
+        uses: actions/cache@v3
         with:
-          languages: ${{ matrix.language }}
-      - name: maven-settings-xml-action
-        uses: whelk-io/maven-settings-xml-action@v18
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v3
         with:
-          repositories: >
-            [
-              {
-                "id": "spring-releases",
-                "name": "Spring Releases",
-                "url": "https://repo.spring.io/release"
-              }
-            ]
-          plugin_repositories: >
-            [
-              {
-                "id": "spring-releases",
-                "name": "Spring Releases",
-                "url": "https://repo.spring.io/release"
-              }
-            ]
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build with Maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn --no-transfer-progress clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=muhamadto_spring-native-aws-lambda --settings settings-spring.xml
