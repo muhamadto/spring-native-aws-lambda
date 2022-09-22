@@ -13,7 +13,7 @@
 
 1. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean package -Pnative --settings ./settings-spring-native.xml
+    $ ./mvnw -ntp clean package -Pnative --settings ./settings-spring.xml
     $ target/spring-native-aws-lambda
     ```
    The service starts in less than 200 ms
@@ -42,6 +42,8 @@
    ```
 
 ### AWS environment
+
+#### Building AWS Lambda Function from Zip
 
 1. Run the following commands locally
     ```shell

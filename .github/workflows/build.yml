@@ -1,0 +1,7 @@
+name: "Build"
+
+on:
+  push:
+    branches: [ "java17" ]
+  pull_request:
+    branches: [ "java17" ]

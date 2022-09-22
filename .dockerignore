@@ -1,3 +1,11 @@
-**
-!docker/
-!spring-native-aws-lambda-template/target/*.jar
+.github/
+.idea/
+badges/
+.gitignore
+CODE_OF_CONDUCT.md
+HELP.md
+LICENSE
+NOTICE
+PULL_REQUEST_TEMPLATE.md
+README.md
+spring-native-aws-lambda.iml

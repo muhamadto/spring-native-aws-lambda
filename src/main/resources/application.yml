@@ -1,7 +1,7 @@
 spring:
   main:
     banner-mode: off
-    web-application-type: none # change to 'servlet' for development
+    web-application-type: none # change to 'reactive' for development
   cloud:
     function:
       preferred-json-mapper: jackson
