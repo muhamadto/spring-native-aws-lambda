@@ -46,6 +46,25 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v18
+        with:
+          repositories: >
+            [
+              {
+                "id": "spring-releases",
+                "name": "Spring Releases",
+                "url": "https://repo.spring.io/release"
+              }
+            ]
+          plugin_repositories: >
+            [
+              {
+                "id": "spring-releases",
+                "name": "Spring Releases",
+                "url": "https://repo.spring.io/release"
+              }
+            ]
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
       - name: Perform CodeQL Analysis
