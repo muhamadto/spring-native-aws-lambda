@@ -2,4 +2,4 @@ FROM ghcr.io/muhamadto/spring-native-aws-lambda-builder-java17:latest AS spring-
 
 COPY . /opt/build
 
-RUN ./mvnw -ntp -Pnative -Dmaven.test.skip=true package
+RUN ./mvnw -ntp -Pnative package -DskipTests

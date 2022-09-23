@@ -1,6 +1,8 @@
 .github/
 .idea/
 badges/
+target/
+```
 .gitignore
 CODE_OF_CONDUCT.md
 HELP.md

@@ -1,11 +1,18 @@
 # spring-native-aws-lambda
 
-[![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml) [![contributors](./badges/contributors.svg)](https://github.com/muhamadto/spring-native-aws-lambda/graphs/contributors)
+[![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml)
+[![Build](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml)
 [![jdk](./badges/jdk.svg)](https://jdk.java.net/17/)
 [![graalvm](./badges/graalvm.svg)](https://www.graalvm.org/release-notes/22_2/)
 [![spring-native](./badges/spring-native.svg)](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/)
 [![spring-cloud](./badges/spring-cloud.svg)](https://spring.io/projects/spring-cloud)
-[![aws-lambda-events](./badges/aws-lambda-events.svg)](https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-events)
+
+## Test
+
+```bash
+$ sdk use java 22.2.r17-grl
+$ mvn clean verify -U --settings ./settings-spring.xml
+```
 
 ## Building and Running
 
@@ -13,7 +20,7 @@
 
 1. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean package -Pnative --settings ./settings-spring.xml
+    $ ./mvnw -ntp clean package -U -Pnative --settings ./settings-spring.xml
     $ target/spring-native-aws-lambda
     ```
    The service starts in less than 200 ms
@@ -56,7 +63,7 @@
     $ docker ps -a  
     $ docker rm spring-native-aws-lambda                                                                                                                                
     $ docker run --name spring-native-aws-lambda spring-native-aws-lambda:0.0.1-SNAPSHOT                                                            
-    $ docker cp spring-native-aws-lambda:app/target/ .
+    $ docker cp spring-native-aws-lambda:/opt/build/target/ .
     ```
 2. Upload the *spring-native-aws-lambda-0.0.1-SNAPSHOT-native-zip.zip* file to aws lambda,
 3. Set the handler to `exampleFunction`

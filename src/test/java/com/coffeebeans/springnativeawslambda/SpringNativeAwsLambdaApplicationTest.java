@@ -10,7 +10,7 @@ import org.springframework.cloud.function.adapter.test.aws.AWSCustomRuntime;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"spring.main.web-application-type=reactive"})
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"spring.main.web-application-type=servlet"})
 @ContextConfiguration(classes = {AWSCustomRuntime.class, SpringNativeAwsLambdaApplication.class})
 @TestPropertySource(properties = {"_HANDLER=exampleFunction"})
 class SpringNativeAwsLambdaApplicationTest {
