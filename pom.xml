@@ -23,6 +23,11 @@
     <spring-cloud.version>2021.0.3</spring-cloud.version>
     <aws-lambda-events.version>3.11.0</aws-lambda-events.version>
     <spring-native.version>0.12.1</spring-native.version>
+        
+    <sonar.organization>spring-native-aws-lambda</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+
     <repackage.classifier />
     <native.build.args>
       --enable-url-protocols=http
