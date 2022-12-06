@@ -29,7 +29,7 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
   private static final String SNS_FAILURE_TOPIC_ID = "spring-native-aws-lambda-function-failure-topic";
   private static final String SQS_SUCCESS_QUEUE_ID = "spring-native-aws-lambda-function-success-queue";
   private static final String SQS_FAILURE_QUEUE_ID = "spring-native-aws-lambda-function-failure-queue";
-  private static final String LAMBDA_HANDLER = "com.coffeebeans.springnativeawslambda.functions.ExampleFunction";
+  private static final String LAMBDA_HANDLER = "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest";
   private static final AssetCode ASSET_CODE = fromAsset(LAMBDA_FUNCTION_ID + "/target/spring-native-aws-lambda-function-native-zip.zip");
   private static final String ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE = "SPRING_PROFILES_ACTIVE";
 
