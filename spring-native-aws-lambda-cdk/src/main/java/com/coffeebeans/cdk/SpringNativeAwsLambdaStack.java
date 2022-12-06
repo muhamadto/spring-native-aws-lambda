@@ -58,6 +58,6 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
     final Function function =
         createFunction(LAMBDA_FUNCTION_ID, LAMBDA_HANDLER, ASSET_CODE, null, successTopic, failureTopic, role, tags, environment);
 
-    createLambdaRestApi(stage, REST_API_ID, "name", "POST", function, false, tags);
+    createLambdaRestApi(stage, REST_API_ID, function, true, tags);
   }
 }

@@ -7,12 +7,10 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.lang3.StringUtils;
 import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
-import software.amazon.awscdk.services.apigateway.Resource;
 import software.amazon.awscdk.services.apigateway.StageOptions;
 import software.amazon.awscdk.services.ec2.IVpc;
 import software.amazon.awscdk.services.iam.Role;
@@ -186,8 +184,6 @@ public class ApiBaseStack extends Stack {
   protected LambdaRestApi createLambdaRestApi(
       @NotBlank final String stageName,
       @NotBlank final String restApiId,
-      @NotNull final String resourceName,
-      @NotNull final String httpMethod,
       @NotNull final Function function,
       final boolean proxy,
       @NotEmpty final Map<String, String> tags) {
@@ -200,12 +196,7 @@ public class ApiBaseStack extends Stack {
         .deployOptions(StageOptions.builder().stageName(stageName).build())
         .build();
 
-    // get root resource to add methods
-    final Resource resource = lambdaRestApi.getRoot().addResource(resourceName);
-    resource.addMethod(StringUtils.toRootUpperCase(httpMethod));
-
     addTags(lambdaRestApi, tags);
-    addTags(resource, tags);
 
     return lambdaRestApi;
   }
