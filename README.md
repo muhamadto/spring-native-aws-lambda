@@ -28,10 +28,16 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
     ```
    The service starts in less than 100 ms
    ```shell
-   2022-12-06 23:54:56.539  INFO 19823 --- [           main] o.s.nativex.NativeListener               : AOT mode enabled
-   2022-12-06 23:54:56.541  INFO 19823 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : Starting SpringNativeAwsLambdaApplication using Java 17.0.4
-   2022-12-06 23:54:56.542  INFO 19823 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : No active profile set, falling back to 1 default profile: "default"
-   2022-12-06 23:54:56.562  INFO 19823 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : Started SpringNativeAwsLambdaApplication in 0.068 seconds (JVM running for 0.071)
+   2022-12-07 02:56:51.706  INFO 42417 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : Starting SpringNativeAwsLambdaApplication using Java 17.0.4
+   2022-12-07 02:56:51.706  INFO 42417 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : No active profile set, falling back to 1 default profile: "default"
+   2022-12-07 02:56:51.723  INFO 42417 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+   2022-12-07 02:56:51.724  INFO 42417 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+   2022-12-07 02:56:51.724  INFO 42417 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+   2022-12-07 02:56:51.733  INFO 42417 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+   2022-12-07 02:56:51.733  INFO 42417 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 27 ms
+   2022-12-07 02:56:51.761  INFO 42417 --- [           main] o.s.c.f.web.mvc.FunctionHandlerMapping   : FunctionCatalog: org.springframework.cloud.function.context.catalog.BeanFactoryAwareFunctionRegistry@7efd575
+   2022-12-07 02:56:51.763  INFO 42417 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+   2022-12-07 02:56:51.763  INFO 42417 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : Started SpringNativeAwsLambdaApplication in 0.084 seconds (JVM running for 0.087)
    ```
 3. Make a call
     ```shell
