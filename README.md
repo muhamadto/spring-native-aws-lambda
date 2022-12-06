@@ -192,7 +192,7 @@ and the following trust relationship
          "Effect": "Allow",
          "Action": "s3:GetObject",
          "Resource": [
-            "arn:aws:s3:::{qualifier}-cdk-bucket/",
+            "arn:aws:s3:::{qualifier}-cdk-bucket",
             "arn:aws:s3:::{qualifier}-cdk-bucket/*"
          ]
       },
@@ -216,10 +216,12 @@ and the following trust relationship
          "Sid": "SNSPermissions",
          "Effect": "Allow",
          "Action": [
-            "SNS:GetTopicAttributes",
             "SNS:CreateTopic",
             "SNS:DeleteTopic",
-            "SNS:Subscribe"
+            "SNS:Subscribe",
+            "SNS:GetTopicAttributes",
+            "SNS:ListSubscriptionsByTopic",
+            "SNS:Unsubscribe"
          ],
          "Resource": [
             "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-topic.fifo",
@@ -234,7 +236,8 @@ and the following trust relationship
             "sqs:CreateQueue",
             "sqs:DeleteQueue",
             "sqs:GetQueueUrl",
-            "sqs:SetQueueAttributes"
+            "sqs:SetQueueAttributes",
+            "sqs:ListQueues"
          ],
          "Resource": [
             "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-queue-dlq",
@@ -255,7 +258,10 @@ and the following trust relationship
             "lambda:AddPermission",
             "lambda:RemovePermission",
             "lambda:PutFunctionEventInvokeConfig",
-            "lambda:DeleteFunctionEventInvokeConfig"
+            "lambda:DeleteFunctionEventInvokeConfig",
+            "lambda:UpdateFunctionCode",
+            "lambda:ListTags",
+            "lambda:UpdateFunctionConfiguration"
          ],
          "Resource": [
             "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-lambda-function",
@@ -288,6 +294,7 @@ and the following trust relationship
          ],
          "Resource": [
             "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-springnativeawslambdafun-*",
+            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-springnativeawslambdares-4FVJBBHF9EL2",
             "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-function-rest-api/CloudWatchRole"
          ]
       },
