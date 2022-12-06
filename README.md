@@ -20,7 +20,8 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
 
 ### Locally
 
-1. Run the following commands
+1. Set `spring.main.web-application-type` to `servlet` for local development
+2. Run the following commands
     ```shell
     $ ./mvnw -ntp clean package -U -Pnative --settings ./settings-spring.xml
     $ ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
@@ -32,7 +33,7 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
    2022-12-06 23:54:56.542  INFO 19823 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : No active profile set, falling back to 1 default profile: "default"
    2022-12-06 23:54:56.562  INFO 19823 --- [           main] c.c.s.SpringNativeAwsLambdaApplication   : Started SpringNativeAwsLambdaApplication in 0.068 seconds (JVM running for 0.071)
    ```
-2. Make a call
+3. Make a call
     ```shell
    $ curl --location --request POST 'http://localhost:8080/exampleFunction' \
    --header 'Content-Type: application/json' \
