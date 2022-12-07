@@ -34,7 +34,7 @@ public class ExampleFunction implements Function<APIGatewayProxyRequestEvent, AP
   @Override
   @SneakyThrows(value = JsonProcessingException.class)
   public APIGatewayProxyResponseEvent apply(final APIGatewayProxyRequestEvent proxyRequestEvent) {
-    log.info("Converting request into a response...");
+    log.info("Converting request into a response...'");
 
     final Request request = objectMapper.readValue(proxyRequestEvent.getBody(), Request.class);
 
