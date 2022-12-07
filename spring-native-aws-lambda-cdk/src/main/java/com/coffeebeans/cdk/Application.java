@@ -53,9 +53,9 @@ public final class Application {
         .build();
   }
 
-  public static void createStack(final App app, final String env, final String stackName) {
+  static SpringNativeAwsLambdaStack createStack(final App app, final String env, final String stackName) {
     final Map<String, String> devTags = createTags(env);
     final StackProps stackProps = getStackProps(stackName, devTags);
-    new SpringNativeAwsLambdaStack(app, stackName, stackProps);
+    return new SpringNativeAwsLambdaStack(app, stackName, stackProps);
   }
 }

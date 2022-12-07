@@ -2,6 +2,8 @@
 
 [![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml)
 [![Build](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml)
+[![Deploy to AWS](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/release.yml/badge.svg?branch=feature-java17-cdk)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/release.yml)
+---
 [![jdk](./badges/jdk.svg)](https://jdk.java.net/17/)
 [![graalvm](./badges/graalvm.svg)](https://www.graalvm.org/release-notes/22_2/)
 [![spring-native](./badges/spring-native.svg)](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/)
@@ -320,7 +322,8 @@ cdk bootstrap aws://{aws-account-number}/{aws-region} --profile cdk \
   --tags COST_CENTRE=coffeebeans-core
 ```
 
-**NOTE**: notice that the policy passed in `--cloudformation-execution-policies` is the one created
+**NOTE**: notice that the policy passed to `--cloudformation-execution-policies` option is the one
+we created
 in step 4
 
 **NOTE 2**: I added queues to receive messages from the functions `onSuccess` and `onFailure`

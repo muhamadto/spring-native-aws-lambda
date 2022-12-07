@@ -1,25 +1,52 @@
 package com.coffeebeans.springnativeawslambda.functions;
 
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.coffeebeans.springnativeawslambda.model.Request;
 import com.coffeebeans.springnativeawslambda.model.Response;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.function.Function;
+import javax.validation.constraints.NotNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 @Component
 @Slf4j
-public class ExampleFunction implements Function<Request, Response> {
+@Validated
+public class ExampleFunction implements Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-	@Override
-	public Response apply(final Request request) {
-		log.info("Converting request into a response...");
+  private final ObjectMapper objectMapper;
 
-		final Response response = Response.builder()
-				.name(request.getName())
-				.saved(true)
-				.build();
+  public ExampleFunction(@NotNull final ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
 
-		log.info("Converted request into a response.");
-		return response;
-	}
+  /**
+   * Lambda function handler that takes a request and returns a response.
+   *
+   * @param proxyRequestEvent the function argument
+   * @return {@link APIGatewayProxyResponseEvent}
+   * @throws JsonProcessingException
+   */
+  @Override
+  @SneakyThrows(value = JsonProcessingException.class)
+  public APIGatewayProxyResponseEvent apply(final APIGatewayProxyRequestEvent proxyRequestEvent) {
+    log.info("Converting request into a response...");
+
+    final Request request = objectMapper.readValue(proxyRequestEvent.getBody(), Request.class);
+
+    final Response response = Response.builder()
+        .name(request.getName())
+        .saved(true)
+        .build();
+
+    log.info("Converted request into a response.");
+
+    return new APIGatewayProxyResponseEvent()
+        .withStatusCode(200)
+        .withBody(objectMapper.writeValueAsString(response));
+  }
 }

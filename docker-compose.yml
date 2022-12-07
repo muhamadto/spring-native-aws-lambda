@@ -1,0 +1,77 @@
+version: '3.9'
+services:
+  spring-native-aws-lambda-function:
+    image: ghcr.io/muhamadto/spring-native-amazonlinux2-base-java17:latest
+    ports:
+      - 8080:8080
+    networks:
+      default:
+        aliases:
+          - spring-native-aws-lambda-function
+    volumes:
+      - ./:/opt/build
+      - ${M2_REPO}:/home/ci/.m2
+    working_dir: /opt/build
+    environment:
+      SPRING_MAIN_WEBAPPLICATIONTYPE: servlet
+      SPRING_PROFILES_ACTIVE: compose
+      AWS_HOST: localstack
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_DEFAULT_REGION: ap-southeast-2
+      AWS_REGION: ap-southeast-2
+      MAVEN_OPTS: |
+        -DskipTests=true
+        -Dcheckstyle.skip=true
+        -Djacoco.skip=true
+        -Dsonar.skip=true
+        -Dskip.it=true
+        -Dmaven.javadoc.skip=true
+        -Dmaven.source.skip=true
+        -Dspring-boot.run.profiles=compose
+    entrypoint:
+      - bash
+      - -c
+    command: >
+      "
+      ./mvnw -pl spring-native-aws-lambda-function clean package -Pnative -DskipTests --settings ./settings-spring.xml  &&
+      spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
+      "
+    depends_on:
+      - localstack
+
+  spring-native-aws-lambda-function-infrastructure:
+    image: ghcr.io/muhamadto/spring-native-amazonlinux2-base-java17:latest
+    environment:
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_DEFAULT_REGION: ap-southeast-2
+    entrypoint:
+      - bash
+      - -c
+
+
+  localstack:
+    image: localstack/localstack:latest
+    logging:
+      driver: none
+    ports:
+      - 4576:4576
+      - ${EDGE_PORT-4566}:${EDGE_PORT-4566}
+      - ${PORT_WEB_UI-8088}:${PORT_WEB_UI-8088}
+    environment:
+      AWS_DEFAULT_REGION: ap-southeast-2
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      SERVICES: sns,sqs,lambda, apigateway
+      DEBUG: 1
+      LS_LOG: debug # seems to give more logs than DEBUG: 1
+      DATA_DIR: ${DATA_DIR- }
+      PORT_WEB_UI: ${PORT_WEB_UI-8088}
+      EDGE_PORT: ${EDGE_PORT-4566}
+      DOCKER_HOST: unix:///var/run/docker.sock
+      HOSTNAME_EXTERNAL: localstack
+    volumes:
+      # If you have access issues on Mac, consider using an alias docker-compose="TMPDIR=/private$TMPDIR /usr/local/bin/docker-compose"
+      - /${TMPDIR:-/tmp/localstack}:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
