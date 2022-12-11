@@ -3,13 +3,22 @@
 [![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml)
 [![Build](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml)
 [![Deploy to AWS](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/release.yml/badge.svg?branch=feature-java17-cdk)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/release.yml)
----
-[![jdk](./badges/jdk.svg)](https://jdk.java.net/17/)
-[![graalvm](./badges/graalvm.svg)](https://www.graalvm.org/release-notes/22_2/)
-[![spring-native](./badges/spring-native.svg)](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/)
-[![spring-cloud](./badges/spring-cloud.svg)](https://spring.io/projects/spring-cloud)
-[![spring-boot](./badges/spring-boot.svg)](https://spring.io/projects/spring-boot)
-[![aws-cdk](./badges/aws-cdk.svg)](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
+
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=alert_status)](https://sonarcloud.io/dashboard?id=muhamadto_spring-native-aws-lambda)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=bugs)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
+[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=muhamadto_spring-native-aws-lambda)
+
+| Component     | Version  |
+|---------------|----------|
+| JDK           | 17       |
+| GraalVM       | 22.2     |
+| Spring Native | 0.12.1   |
+| Spring Cloud  | 2021.0.3 |
+| Spring Boot   | 2.7.5    |
+| Spring Boot   | 2.40.0   |
 
 ## Test
 
@@ -352,17 +361,18 @@ Now that the setup is done you can deploy to AWS.
 3. Et voila! It runs with 500 ms for cold start.
 
 ## Maven Repository
-This project uses experimental dependencies from Spring. 
 
-* One way to pul them is to add `repositories` and `pluginRepositories` elements to `pom.xml`. 
+This project uses experimental dependencies from Spring.
+
+* One way to pul them is to add `repositories` and `pluginRepositories` elements to `pom.xml`.
 
 * An alternative add them to `settings.xml` as following
 
 ```xml
 
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <profiles>
     <profile>
       <id>spring-native-demo</id>

@@ -1,5 +1,6 @@
 package com.coffeebeans.cdk;
 
+import static com.coffeebeans.cdk.SpringNativeAwsLambdaStack.LAMBDA_FUNCTION_ID;
 import static com.coffeebeans.cdk.TagUtils.TAG_KEY_COST_CENTRE;
 import static com.coffeebeans.cdk.TagUtils.TAG_KEY_ENV;
 import static com.coffeebeans.cdk.TagUtils.TAG_VALUE_COST_CENTRE;
@@ -24,6 +25,7 @@ public final class Application {
       .qualifier("cbcore")
       .fileAssetsBucketName("cbcore-cdk-bucket")
       .build();
+  private static final String LAMBDA_CODE_PATH = LAMBDA_FUNCTION_ID + "/target/spring-native-aws-lambda-function-native-zip.zip";
 
   public static void main(final String... args) {
     final App app = new App();
@@ -31,8 +33,8 @@ public final class Application {
     final String env = System.getenv(TAG_KEY_ENV);
     checkNotNull(env, "'env' environment variable is required");
     switch (env) {
-      case ENVIRONMENT_NAME_DEV -> createStack(app, ENVIRONMENT_NAME_DEV, DEV_STACK_NAME);
-      case ENVIRONMENT_NAME_PRD -> createStack(app, ENVIRONMENT_NAME_PRD, PRD_STACK_NAME);
+      case ENVIRONMENT_NAME_DEV -> createStack(app, ENVIRONMENT_NAME_DEV, DEV_STACK_NAME, LAMBDA_CODE_PATH);
+      case ENVIRONMENT_NAME_PRD -> createStack(app, ENVIRONMENT_NAME_PRD, PRD_STACK_NAME, LAMBDA_CODE_PATH);
       default -> throw new IllegalArgumentException("Environment variable " + TAG_KEY_ENV + " is not set to a valid value. Set it to '[dev|prd]'");
     }
 
@@ -53,9 +55,9 @@ public final class Application {
         .build();
   }
 
-  static SpringNativeAwsLambdaStack createStack(final App app, final String env, final String stackName) {
+  static SpringNativeAwsLambdaStack createStack(final App app, final String env, final String stackName, final String lambdaCodePath) {
     final Map<String, String> devTags = createTags(env);
     final StackProps stackProps = getStackProps(stackName, devTags);
-    return new SpringNativeAwsLambdaStack(app, stackName, stackProps);
+    return new SpringNativeAwsLambdaStack(app, stackName, stackProps, lambdaCodePath);
   }
 }

@@ -3,6 +3,7 @@ package com.coffeebeans.cdk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,9 @@ class LambdaTest extends TemplateSupport {
   private static final String FUNCTION_RESOURCE_TYPE = "AWS::Lambda::Function";
   private static final String FUNCTION_ROLE_RESOURCE_TYPE = "AWS::IAM::Role";
   private static final String FUNCTION_POLICY_RESOURCE_TYPE = "AWS::IAM::Policy";
-
   @Test
   void should_have_lambda_function() {
+    File tempDir = new File("/tmp/spring-native-aws-lambda-function-native-zip.zip");
     final Map<String, Object> expected = Map.of(
         "Type", "AWS::Lambda::Function",
         "DependsOn",

@@ -23,17 +23,20 @@ import software.constructs.Construct;
 
 public class SpringNativeAwsLambdaStack extends ApiBaseStack {
 
-  private static final String LAMBDA_FUNCTION_ID = "spring-native-aws-lambda-function";
+  static final String LAMBDA_FUNCTION_ID = "spring-native-aws-lambda-function";
   private static final String REST_API_ID = "spring-native-aws-lambda-function-rest-api";
   private static final String SNS_SUCCESS_TOPIC_ID = "spring-native-aws-lambda-function-success-topic";
   private static final String SNS_FAILURE_TOPIC_ID = "spring-native-aws-lambda-function-failure-topic";
   private static final String SQS_SUCCESS_QUEUE_ID = "spring-native-aws-lambda-function-success-queue";
   private static final String SQS_FAILURE_QUEUE_ID = "spring-native-aws-lambda-function-failure-queue";
   private static final String LAMBDA_HANDLER = "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest";
-  private static final AssetCode ASSET_CODE = fromAsset(LAMBDA_FUNCTION_ID + "/target/spring-native-aws-lambda-function-native-zip.zip");
   private static final String ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE = "SPRING_PROFILES_ACTIVE";
+  private final AssetCode assetCode;
 
-  public SpringNativeAwsLambdaStack(@NotNull final Construct scope, @NotBlank final String id, @NotNull final StackProps props) {
+  public SpringNativeAwsLambdaStack(@NotNull final Construct scope,
+      @NotBlank final String id,
+      @NotNull final StackProps props,
+      @NotBlank final String lambdaCodePath) {
     super(scope, id, props);
 
     final Map<String, String> tags = props.getTags();
@@ -55,8 +58,10 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
         .managedPolicies(List.of(ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaBasicExecutionRole")))
         .build();
 
+    assetCode = fromAsset(lambdaCodePath);
+
     final Function function =
-        createFunction(LAMBDA_FUNCTION_ID, LAMBDA_HANDLER, ASSET_CODE, null, successTopic, failureTopic, role, tags, environment);
+        createFunction(LAMBDA_FUNCTION_ID, LAMBDA_HANDLER, assetCode, null, successTopic, failureTopic, role, tags, environment);
 
     createLambdaRestApi(stage, REST_API_ID, "name", "POST", function, true, tags);
   }
