@@ -51,6 +51,7 @@ public class ApiBaseStack extends Stack {
         .queueName(queueId)
         .deadLetterQueue(deadLetterQueue)
         .build();
+
     addTags(queue, tags);
 
     return queue;

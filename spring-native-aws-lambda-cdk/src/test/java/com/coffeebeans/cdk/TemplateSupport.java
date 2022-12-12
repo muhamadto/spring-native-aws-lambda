@@ -1,10 +1,11 @@
 package com.coffeebeans.cdk;
 
-import static com.coffeebeans.cdk.Application.createStack;
+
+import static com.coffeebeans.cdk.StackUtils.createStack;
+import static com.coffeebeans.cdk.TestLambdaUtils.getTestLambdaCodePath;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
@@ -19,19 +20,12 @@ public abstract class TemplateSupport {
   @TempDir
   private static Path TEMP_DIR;
 
-  @SneakyThrows(IOException.class)
   @BeforeAll
-  static void initAll() {
-    final Path lambdaCodePath = TEMP_DIR.resolve("lambda-package.zip");
+  static void initAll() throws IOException {
+    final Path lambdaCodePath = getTestLambdaCodePath(TEMP_DIR);
 
-    final boolean isCreated = lambdaCodePath.toFile().createNewFile();
-
-    if (!isCreated) {
-      throw new IOException("Failed to create lambda package");
-    }
-
-    final SpringNativeAwsLambdaStack springNativeAwsLambdaStack = createStack(new App(), ENV, STACK_NAME, lambdaCodePath.toString());
-
+    final SpringNativeAwsLambdaStack springNativeAwsLambdaStack = createStack(new App(), ENV, STACK_NAME, lambdaCodePath.toString(), "test",
+        "test-cdk-bucket");
     template = Template.fromStack(springNativeAwsLambdaStack);
   }
 
