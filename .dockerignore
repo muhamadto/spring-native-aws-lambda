@@ -1,8 +1,7 @@
 .github/
 .idea/
 badges/
-target/
-```
+**/target/
 .gitignore
 CODE_OF_CONDUCT.md
 HELP.md
@@ -10,4 +9,9 @@ LICENSE
 NOTICE
 PULL_REQUEST_TEMPLATE.md
 README.md
-spring-native-aws-lambda.iml
+**/*.iml
+
+# Settings.xml file is already in the ghcr.io/muhamadto/spring-native-aws-lambda-builder-java17 image and
+# there is no need to copy it again if you want to use your own setting file, you can comment the
+# line below
+settings-spring.xml

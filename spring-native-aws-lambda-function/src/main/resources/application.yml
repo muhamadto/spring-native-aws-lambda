@@ -1,0 +1,12 @@
+spring:
+  main:
+    banner-mode: off
+    web-application-type: none # change to 'servlet' for development
+  cloud:
+    function:
+      web:
+        export:
+          enabled: false
+          debug: false
+      definition: exampleFunction
+debug: false

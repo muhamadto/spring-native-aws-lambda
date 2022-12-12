@@ -17,9 +17,10 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "java17" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "java17" ]
+    branches: [ "java17", "java11" ]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   analyze:

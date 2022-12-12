@@ -17,13 +17,16 @@ name: "Build"
 
 on:
   push:
-    branches: [ "java17" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "java17" ]
+    branches: [ "java17", "java11" ]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -33,5 +36,20 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
           cache: 'maven'
+      - name: Cache Sonar packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
-        run: mvn clean verify -U --settings settings-spring.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn --no-transfer-progress clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=muhamadto_spring-native-aws-lambda --settings settings-spring.xml

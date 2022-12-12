@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.coffeebeans</groupId>
+    <artifactId>spring-native-aws-lambda</artifactId>
+    <version>${revision}</version>
+  </parent>
+
+  <artifactId>spring-native-aws-lambda-function</artifactId>
+  <name>${project.artifactId}</name>
+  <packaging>jar</packaging>
+  <description>Demo project for Spring cloud function with graalvm native image</description>
+
+  <developers>
+    <developer>
+      <id>matto</id>
+      <name>Muhammad Hamadto</name>
+      <url>https://www.linkedin.com/in/muhamadto/</url>
+    </developer>
+  </developers>
+
+  <properties>
+    <spring-cloud.version>2021.0.3</spring-cloud.version>
+    <aws-lambda-events.version>3.11.0</aws-lambda-events.version>
+    <spring-native.version>0.12.1</spring-native.version>
+    <aws-lambda-java-core.version>1.2.1</aws-lambda-java-core.version>
+    <spring-cloud-function-adapter-aws.version>3.2.8</spring-cloud-function-adapter-aws.version>
+    <lombok.version>1.18.24</lombok.version>
+    <spring-boot-dependencies.version>2.7.5</spring-boot-dependencies.version>
+    <spring-boot-maven-plugin.version>2.7.5</spring-boot-maven-plugin.version>
+    <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+    <repackage.classifier/>
+    <native.build.args>
+      --enable-url-protocols=http
+      -H:+AddAllCharsets
+    </native.build.args>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot-dependencies.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+    <!-- AWS LAMBDA -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-events</artifactId>
+      <version>${aws-lambda-events.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-core</artifactId>
+      <version>${aws-lambda-java-core.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- AWS LAMBDA ENDS -->
+
+    <!-- SPRING NATIVE -->
+
+    <dependency>
+      <groupId>org.springframework.experimental</groupId>
+      <artifactId>spring-native</artifactId>
+      <version>${spring-native.version}</version>
+    </dependency>
+    <!-- SPRING NATIVE ENDS -->
+
+    <!-- SPRING CLOUD -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-function-adapter-aws</artifactId>
+      <version>${spring-cloud-function-adapter-aws.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-function-web</artifactId>
+    </dependency>
+    <!-- SPRING CLOUD ENDS -->
+
+    <!-- SPRING BOOT -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.tomcat.embed</groupId>
+          <artifactId>tomcat-embed-websocket</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <!-- SPRING BOOT ENDS -->
+
+    <!-- UTILITIES -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+    <!-- UTILITIES ENDS -->
+
+    <!-- TEST -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- TEST ENDS -->
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring-boot-maven-plugin.version}</version>
+        <configuration>
+          <classifier>${repackage.classifier}</classifier>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.experimental</groupId>
+        <artifactId>spring-aot-maven-plugin</artifactId>
+        <version>${spring-native.version}</version>
+        <executions>
+          <execution>
+            <id>test-generate</id>
+            <goals>
+              <goal>test-generate</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>native</id>
+      <properties>
+        <repackage.classifier>exec</repackage.classifier>
+        <native-buildtools.version>0.9.13</native-buildtools.version>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>${native-buildtools.version}</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+              <execution>
+                <id>test-native</id>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <phase>test</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <buildArgs combine.children="append">
+                <buildArg>-H:DashboardDump=dashboardDump</buildArg>
+                <buildArg>-H:+DashboardAll</buildArg>
+              </buildArgs>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${maven-assembly-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>native-zip</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <inherited>false</inherited>
+              </execution>
+            </executions>
+            <configuration>
+              <descriptors>
+                <descriptor>src/assembly/native.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
