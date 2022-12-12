@@ -6,6 +6,7 @@ import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
 
 import java.util.List;
 import java.util.Map;
+import javax.validation.constraints.NotBlank;
 import org.apache.commons.collections4.MapUtils;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.Duration;
@@ -35,8 +36,6 @@ import software.amazon.awscdk.services.logs.RetentionDays;
 import software.amazon.awscdk.services.sns.ITopic;
 import software.amazon.awscdk.services.sqs.IQueue;
 import software.constructs.Construct;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * A lambda function with runtime provided.al2 (custom runtime 2). Creating function with any other runtime, will result in unexpected behaviour.
@@ -732,7 +731,7 @@ public class CustomRuntime2Function extends Function {
 
       checkArgument(functionProps.getCode() != null, "'code' is required");
       checkArgument(functionProps.getHandler() != null, "'handler' is required");
-//      checkArgument(functionProps.getRole() != null, "'role' is required");
+
       checkArgument(functionProps.getTimeout() != null, "'timeout' is required");
       checkArgument(functionProps.getDescription() != null, "'description' is required");
       checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");

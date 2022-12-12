@@ -30,16 +30,21 @@
 
     <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S107
     </sonar.issue.ignore.multicriteria.e1.ruleKey>
-    <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java
+    <sonar.issue.ignore.multicriteria.e1.resourceKey>**/cdk/*.java
     </sonar.issue.ignore.multicriteria.e1.resourceKey>
 
     <!-- This class has 6 parents which is greater than 5 authorized,
         suspended as we are using CDK and the original code has 5 levels of inheritance already-->
     <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S110
     </sonar.issue.ignore.multicriteria.e2.ruleKey>
-    <sonar.issue.ignore.multicriteria.e2.resourceKey>com.coffeebeans.cdk/*.java
+    <sonar.issue.ignore.multicriteria.e2.resourceKey>**/cdk/*.java
     </sonar.issue.ignore.multicriteria.e2.resourceKey>
-
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
+      ${project.basedir}/target/site/jacoco-it/jacoco.xml
+    </sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.coverage.exclusions>**/model/*.java, **/Application.java,
+      **/SpringNativeAwsLambdaApplication.java
+    </sonar.coverage.exclusions>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.release>17</maven.compiler.release>
