@@ -18,7 +18,7 @@
 | Spring Native | 0.12.1   |
 | Spring Cloud  | 2021.0.3 |
 | Spring Boot   | 2.7.5    |
-| Spring Boot   | 2.40.0   |
+| AWS CDK   | 2.40.0   |
 
 ## Test
 
