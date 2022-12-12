@@ -17,22 +17,15 @@ public class TagUtils {
   public static final String TAG_KEY_COST_CENTRE = "COST_CENTRE";
   public static final String TAG_VALUE_COST_CENTRE = "coffeebeans-core";
 
-  public static Construct addTags(@NotNull final Construct construct, @NotEmpty final Map<String, String> tags) {
-    tags.entrySet().stream()
-        .filter(entry -> Objects.nonNull(entry.getValue()))
-        .forEach(entry -> addTag(construct, entry.getKey(), entry.getValue()));
-
-    return construct;
-  }
-
   @NotNull
   public static Map<String, String> createTags(@NotBlank final String env, @NotBlank final String costCenter) {
     return Map.of(TAG_KEY_COST_CENTRE, TAG_VALUE_COST_CENTRE, TAG_KEY_ENV, env);
   }
 
-  public static void addTags(@NotNull final Construct construct, @NotBlank final String env, @NotBlank final String costCenter) {
-    addTag(construct, TAG_KEY_ENV, env);
-    addTag(construct, TAG_KEY_COST_CENTRE, costCenter);
+  public static void addTags(@NotNull final Construct construct, @NotEmpty final Map<String, String> tags) {
+    tags.entrySet().stream()
+        .filter(entry -> Objects.nonNull(entry.getValue()))
+        .forEach(entry -> addTag(construct, entry.getKey(), entry.getValue()));
   }
 
   public static void addTag(@NotNull final Construct construct, @NotBlank final String key, @NotBlank final String value) {
