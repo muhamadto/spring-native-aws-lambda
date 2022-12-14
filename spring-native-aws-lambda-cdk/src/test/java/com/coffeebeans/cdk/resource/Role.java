@@ -1,6 +1,6 @@
 package com.coffeebeans.cdk.resource;
 
-import static com.coffeebeans.cdk.resource.CdkResourceType.POLICY;
+import static com.coffeebeans.cdk.resource.CdkResourceType.ROLE;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,18 +14,18 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
+
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Policy {
+public class Role {
 
   @JsonIgnore
-  private final CdkResourceType type = POLICY;
+  private final CdkResourceType type = ROLE;
 
   @JsonProperty("Properties")
-  private PolicyProperties properties;
+  private RoleProperties properties;
 
   @JsonProperty("Type")
   public String getType() {
     return type.getValue();
   }
 }
-

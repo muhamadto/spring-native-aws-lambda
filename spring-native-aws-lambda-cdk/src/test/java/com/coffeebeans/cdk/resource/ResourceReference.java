@@ -1,5 +1,6 @@
 package com.coffeebeans.cdk.resource;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +12,9 @@ import software.amazon.awscdk.assertions.Matcher;
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
-public class RoleRef {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class ResourceReference {
 
   @JsonProperty("Ref")
-  private Matcher ref;
+  private Matcher reference;
 }

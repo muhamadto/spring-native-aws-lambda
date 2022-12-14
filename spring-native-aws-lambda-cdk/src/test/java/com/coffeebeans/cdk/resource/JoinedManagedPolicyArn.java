@@ -1,18 +1,22 @@
 package com.coffeebeans.cdk.resource;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import software.amazon.awscdk.assertions.Matcher;
+import lombok.Singular;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
-public class ResourceRef {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class JoinedManagedPolicyArn {
 
-  @JsonProperty("Ref")
-  private Matcher ref;
+  @Singular
+  @JsonProperty("Fn::Join")
+  public List<Object> arns;
 }

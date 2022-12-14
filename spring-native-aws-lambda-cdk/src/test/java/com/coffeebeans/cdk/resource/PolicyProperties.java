@@ -1,7 +1,7 @@
 package com.coffeebeans.cdk.resource;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +14,7 @@ import software.amazon.awscdk.assertions.Matcher;
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
-@JsonPropertyOrder({
-    "PolicyName",
-    "PolicyDocument",
-    "Roles"
-})
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PolicyProperties {
 
   @JsonProperty("PolicyName")
@@ -29,5 +25,5 @@ public class PolicyProperties {
 
   @Singular
   @JsonProperty("Roles")
-  private List<RoleRef> roles;
+  private List<ResourceReference> roles;
 }
