@@ -14,7 +14,6 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
-
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Role {
 

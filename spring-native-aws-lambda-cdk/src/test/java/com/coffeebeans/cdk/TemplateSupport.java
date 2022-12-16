@@ -1,6 +1,5 @@
 package com.coffeebeans.cdk;
 
-
 import static com.coffeebeans.cdk.StackUtils.createStack;
 import static com.coffeebeans.cdk.TestLambdaUtils.getTestLambdaCodePath;
 
@@ -14,7 +13,10 @@ import software.amazon.awscdk.assertions.Template;
 
 public abstract class TemplateSupport {
 
-  static final String ENV = "test";
+  public static final String ENV = "test";
+  public static final String TEST_CDK_BUCKET = "test-cdk-bucket";
+  public static final String QUALIFIER = "test";
+
   static Template template;
   private static final String STACK_NAME = "spring-native-aws-lambda-function-test-stack";
   @TempDir
@@ -24,8 +26,8 @@ public abstract class TemplateSupport {
   static void initAll() throws IOException {
     final Path lambdaCodePath = getTestLambdaCodePath(TEMP_DIR);
 
-    final SpringNativeAwsLambdaStack springNativeAwsLambdaStack = createStack(new App(), ENV, STACK_NAME, lambdaCodePath.toString(), "test",
-        "test-cdk-bucket");
+    final SpringNativeAwsLambdaStack springNativeAwsLambdaStack =
+        createStack(new App(), ENV, STACK_NAME, lambdaCodePath.toString(), QUALIFIER, TEST_CDK_BUCKET);
     template = Template.fromStack(springNativeAwsLambdaStack);
   }
 

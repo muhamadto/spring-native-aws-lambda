@@ -2,10 +2,12 @@ package com.coffeebeans.cdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
 import software.amazon.awscdk.assertions.Matcher;
 
 @Getter
@@ -13,8 +15,9 @@ import software.amazon.awscdk.assertions.Matcher;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PolicyPrincipal {
+public class LambdaEnvironment {
 
-  @JsonProperty("Service")
-  private Matcher service;
+  @Singular
+  @JsonProperty("Variables")
+  private Map<String, Matcher> variables;
 }

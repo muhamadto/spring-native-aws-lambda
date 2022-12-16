@@ -5,9 +5,14 @@ import static com.coffeebeans.cdk.resource.CdkResourceType.ROLE;
 import static com.coffeebeans.cdk.resource.PolicyStatementEffect.ALLOW;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.cdk.resource.JoinedManagedPolicyArn;
+import com.coffeebeans.cdk.resource.IntrinsicFunctionBasedArn;
+import com.coffeebeans.cdk.resource.Lambda;
+import com.coffeebeans.cdk.resource.LambdaCode;
+import com.coffeebeans.cdk.resource.LambdaEnvironment;
+import com.coffeebeans.cdk.resource.LambdaProperties;
 import com.coffeebeans.cdk.resource.PartitionedArn;
 import com.coffeebeans.cdk.resource.Policy;
 import com.coffeebeans.cdk.resource.PolicyDocument;
@@ -17,7 +22,7 @@ import com.coffeebeans.cdk.resource.PolicyStatement;
 import com.coffeebeans.cdk.resource.ResourceReference;
 import com.coffeebeans.cdk.resource.Role;
 import com.coffeebeans.cdk.resource.RoleProperties;
-import java.util.List;
+import com.coffeebeans.cdk.resource.Tag;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import software.amazon.awscdk.assertions.Matcher;
@@ -28,24 +33,42 @@ class LambdaTest extends TemplateSupport {
 
   @Test
   void should_have_lambda_function() {
-    final Map<String, Object> expected = Map.of(
-        "Type", "AWS::Lambda::Function",
-        "DependsOn",
-        List.of(stringLikeRegexp("springnativeawslambdafunctionroleDefaultPolicy(.*)"), stringLikeRegexp("springnativeawslambdafunctionrole(.*)")),
-        "Properties", Map.of(
-            "Code", Map.of("S3Bucket", "test-cdk-bucket", "S3Key", stringLikeRegexp("(.*).zip")),
-            "Role", Map.of("Fn::GetAtt", List.of(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"), "Arn")),
-            "Environment", Map.of("Variables", Map.of("ENV", "test", "SPRING_PROFILES_ACTIVE", "test")),
-            "Tags", List.of(Map.of("Key", "COST_CENTRE", "Value", "coffeebeans-core"), Map.of("Key", "ENV", "Value", "test")),
-            "Description", "Lambda example with spring native",
-            "FunctionName", "spring-native-aws-lambda-function",
-            "Handler", "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest",
-            "MemorySize", 512,
-            "Runtime", "provided.al2",
-            "Timeout", 3
-        ));
+    final LambdaCode lambdaCode = LambdaCode.builder()
+        .s3Bucket(exact("test-cdk-bucket"))
+        .s3Key(stringLikeRegexp("(.*).zip"))
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(FUNCTION_RESOURCE_TYPE, expected);
+    final IntrinsicFunctionBasedArn roleArn = IntrinsicFunctionBasedArn.builder()
+        .getAttributesArn(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
+        .getAttributesArn("Arn")
+        .build();
+
+    final LambdaEnvironment lambdaEnvironment = LambdaEnvironment.builder()
+        .variable("ENV", exact("test"))
+        .variable("SPRING_PROFILES_ACTIVE", exact("test"))
+        .build();
+
+    final LambdaProperties lambdaProperties = LambdaProperties.builder()
+        .functionName(exact("spring-native-aws-lambda-function"))
+        .handler(exact("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest"))
+        .memorySize(512)
+        .runtime(exact("provided.al2"))
+        .timeout(3)
+        .description(exact("Lambda example with spring native"))
+        .code(lambdaCode)
+        .roleArn(roleArn)
+        .tag(Tag.builder().key("COST_CENTRE").value(exact("coffeebeans-core")).build())
+        .tag(Tag.builder().key("ENV").value(exact("test")).build())
+        .environment(lambdaEnvironment)
+        .build();
+
+    final Lambda lambda = Lambda.builder()
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionroleDefaultPolicy(.*)"))
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
+        .properties(lambdaProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(FUNCTION_RESOURCE_TYPE, lambda);
 
     assertThat(actual)
         .isNotNull()
@@ -56,9 +79,9 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_role_with_AWSLambdaBasicExecutionRole_policy_for_lambda_to_assume() {
     final PolicyStatement policyStatement = PolicyStatement.builder()
+        .principal(PolicyPrincipal.builder().service(exact("lambda.amazonaws.com")).build())
         .effect(ALLOW)
         .action("sts:AssumeRole")
-        .principal(PolicyPrincipal.builder().service("lambda.amazonaws.com").build())
         .build();
 
     final PolicyDocument assumeRolePolicyDocument = PolicyDocument.builder()
@@ -72,9 +95,9 @@ class LambdaTest extends TemplateSupport {
         .resourceId("service-role/AWSLambdaBasicExecutionRole")
         .build();
 
-    final JoinedManagedPolicyArn managedPolicyArn = JoinedManagedPolicyArn.builder()
-        .arn(EMPTY)
-        .arn(partitionedArn.asList())
+    final IntrinsicFunctionBasedArn managedPolicyArn = IntrinsicFunctionBasedArn.builder()
+        .joinArn(EMPTY)
+        .joinArn(partitionedArn.asList())
         .build();
 
     final RoleProperties roleProperties = RoleProperties.builder()

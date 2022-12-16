@@ -13,8 +13,11 @@ import software.amazon.awscdk.assertions.Matcher;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PolicyPrincipal {
+public class LambdaCode {
 
-  @JsonProperty("Service")
-  private Matcher service;
+  @JsonProperty("S3Bucket")
+  private Matcher s3Bucket;
+
+  @JsonProperty("S3Key")
+  private Matcher s3Key;
 }

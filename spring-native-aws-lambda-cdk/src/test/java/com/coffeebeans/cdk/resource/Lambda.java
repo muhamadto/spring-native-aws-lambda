@@ -1,5 +1,8 @@
 package com.coffeebeans.cdk.resource;
 
+import static com.coffeebeans.cdk.resource.CdkResourceType.LAMBDA_FUNCTION;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
@@ -15,15 +18,20 @@ import software.amazon.awscdk.assertions.Matcher;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RoleProperties {
+public class Lambda {
 
-  @JsonProperty("PolicyName")
-  private Matcher policyName;
-
-  @JsonProperty("AssumeRolePolicyDocument")
-  private PolicyDocument assumeRolePolicyDocument;
+  @JsonIgnore
+  private final CdkResourceType type = LAMBDA_FUNCTION;
 
   @Singular
-  @JsonProperty("ManagedPolicyArns")
-  private List<IntrinsicFunctionBasedArn> managedPolicyArns;
+  @JsonProperty("DependsOn")
+  private List<Matcher> dependencies;
+
+  @JsonProperty("Properties")
+  private LambdaProperties properties;
+
+  @JsonProperty("Type")
+  public String getType() {
+    return type.getValue();
+  }
 }
