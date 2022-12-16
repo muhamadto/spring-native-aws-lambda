@@ -8,18 +8,22 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
+import software.amazon.awscdk.assertions.Matcher;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PolicyDocument {
+public class RoleProperties {
 
-  @JsonProperty("Version")
-  private final String version = "2012-10-17";
+  @JsonProperty("PolicyName")
+  private Matcher policyName;
+
+  @JsonProperty("AssumeRolePolicyDocument")
+  private PolicyDocument assumeRolePolicyDocument;
 
   @Singular
-  @JsonProperty("Statement")
-  private List<PolicyStatement> statements;
+  @JsonProperty("ManagedPolicyArns")
+  private List<IntrinsicFunctionBasedArn> managedPolicyArns;
 }

@@ -3,8 +3,8 @@ package com.coffeebeans.cdk.resource;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,11 +16,7 @@ import lombok.Singular;
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
-@JsonPropertyOrder({
-    "Effect",
-    "Action",
-    "Resource"
-})
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PolicyStatement {
 
   @JsonIgnore
@@ -34,7 +30,10 @@ public class PolicyStatement {
   @Singular
   @JsonProperty("Resource")
   @JsonFormat(with = Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
-  private List<ResourceRef> resources;
+  private List<ResourceReference> resources;
+
+  @JsonProperty("Principal")
+  private PolicyPrincipal principal;
 
   @JsonProperty("Effect")
   public String getEffect() {

@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum CdkResourceType {
-  LAMBDA_FUNCTION("AWS::Lambda::Function"),
-  POLICY("AWS::IAM::Policy"),
-  ROLE("AWS::IAM::Role");
+public enum CloudFormationIntrinsicFunction {
+  JOIN("Fn::Join"),
+  SUBSTITUTES("Fn::Sub");
 
   private String value;
+
 }
