@@ -1,5 +1,6 @@
 package com.coffeebeans.cdk;
 
+import static com.coffeebeans.cdk.TagUtils.TAG_VALUE_COST_CENTRE;
 import static com.coffeebeans.cdk.resource.CdkResourceType.POLICY;
 import static com.coffeebeans.cdk.resource.CdkResourceType.ROLE;
 import static com.coffeebeans.cdk.resource.PolicyStatementEffect.ALLOW;
@@ -30,6 +31,7 @@ import software.amazon.awscdk.assertions.Matcher;
 class LambdaTest extends TemplateSupport {
 
   private static final String FUNCTION_RESOURCE_TYPE = "AWS::Lambda::Function";
+  public static final String TEST = "test";
 
   @Test
   void should_have_lambda_function() {
@@ -44,8 +46,8 @@ class LambdaTest extends TemplateSupport {
         .build();
 
     final LambdaEnvironment lambdaEnvironment = LambdaEnvironment.builder()
-        .variable("ENV", exact("test"))
-        .variable("SPRING_PROFILES_ACTIVE", exact("test"))
+        .variable("ENV", exact(TEST))
+        .variable("SPRING_PROFILES_ACTIVE", exact(TEST))
         .build();
 
     final LambdaProperties lambdaProperties = LambdaProperties.builder()
@@ -57,8 +59,8 @@ class LambdaTest extends TemplateSupport {
         .description(exact("Lambda example with spring native"))
         .code(lambdaCode)
         .roleArn(roleArn)
-        .tag(Tag.builder().key("COST_CENTRE").value(exact("coffeebeans-core")).build())
-        .tag(Tag.builder().key("ENV").value(exact("test")).build())
+        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
+        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .environment(lambdaEnvironment)
         .build();
 
