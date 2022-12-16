@@ -71,8 +71,8 @@ public class CustomRuntime2Function extends Function {
   public static final class Builder implements software.amazon.jsii.Builder<CustomRuntime2Function> {
 
     /**
-     * @param scope               This parameter is required.
-     * @param id                  This parameter is required.
+     * @param scope This parameter is required.
+     * @param id    This parameter is required.
      * @return a new instance of {@link CustomRuntime2Function.Builder}.
      */
     public static CustomRuntime2Function.Builder create(final Construct scope, final String id) {
@@ -85,7 +85,8 @@ public class CustomRuntime2Function extends Function {
      * @param deadLetterQueueType This parameter is required.
      * @return a new instance of {@link CustomRuntime2Function.Builder}.
      */
-    public static CustomRuntime2Function.Builder create(@NotBlank final Construct scope, @NotBlank final String id, final DeadLetterQueueType deadLetterQueueType) {
+    public static CustomRuntime2Function.Builder create(@NotBlank final Construct scope, @NotBlank final String id,
+        final DeadLetterQueueType deadLetterQueueType) {
       return new CustomRuntime2Function.Builder(scope, id, deadLetterQueueType);
     }
 
@@ -159,7 +160,7 @@ public class CustomRuntime2Function extends Function {
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder retryAttempts(final Number retryAttempts) {
-      this.props.retryAttempts(retryAttempts == null ? FUNCTION_DEFAULT_RETRY_ATTEMPTS: retryAttempts);
+      this.props.retryAttempts(retryAttempts == null ? FUNCTION_DEFAULT_RETRY_ATTEMPTS : retryAttempts);
       return this;
     }
 
@@ -722,7 +723,6 @@ public class CustomRuntime2Function extends Function {
     }
 
     /**
-     *
      * @return a newly built instance of {@link CustomRuntime2Function}.
      */
     @Override
@@ -739,13 +739,13 @@ public class CustomRuntime2Function extends Function {
 
       checkArgument(functionProps.getMemorySize() != null, "'memorySize' is required");
       checkArgument(functionProps.getMemorySize().intValue() >= 128 && functionProps.getMemorySize().intValue() <= 3008,
-              "memorySize must be between 128 and 3008 (inclusive)");
+          "memorySize must be between 128 and 3008 (inclusive)");
 
       checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");
       checkArgument(functionProps.getRetryAttempts().intValue() >= 0 && functionProps.getRetryAttempts().intValue() <= 2,
-              "'retryAttempts' must be between 0 and 2 (inclusive)");
+          "'retryAttempts' must be between 0 and 2 (inclusive)");
 
-      if(deadLetterQueueType == null){
+      if (deadLetterQueueType == null) {
         checkArgument(functionProps.getOnFailure() != null, "'onFailure' is required");
         return new CustomRuntime2Function(this.scope, this.id, functionProps);
       }

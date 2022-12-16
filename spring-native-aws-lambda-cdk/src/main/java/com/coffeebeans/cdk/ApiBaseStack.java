@@ -1,7 +1,5 @@
 package com.coffeebeans.cdk;
 
-import static com.coffeebeans.cdk.TagUtils.addTags;
-
 import com.coffeebeans.cdk.lambda.CustomRuntime2Function;
 import java.util.Map;
 import javax.validation.constraints.NotBlank;
@@ -43,42 +41,33 @@ public class ApiBaseStack extends Stack {
 
   @NotNull
   protected Queue createQueue(
-      @NotBlank final String queueId,
-      @NotEmpty final Map<String, String> tags) {
+      @NotBlank final String queueId) {
     final DeadLetterQueue deadLetterQueue = createDeadLetterQueue(queueId + DEAD_LETTER_QUEUE_SUFFIX);
 
-    final Queue queue = Queue.Builder.create(this, queueId)
+    return Queue.Builder.create(this, queueId)
         .queueName(queueId)
         .deadLetterQueue(deadLetterQueue)
         .build();
-
-    addTags(queue, tags);
-
-    return queue;
   }
 
   @NotNull
   protected Queue createFifoQueue(
       @NotBlank final String queueId,
       final boolean contentBasedDeduplication,
-      @NotNull final DeduplicationScope messageGroup,
-      @NotEmpty final Map<String, String> tags) {
+      @NotNull final DeduplicationScope messageGroup) {
     final String fifoQueueId = queueId + FIFO_SUFFIX;
     final String fifoDeadLetterQueueId = queueId + DEAD_LETTER_QUEUE_SUFFIX;
 
     final DeadLetterQueue deadLetterQueue =
         createFifoDeadLetterQueue(fifoDeadLetterQueueId, contentBasedDeduplication, messageGroup);
 
-    final Queue queue = Queue.Builder.create(this, fifoQueueId)
+    return Queue.Builder.create(this, fifoQueueId)
         .queueName(fifoQueueId)
         .fifo(true)
         .deadLetterQueue(deadLetterQueue)
         .contentBasedDeduplication(contentBasedDeduplication)
         .deduplicationScope(messageGroup)
         .build();
-    addTags(queue, tags);
-
-    return queue;
   }
 
   @NotNull
@@ -115,15 +104,13 @@ public class ApiBaseStack extends Stack {
   @NotNull
   protected Topic createTopic(
       @NotBlank final String topicId,
-      @NotNull final SqsSubscription subscription,
-      @NotEmpty final Map<String, String> tags) {
+      @NotNull final SqsSubscription subscription) {
 
     final Topic topic = Topic.Builder.create(this, topicId)
         .topicName(topicId)
         .build();
 
     topic.addSubscription(subscription);
-    addTags(topic, tags);
 
     return topic;
   }
@@ -133,8 +120,7 @@ public class ApiBaseStack extends Stack {
       @NotBlank final String topicId,
       @NotNull final SqsSubscription subscription,
       final boolean fifo,
-      final boolean contentBasedDeduplication,
-      @NotEmpty final Map<String, String> tags) {
+      final boolean contentBasedDeduplication) {
     String fifoTopicId = topicId + FIFO_SUFFIX;
     final Topic topic = Topic.Builder.create(this, fifoTopicId)
         .topicName(fifoTopicId)
@@ -143,7 +129,6 @@ public class ApiBaseStack extends Stack {
         .build();
 
     topic.addSubscription(subscription);
-    addTags(topic, tags);
 
     return topic;
   }
@@ -158,13 +143,31 @@ public class ApiBaseStack extends Stack {
       @NotBlank final String lambdaId,
       @NotBlank final String handler,
       @NotNull final Code code,
-      final IVpc vpc,
       @NotNull final Topic successTopic,
       @NotNull final Topic failureTopic,
       @NotNull Role role,
-      @NotEmpty final Map<String, String> tags,
       @NotEmpty final Map<String, String> environment) {
-    final CustomRuntime2Function function = CustomRuntime2Function.Builder.create(this, lambdaId)
+    return this.createFunction(null,
+        lambdaId,
+        handler,
+        code,
+        successTopic,
+        failureTopic,
+        role,
+        environment);
+  }
+
+  @NotNull
+  protected Function createFunction(
+      final IVpc vpc,
+      @NotBlank final String lambdaId,
+      @NotBlank final String handler,
+      @NotNull final Code code,
+      @NotNull final Topic successTopic,
+      @NotNull final Topic failureTopic,
+      @NotNull Role role,
+      @NotEmpty final Map<String, String> environment) {
+    return CustomRuntime2Function.Builder.create(this, lambdaId)
         .functionName(lambdaId)
         .description("Lambda example with spring native")
         .code(code)
@@ -178,9 +181,6 @@ public class ApiBaseStack extends Stack {
         .memorySize(LAMBDA_FUNCTION_MEMORY_SIZE)
         .retryAttempts(LAMBDA_FUNCTION_RETRY_ATTEMPTS)
         .build();
-    addTags(function, tags);
-
-    return function;
   }
 
   @NotNull
@@ -190,8 +190,7 @@ public class ApiBaseStack extends Stack {
       @NotNull final String resourceName,
       @NotNull final String httpMethod,
       @NotNull final Function function,
-      final boolean proxy,
-      @NotEmpty final Map<String, String> tags) {
+      final boolean proxy) {
 
     // point to the lambda
     final LambdaRestApi lambdaRestApi = LambdaRestApi.Builder.create(this, restApiId)
@@ -204,9 +203,6 @@ public class ApiBaseStack extends Stack {
     // get root resource to add methods
     final Resource resource = lambdaRestApi.getRoot().addResource(resourceName);
     resource.addMethod(StringUtils.toRootUpperCase(httpMethod));
-
-    addTags(lambdaRestApi, tags);
-    addTags(resource, tags);
 
     return lambdaRestApi;
   }
