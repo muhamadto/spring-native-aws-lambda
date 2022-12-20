@@ -1,13 +1,13 @@
 package com.coffeebeans.cdk.lambda;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.Boolean.TRUE;
+import static org.apache.commons.collections4.MapUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
 
 import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotBlank;
-import org.apache.commons.collections4.MapUtils;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.Size;
@@ -730,17 +730,17 @@ public class CustomRuntime2Function extends Function {
       final FunctionProps functionProps = this.props.build();
 
       checkArgument(functionProps.getCode() != null, "'code' is required");
-      checkArgument(functionProps.getHandler() != null, "'handler' is required");
+      checkArgument(isNoneBlank(functionProps.getHandler()), "'handler' is required");
 
       checkArgument(functionProps.getTimeout() != null, "'timeout' is required");
-      checkArgument(functionProps.getDescription() != null, "'description' is required");
-      checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");
-      checkArgument(MapUtils.isNotEmpty(functionProps.getEnvironment()), "'environment' is required");
+      checkArgument(isNoneBlank(functionProps.getDescription()), "'description' is required");
+      checkArgument(isNotEmpty(functionProps.getEnvironment()), "'environment' is required");
 
       checkArgument(functionProps.getMemorySize() != null, "'memorySize' is required");
       checkArgument(functionProps.getMemorySize().intValue() >= 128 && functionProps.getMemorySize().intValue() <= 3008,
-          "memorySize must be between 128 and 3008 (inclusive)");
+          "'memorySize' must be between 128 and 3008 (inclusive)");
 
+      checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");
       checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");
       checkArgument(functionProps.getRetryAttempts().intValue() >= 0 && functionProps.getRetryAttempts().intValue() <= 2,
           "'retryAttempts' must be between 0 and 2 (inclusive)");
@@ -748,15 +748,6 @@ public class CustomRuntime2Function extends Function {
       if (deadLetterQueueType == null) {
         checkArgument(functionProps.getOnFailure() != null, "'onFailure' is required");
         return new CustomRuntime2Function(this.scope, this.id, functionProps);
-      }
-
-      if (deadLetterQueueType == DeadLetterQueueType.QUEUE) {
-        checkArgument(TRUE.equals(functionProps.getDeadLetterQueueEnabled()) && functionProps.getDeadLetterQueue() != null,
-            "'deadLetterQueue' is required");
-      }
-
-      if (deadLetterQueueType == DeadLetterQueueType.TOPIC) {
-        checkArgument(functionProps.getDeadLetterTopic() != null, "'deadLetterTopic' is required");
       }
 
       return new CustomRuntime2Function(this.scope, this.id, functionProps);
