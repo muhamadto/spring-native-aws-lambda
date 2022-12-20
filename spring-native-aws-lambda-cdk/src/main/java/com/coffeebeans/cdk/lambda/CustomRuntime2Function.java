@@ -7,7 +7,6 @@ import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
 
 import java.util.List;
 import java.util.Map;
-import javax.validation.constraints.NotBlank;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.Size;
@@ -43,10 +42,6 @@ import software.constructs.Construct;
 
 public class CustomRuntime2Function extends Function {
 
-  public enum DeadLetterQueueType {
-    QUEUE, TOPIC
-  }
-
   private static final int FUNCTION_DEFAULT_TIMEOUT_IN_SECONDS = 10;
   private static final int FUNCTION_DEFAULT_MEMORY_SIZE = 512;
   private static final int FUNCTION_DEFAULT_RETRY_ATTEMPTS = 2;
@@ -76,30 +71,17 @@ public class CustomRuntime2Function extends Function {
      * @return a new instance of {@link CustomRuntime2Function.Builder}.
      */
     public static CustomRuntime2Function.Builder create(final Construct scope, final String id) {
-      return new CustomRuntime2Function.Builder(scope, id, null);
-    }
-
-    /**
-     * @param scope               This parameter is required.
-     * @param id                  This parameter is required.
-     * @param deadLetterQueueType This parameter is required.
-     * @return a new instance of {@link CustomRuntime2Function.Builder}.
-     */
-    public static CustomRuntime2Function.Builder create(@NotBlank final Construct scope, @NotBlank final String id,
-        final DeadLetterQueueType deadLetterQueueType) {
-      return new CustomRuntime2Function.Builder(scope, id, deadLetterQueueType);
+      return new CustomRuntime2Function.Builder(scope, id);
     }
 
     private final Construct scope;
     private final String id;
     private final FunctionProps.Builder props;
-    private final DeadLetterQueueType deadLetterQueueType;
 
-    private Builder(final Construct scope, final String id, final DeadLetterQueueType deadLetterQueueType) {
+    private Builder(final Construct scope, final String id) {
       this.scope = scope;
       this.id = id;
       this.props = new FunctionProps.Builder();
-      this.deadLetterQueueType = deadLetterQueueType;
 
       this.props.runtime(PROVIDED_AL2);
     }
@@ -741,14 +723,11 @@ public class CustomRuntime2Function extends Function {
           "'memorySize' must be between 128 and 3008 (inclusive)");
 
       checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");
-      checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");
       checkArgument(functionProps.getRetryAttempts().intValue() >= 0 && functionProps.getRetryAttempts().intValue() <= 2,
           "'retryAttempts' must be between 0 and 2 (inclusive)");
 
-      if (deadLetterQueueType == null) {
-        checkArgument(functionProps.getOnFailure() != null, "'onFailure' is required");
-        return new CustomRuntime2Function(this.scope, this.id, functionProps);
-      }
+      checkArgument(functionProps.getOnFailure() != null, "'onFailure' is required");
+      checkArgument(functionProps.getOnSuccess() != null, "'onSuccess' is required");
 
       return new CustomRuntime2Function(this.scope, this.id, functionProps);
     }

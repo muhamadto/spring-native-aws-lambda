@@ -9,7 +9,7 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=bugs)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
-[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=muhamadto_spring-native-aws-lambda)
+[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=coverage)](https://sonarcloud.io/component_measures?id=muhamadto_spring-native-aws-lambda&metric=new_coverage&view=list)
 
 | Component     | Version  |
 |---------------|----------|

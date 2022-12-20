@@ -39,11 +39,13 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
 
     final Queue successQueue = createFifoQueue(SQS_SUCCESS_QUEUE_ID, true, MESSAGE_GROUP);
     final SqsSubscription successQueueSubscription = createSqsSubscription(successQueue);
-    final Topic successTopic = createFifoTopic(SNS_SUCCESS_TOPIC_ID, successQueueSubscription, true, true);
+    final Topic successTopic = createFifoTopic(SNS_SUCCESS_TOPIC_ID, true, true);
+    successTopic.addSubscription(successQueueSubscription);
 
     final Queue failureQueue = createQueue(SQS_FAILURE_QUEUE_ID);
     final SqsSubscription failureQueueSubscription = createSqsSubscription(failureQueue);
-    final Topic failureTopic = createTopic(SNS_FAILURE_TOPIC_ID, failureQueueSubscription);
+    final Topic failureTopic = createTopic(SNS_FAILURE_TOPIC_ID);
+    failureTopic.addSubscription(failureQueueSubscription);
 
     final Map<String, String> environment = Map.of(ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE, stage, TAG_KEY_ENV, stage);
 
