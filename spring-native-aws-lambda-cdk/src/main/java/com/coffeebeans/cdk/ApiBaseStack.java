@@ -13,10 +13,12 @@ import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.Resource;
 import software.amazon.awscdk.services.apigateway.StageOptions;
 import software.amazon.awscdk.services.ec2.IVpc;
+import software.amazon.awscdk.services.iam.IRole;
 import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.destinations.SnsDestination;
+import software.amazon.awscdk.services.sns.ITopic;
 import software.amazon.awscdk.services.sns.Topic;
 import software.amazon.awscdk.services.sns.subscriptions.SqsSubscription;
 import software.amazon.awscdk.services.sqs.DeadLetterQueue;
@@ -71,7 +73,7 @@ public class ApiBaseStack extends Stack {
   }
 
   @NotNull
-  private DeadLetterQueue createDeadLetterQueue(@NotBlank final String deadLetterQueueId) {
+  protected DeadLetterQueue createDeadLetterQueue(@NotBlank final String deadLetterQueueId) {
     final Queue queue = Queue.Builder.create(this, deadLetterQueueId)
         .queueName(deadLetterQueueId)
         .build();
@@ -83,7 +85,7 @@ public class ApiBaseStack extends Stack {
   }
 
   @NotNull
-  private DeadLetterQueue createFifoDeadLetterQueue(
+  protected DeadLetterQueue createFifoDeadLetterQueue(
       @NotBlank final String deadLetterQueueId,
       final boolean contentBasedDeduplication,
       @NotNull final DeduplicationScope messageGroup) {
@@ -103,34 +105,25 @@ public class ApiBaseStack extends Stack {
 
   @NotNull
   protected Topic createTopic(
-      @NotBlank final String topicId,
-      @NotNull final SqsSubscription subscription) {
+      @NotBlank final String topicId) {
 
-    final Topic topic = Topic.Builder.create(this, topicId)
+    return Topic.Builder.create(this, topicId)
         .topicName(topicId)
         .build();
-
-    topic.addSubscription(subscription);
-
-    return topic;
   }
 
   @NotNull
   protected Topic createFifoTopic(
       @NotBlank final String topicId,
-      @NotNull final SqsSubscription subscription,
       final boolean fifo,
       final boolean contentBasedDeduplication) {
     String fifoTopicId = topicId + FIFO_SUFFIX;
-    final Topic topic = Topic.Builder.create(this, fifoTopicId)
+
+    return Topic.Builder.create(this, fifoTopicId)
         .topicName(fifoTopicId)
         .fifo(fifo)
         .contentBasedDeduplication(contentBasedDeduplication)
         .build();
-
-    topic.addSubscription(subscription);
-
-    return topic;
   }
 
   @NotNull
@@ -163,9 +156,9 @@ public class ApiBaseStack extends Stack {
       @NotBlank final String lambdaId,
       @NotBlank final String handler,
       @NotNull final Code code,
-      @NotNull final Topic successTopic,
-      @NotNull final Topic failureTopic,
-      @NotNull Role role,
+      @NotNull final ITopic successTopic,
+      @NotNull final ITopic failureTopic,
+      @NotNull IRole role,
       @NotEmpty final Map<String, String> environment) {
     return CustomRuntime2Function.Builder.create(this, lambdaId)
         .functionName(lambdaId)

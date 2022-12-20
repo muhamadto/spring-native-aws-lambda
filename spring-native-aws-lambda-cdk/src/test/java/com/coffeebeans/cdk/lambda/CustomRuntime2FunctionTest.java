@@ -73,7 +73,7 @@ class CustomRuntime2FunctionTest {
         .deadLetterQueueEnabled(false)
         .deadLetterTopic(null)
         .description("test function")
-        .environment(Map.of("key", "value"))
+        .environment(Map.of("Account", "***"))
         .environmentEncryption(Key.fromKeyArn(stack, "test-key", "arn:aws:kms:us-east-1:***:key/***"))
         .ephemeralStorageSize(Size.gibibytes(1))
         .events(List.of(new ApiEventSource("POST", "/test")))
@@ -83,6 +83,7 @@ class CustomRuntime2FunctionTest {
         .insightsVersion(null)
         .layers(Collections.emptyList())
         .logRetention(RetentionDays.FIVE_DAYS)
+        .logRetentionRetryOptions()
         .logRetentionRole(Role.fromRoleArn(stack, "test-log-role", "arn:aws:iam::***:role/test-log-role"))
         .memorySize(512)
         .timeout(Duration.seconds(3))
@@ -125,13 +126,15 @@ class CustomRuntime2FunctionTest {
     assertThat(actual)
         .isNotNull();
 
-    assertThat(actual.getTimeout().toSeconds())
+    assertThat(actual.getTimeout().toSeconds()) // actual.getTimeout() won't be null Builder#timeout() has a default value of 10 seconds
         .isEqualTo(DEFAULT_TIMEOUT.toSeconds());
   }
 
   @Test
   void should_throw_exception_when_function_code_is_missing() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.code(null).build())
+    customRuntime2FunctionBuilder.code(null);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(NullPointerException.class)
         .hasFieldOrPropertyWithValue("message", "code is required");
@@ -139,7 +142,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_handler_is_missing() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.handler(null).build())
+    customRuntime2FunctionBuilder.handler(null);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(NullPointerException.class)
         .hasFieldOrPropertyWithValue("message", "handler is required");
@@ -147,7 +152,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_handler_is_empty_string() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.handler(StringUtils.EMPTY).build())
+    customRuntime2FunctionBuilder.handler(StringUtils.EMPTY);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'handler' is required");
@@ -155,7 +162,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_description_is_missing() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.description(null).build())
+    customRuntime2FunctionBuilder.description();
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'description' is required");
@@ -163,7 +172,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_description_is_empty_string() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.description(StringUtils.EMPTY).build())
+    customRuntime2FunctionBuilder.description(StringUtils.EMPTY);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'description' is required");
@@ -171,7 +182,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_environment_is_empty_map() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.environment(Collections.emptyMap()).build())
+    customRuntime2FunctionBuilder.environment(Collections.emptyMap());
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'environment' is required");
@@ -179,7 +192,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_environment_is_null() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.environment(null).build())
+    customRuntime2FunctionBuilder.environment(null);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'environment' is required");
@@ -187,7 +202,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_memory_size_is_less_than_128() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.memorySize(120).build())
+    customRuntime2FunctionBuilder.memorySize(120);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'memorySize' must be between 128 and 3008 (inclusive)");
@@ -195,7 +212,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_memory_size_is_larger_than_3008() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.memorySize(3500).build())
+    customRuntime2FunctionBuilder.memorySize(3500);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'memorySize' must be between 128 and 3008 (inclusive)");
@@ -203,7 +222,9 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_memory_size_is_less_than_zero() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.retryAttempts(-1).build())
+    customRuntime2FunctionBuilder.retryAttempts(-1);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'retryAttempts' must be between 0 and 2 (inclusive)");
@@ -211,9 +232,31 @@ class CustomRuntime2FunctionTest {
 
   @Test
   void should_throw_exception_when_function_memory_size_is_larger_than_two() {
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.retryAttempts(3).build())
+    customRuntime2FunctionBuilder.retryAttempts(3);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
         .hasFieldOrPropertyWithValue("message", "'retryAttempts' must be between 0 and 2 (inclusive)");
+  }
+
+  @Test
+  void should_throw_exception_when_on_failure_topic_is_missing() {
+    customRuntime2FunctionBuilder.onFailure(null);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
+        .isNotNull()
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasFieldOrPropertyWithValue("message", "'onFailure' is required");
+  }
+
+  @Test
+  void should_throw_exception_when_on_success_topic_is_missing() {
+    customRuntime2FunctionBuilder.onSuccess(null);
+
+    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
+        .isNotNull()
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasFieldOrPropertyWithValue("message", "'onSuccess' is required");
   }
 }
