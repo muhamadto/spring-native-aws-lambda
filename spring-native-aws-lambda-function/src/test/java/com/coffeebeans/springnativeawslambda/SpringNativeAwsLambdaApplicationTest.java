@@ -26,7 +26,7 @@ class SpringNativeAwsLambdaApplicationTest {
   private ObjectMapper objectMapper;
 
   @Test
-  void testWithCustomRuntime() throws JsonProcessingException {
+  void should_return_200() throws JsonProcessingException {
     final APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent()
         .withBody("{\"name\":\"Coffeebeans\"}");
 
@@ -38,5 +38,4 @@ class SpringNativeAwsLambdaApplicationTest {
         .isEqualTo(objectMapper.writeValueAsString(response));
 
   }
-
 }
