@@ -7,7 +7,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CdkResourceType {
+  APIGATEWAY_RESTAPI("AWS::ApiGateway::RestApi"),
   LAMBDA_FUNCTION("AWS::Lambda::Function"),
+  LAMBDA_EVENT_INVOKE_CONFIG("AWS::Lambda::EventInvokeConfig"),
+  LAMBDA_PERMISSION("AWS::Lambda::Permission"),
   POLICY("AWS::IAM::Policy"),
   ROLE("AWS::IAM::Role");
 
