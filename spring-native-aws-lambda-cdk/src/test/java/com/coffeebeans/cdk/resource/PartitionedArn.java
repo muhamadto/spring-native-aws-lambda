@@ -46,6 +46,7 @@ import software.amazon.awscdk.assertions.Match;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+// TODO fixme
 public class PartitionedArn {
 
   private static final String ARN_SUFFIX = "arn:";
