@@ -10,6 +10,8 @@ public enum CdkResourceType {
   APIGATEWAY_RESTAPI("AWS::ApiGateway::RestApi"),
   APIGATEWAY_RESTAPI_METHOD("AWS::ApiGateway::Method"),
 
+  APIGATEWAY_RESTAPI_RESOURCE("AWS::ApiGateway::Resource"),
+
   LAMBDA_FUNCTION("AWS::Lambda::Function"),
   LAMBDA_EVENT_INVOKE_CONFIG("AWS::Lambda::EventInvokeConfig"),
   LAMBDA_PERMISSION("AWS::Lambda::Permission"),

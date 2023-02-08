@@ -21,7 +21,6 @@ public abstract class TemplateSupport {
   public static final String ENV = "test";
   public static final String TEST_CDK_BUCKET = "test-cdk-bucket";
   public static final String QUALIFIER = "test";
-
   static Template template;
   private static final String STACK_NAME = "spring-native-aws-lambda-function-test-stack";
   @TempDir

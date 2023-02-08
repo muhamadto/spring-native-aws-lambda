@@ -6,21 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import software.amazon.awscdk.assertions.Matcher;
 
 @Getter
 @SuperBuilder
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RestApiMethodIntegration {
+public class RestApiRootMethodProperties extends RestApiMethodProperties {
 
-  @JsonProperty("IntegrationHttpMethod")
-  private Matcher integrationHttpMethod;
-
-  @JsonProperty("Type")
-  private Matcher type;
-
-  @JsonProperty("Uri")
-  private IntrinsicFunctionBasedArn uri;
+  @JsonProperty("ResourceId")
+  private IntrinsicFunctionBasedArn resourceId;
 }

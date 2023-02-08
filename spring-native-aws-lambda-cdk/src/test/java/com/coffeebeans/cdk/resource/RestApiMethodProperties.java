@@ -3,30 +3,29 @@ package com.coffeebeans.cdk.resource;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import software.amazon.awscdk.assertions.Matcher;
 
 @Getter
-@Builder
+@SuperBuilder
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RestApiMethodProperties {
+public abstract class RestApiMethodProperties {
 
   @JsonProperty("HttpMethod")
-  private Matcher httpMethod;
-
-  @JsonProperty("ResourceId")
-  private ResourceReference resourceId;
+  protected Matcher httpMethod;
 
   @JsonProperty("RestApiId")
-  private ResourceReference restApiId;
+  protected ResourceReference restApiId;
 
   @JsonProperty("Integration")
-  private RestApiMethodIntegration integration;
+  protected RestApiMethodIntegration integration;
 
   @JsonProperty("AuthorizationType")
-  private Matcher authorizationType;
+  protected Matcher authorizationType;
 }
