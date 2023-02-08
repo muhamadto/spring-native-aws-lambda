@@ -30,8 +30,6 @@ import com.coffeebeans.cdk.resource.RestApiRootMethodProperties;
 import com.coffeebeans.cdk.resource.Role;
 import com.coffeebeans.cdk.resource.RoleProperties;
 import com.coffeebeans.cdk.resource.Tag;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -76,11 +74,6 @@ class ApiRestTest extends TemplateSupport {
     final RestApiResource restApiResource = RestApiResource.builder()
         .properties(restApiResourceProperties)
         .build();
-
-    try {
-      System.out.println("restApiResource = " + new ObjectMapper().writeValueAsString(restApiResource));
-    } catch (JsonProcessingException e) {
-    }
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_RESOURCE.getValue(), restApiResource);
 
