@@ -2,8 +2,11 @@ package com.coffeebeans.cdk;
 
 import static com.coffeebeans.cdk.TagUtils.TAG_VALUE_COST_CENTRE;
 import static com.coffeebeans.cdk.resource.CdkResourceType.APIGATEWAY_RESTAPI;
+import static com.coffeebeans.cdk.resource.CdkResourceType.APIGATEWAY_RESTAPI_ACCOUNT;
+import static com.coffeebeans.cdk.resource.CdkResourceType.APIGATEWAY_RESTAPI_DEPLOYMENT;
 import static com.coffeebeans.cdk.resource.CdkResourceType.APIGATEWAY_RESTAPI_METHOD;
 import static com.coffeebeans.cdk.resource.CdkResourceType.APIGATEWAY_RESTAPI_RESOURCE;
+import static com.coffeebeans.cdk.resource.CdkResourceType.APIGATEWAY_RESTAPI_STAGE;
 import static com.coffeebeans.cdk.resource.CdkResourceType.ROLE;
 import static com.coffeebeans.cdk.resource.PolicyStatementEffect.ALLOW;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -19,6 +22,10 @@ import com.coffeebeans.cdk.resource.PolicyPrincipal;
 import com.coffeebeans.cdk.resource.PolicyStatement;
 import com.coffeebeans.cdk.resource.ResourceReference;
 import com.coffeebeans.cdk.resource.RestApi;
+import com.coffeebeans.cdk.resource.RestApiAccount;
+import com.coffeebeans.cdk.resource.RestApiAccountProperties;
+import com.coffeebeans.cdk.resource.RestApiDeployment;
+import com.coffeebeans.cdk.resource.RestApiDeploymentProperties;
 import com.coffeebeans.cdk.resource.RestApiMethod;
 import com.coffeebeans.cdk.resource.RestApiMethodIntegration;
 import com.coffeebeans.cdk.resource.RestApiMethodProperties;
@@ -27,6 +34,8 @@ import com.coffeebeans.cdk.resource.RestApiProperties;
 import com.coffeebeans.cdk.resource.RestApiResource;
 import com.coffeebeans.cdk.resource.RestApiResourceProperties;
 import com.coffeebeans.cdk.resource.RestApiRootMethodProperties;
+import com.coffeebeans.cdk.resource.RestApiStage;
+import com.coffeebeans.cdk.resource.RestApiStageProperties;
 import com.coffeebeans.cdk.resource.Role;
 import com.coffeebeans.cdk.resource.RoleProperties;
 import com.coffeebeans.cdk.resource.Tag;
@@ -46,9 +55,87 @@ class ApiRestTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final RestApi restApi = RestApi.builder().properties(restApiProperties).build();
+    final RestApi restApi = RestApi.builder()
+        .properties(restApiProperties)
+        .build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI.getValue(), restApi);
+
+    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+  }
+
+  @Test
+  void should_have_rest_api_account() {
+    final IntrinsicFunctionBasedArn cloudWatchRoleArn = IntrinsicFunctionBasedArn.builder()
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
+
+    final RestApiAccountProperties restApiAccountProperties = RestApiAccountProperties.builder()
+        .cloudWatchRoleArn(cloudWatchRoleArn)
+        .build();
+
+    final RestApiAccount restApiAccount = RestApiAccount.builder()
+        .properties(restApiAccountProperties)
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
+        .updateReplacePolicy(stringLikeRegexp("Retain"))
+        .deletionPolicy(stringLikeRegexp("Retain"))
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_ACCOUNT.getValue(), restApiAccount);
+
+    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+  }
+
+  @Test
+  void should_have_rest_api_deployment() {
+
+    final RestApiDeploymentProperties restApiDeploymentProperties = RestApiDeploymentProperties.builder()
+        .restApiId(ResourceReference.builder()
+            .reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
+            .build())
+        .description(exact("Automatically created by the RestApi construct"))
+        .build();
+
+    final RestApiDeployment restApiDeployment = RestApiDeployment.builder()
+        .properties(restApiDeploymentProperties)
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiproxyANY(.*)"))
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiproxy(.*)"))
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiANY(.*)"))
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapinamePOST(.*)"))
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)"))
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_DEPLOYMENT.getValue(), restApiDeployment);
+
+    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+  }
+
+  @Test
+  void should_have_rest_api_stage() {
+
+    final ResourceReference restApiId = ResourceReference.builder()
+        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
+        .build();
+
+    final ResourceReference deploymentId = ResourceReference.builder()
+        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapiDeployment(.*)"))
+        .build();
+
+    final RestApiStageProperties restApiDeploymentProperties = RestApiStageProperties.builder()
+        .restApiId(restApiId)
+        .deploymentId(deploymentId)
+        .stageName(exact("test"))
+        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
+        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
+        .build();
+
+    final RestApiStage restApiDeployment = RestApiStage.builder()
+        .properties(restApiDeploymentProperties)
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiAccount(.*)"))
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_STAGE.getValue(), restApiDeployment);
 
     assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
   }
