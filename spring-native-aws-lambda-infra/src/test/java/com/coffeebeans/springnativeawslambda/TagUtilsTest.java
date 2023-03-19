@@ -2,6 +2,7 @@ package com.coffeebeans.springnativeawslambda.function.infra;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.coffeebeans.springnativeawslambda.infra.TagUtils;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 

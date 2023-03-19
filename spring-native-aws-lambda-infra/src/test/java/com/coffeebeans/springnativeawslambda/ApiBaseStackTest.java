@@ -7,6 +7,8 @@ import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
 import static software.amazon.awscdk.services.sns.Topic.fromTopicArn;
 import static software.amazon.awscdk.services.sqs.DeduplicationScope.MESSAGE_GROUP;
 
+import com.coffeebeans.springnativeawslambda.infra.ApiBaseStack;
+import com.coffeebeans.springnativeawslambda.infra.StackUtils;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;

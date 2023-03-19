@@ -1,4 +1,4 @@
-package com.coffeebeans.springnativeawslambda.function.infra.lambda;
+package com.coffeebeans.springnativeawslambda.infra.lambda;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.collections4.MapUtils.isNotEmpty;

@@ -1,6 +1,6 @@
-package com.coffeebeans.springnativeawslambda.function.infra;
+package com.coffeebeans.springnativeawslambda.infra;
 
-import static com.coffeebeans.springnativeawslambda.function.infra.TagUtils.TAG_KEY_ENV;
+import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_KEY_ENV;
 import static software.amazon.awscdk.services.lambda.Code.fromAsset;
 import static software.amazon.awscdk.services.sqs.DeduplicationScope.MESSAGE_GROUP;
 

@@ -1,6 +1,6 @@
 package com.coffeebeans.springnativeawslambda.function.infra;
 
-import static com.coffeebeans.springnativeawslambda.function.infra.TagUtils.TAG_VALUE_COST_CENTRE;
+import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static software.amazon.awscdk.assertions.Match.exact;

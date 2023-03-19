@@ -1,4 +1,4 @@
-package com.coffeebeans.springnativeawslambda.function.infra;
+package com.coffeebeans.springnativeawslambda.infra;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;

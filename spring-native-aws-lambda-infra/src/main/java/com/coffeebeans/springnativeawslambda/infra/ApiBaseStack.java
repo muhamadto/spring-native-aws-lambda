@@ -1,6 +1,6 @@
-package com.coffeebeans.springnativeawslambda.function.infra;
+package com.coffeebeans.springnativeawslambda.infra;
 
-import com.coffeebeans.springnativeawslambda.function.infra.lambda.CustomRuntime2Function;
+import com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function;
 import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
