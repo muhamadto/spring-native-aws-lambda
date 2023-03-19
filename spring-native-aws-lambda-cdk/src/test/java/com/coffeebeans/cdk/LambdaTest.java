@@ -99,7 +99,7 @@ class LambdaTest extends TemplateSupport {
         .statement(policyStatement)
         .build();
 
-    // TODO fixme
+    //TODO fixme
     final PartitionedArn partitionedArn = PartitionedArn.builder()
         .partition("AWS::Partition")
         .service("iam")

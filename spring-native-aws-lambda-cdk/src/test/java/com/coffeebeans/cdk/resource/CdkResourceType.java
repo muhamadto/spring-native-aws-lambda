@@ -17,7 +17,9 @@ public enum CdkResourceType {
   LAMBDA_EVENT_INVOKE_CONFIG("AWS::Lambda::EventInvokeConfig"),
   LAMBDA_PERMISSION("AWS::Lambda::Permission"),
   POLICY("AWS::IAM::Policy"),
-  ROLE("AWS::IAM::Role");
+  ROLE("AWS::IAM::Role"),
+  SNS("AWS::SNS::Topic"),
+  SNS_SUBSCRIPTION("AWS::SNS::Subscription");
 
   private String value;
 }
