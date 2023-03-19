@@ -48,14 +48,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
     assertThat(template)
-        .hasQueue(queue);
+        .hasQueue(expected);
   }
 
   @Test
@@ -70,14 +70,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
     assertThat(template)
-        .hasQueue(queue);
+        .hasQueue(expected);
   }
 
   @Test
@@ -114,12 +114,12 @@ class QueueTest extends TemplateSupport {
         .policyDocument(policyDocument)
         .build();
 
-    final QueuePolicy queuePolicy = QueuePolicy.builder()
+    final QueuePolicy expected = QueuePolicy.builder()
         .properties(queuePolicyProperties)
         .build();
 
     assertThat(template)
-        .hasQueuePolicy(queuePolicy);
+        .hasQueuePolicy(expected);
   }
 
   @Test
@@ -142,14 +142,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
     assertThat(template)
-        .hasQueue(queue);
+        .hasQueue(expected);
   }
 
   @Test
@@ -161,14 +161,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
     assertThat(template)
-        .hasQueue(queue);
+        .hasQueue(expected);
   }
 
   @Test
@@ -205,11 +205,11 @@ class QueueTest extends TemplateSupport {
         .policyDocument(policyDocument)
         .build();
 
-    final QueuePolicy queuePolicy = QueuePolicy.builder()
+    final QueuePolicy expected = QueuePolicy.builder()
         .properties(queuePolicyProperties)
         .build();
 
     assertThat(template)
-        .hasQueuePolicy(queuePolicy);
+        .hasQueuePolicy(expected);
   }
 }

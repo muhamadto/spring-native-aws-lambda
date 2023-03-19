@@ -1,11 +1,10 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.coffeebeans.springnativeawslambda.infra.assertion.TopicAssert.assertThat;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType;
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
 import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
 import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
@@ -13,7 +12,6 @@ import com.coffeebeans.springnativeawslambda.infra.resource.Topic;
 import com.coffeebeans.springnativeawslambda.infra.resource.TopicProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.TopicSubscription;
 import com.coffeebeans.springnativeawslambda.infra.resource.TopicSubscriptionProperties;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class TopicTest extends TemplateSupport {
@@ -31,16 +29,12 @@ class TopicTest extends TemplateSupport {
         .topicName(exact("spring-native-aws-lambda-function-success-topic.fifo"))
         .build();
 
-    final Topic topic = Topic.builder()
+    final Topic expected = Topic.builder()
         .properties(topicProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SNS.getValue(), topic);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasTopic(expected);
   }
 
   @Test
@@ -52,16 +46,12 @@ class TopicTest extends TemplateSupport {
         .topicName(exact("spring-native-aws-lambda-function-failure-topic"))
         .build();
 
-    final Topic topic = Topic.builder()
+    final Topic expected = Topic.builder()
         .properties(topicProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SNS.getValue(), topic);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasTopic(expected);
   }
 
   @Test
@@ -81,16 +71,12 @@ class TopicTest extends TemplateSupport {
         .endpoint(endpoint)
         .build();
 
-    final TopicSubscription topicSubscription = TopicSubscription.builder()
+    final TopicSubscription expected = TopicSubscription.builder()
         .properties(topicSubscriptionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SNS_SUBSCRIPTION.getValue(), topicSubscription);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasTopicSubscription(expected);
   }
 
   @Test
@@ -110,15 +96,11 @@ class TopicTest extends TemplateSupport {
         .endpoint(endpoint)
         .build();
 
-    final TopicSubscription topicSubscription = TopicSubscription.builder()
+    final TopicSubscription expected = TopicSubscription.builder()
         .properties(topicSubscriptionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SNS_SUBSCRIPTION.getValue(), topicSubscription);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasTopicSubscription(expected);
   }
 }

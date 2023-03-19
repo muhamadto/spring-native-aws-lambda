@@ -2,11 +2,11 @@ package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.assertj.core.api.Assertions.assertThat;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType;
+import com.coffeebeans.springnativeawslambda.infra.assertion.IamAssert;
+import com.coffeebeans.springnativeawslambda.infra.assertion.LambdaAssert;
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda;
 import com.coffeebeans.springnativeawslambda.infra.resource.LambdaCode;
@@ -29,7 +29,6 @@ import com.coffeebeans.springnativeawslambda.infra.resource.Role;
 import com.coffeebeans.springnativeawslambda.infra.resource.RoleProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import software.amazon.awscdk.assertions.Matcher;
 
@@ -68,18 +67,14 @@ class LambdaTest extends TemplateSupport {
         .environment(lambdaEnvironment)
         .build();
 
-    final Lambda lambda = Lambda.builder()
+    final Lambda expected = Lambda.builder()
         .dependency(stringLikeRegexp("springnativeawslambdafunctionroleDefaultPolicy(.*)"))
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
         .properties(lambdaProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_FUNCTION.getValue(), lambda);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasFunction(expected);
   }
 
   @Test
@@ -109,16 +104,12 @@ class LambdaTest extends TemplateSupport {
         .assumeRolePolicyDocument(assumeRolePolicyDocument)
         .build();
 
-    final Role role = Role.builder()
+    final Role expected = Role.builder()
         .properties(roleProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.ROLE.getValue(), role);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    IamAssert.assertThat(template)
+        .hasRole(expected);
   }
 
   @Test
@@ -149,12 +140,8 @@ class LambdaTest extends TemplateSupport {
         .properties(policyProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.POLICY.getValue(), policy);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    IamAssert.assertThat(template)
+        .hasPolicy(policy);
   }
 
   @Test
@@ -173,17 +160,12 @@ class LambdaTest extends TemplateSupport {
             .build())
         .build();
 
-    final LambdaEventInvokeConfig lambdaEventInvokeConfig = LambdaEventInvokeConfig.builder()
+    final LambdaEventInvokeConfig expected = LambdaEventInvokeConfig.builder()
         .properties(lambdaEventInvokeConfigProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_EVENT_INVOKE_CONFIG.getValue(),
-        lambdaEventInvokeConfig);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasLambdaEventInvokeConfig(expected);
   }
 
   @Test
@@ -219,16 +201,12 @@ class LambdaTest extends TemplateSupport {
         .sourceArn(sourceArn)
         .build();
 
-    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+    final LambdaPermission expected = LambdaPermission.builder()
         .properties(lambdaPermissionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_PERMISSION.getValue(), lambdaPermission);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasLambdaPermission(expected);
   }
 
   @Test
@@ -262,16 +240,12 @@ class LambdaTest extends TemplateSupport {
         .sourceArn(sourceArn)
         .build();
 
-    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+    final LambdaPermission expected = LambdaPermission.builder()
         .properties(lambdaPermissionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_PERMISSION.getValue(), lambdaPermission);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasLambdaPermission(expected);
   }
 
   @Test
@@ -307,16 +281,12 @@ class LambdaTest extends TemplateSupport {
         .sourceArn(sourceArn)
         .build();
 
-    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+    final LambdaPermission expected = LambdaPermission.builder()
         .properties(lambdaPermissionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_PERMISSION.getValue(), lambdaPermission);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasLambdaPermission(expected);
   }
 
   @Test
@@ -350,16 +320,12 @@ class LambdaTest extends TemplateSupport {
         .sourceArn(sourceArn)
         .build();
 
-    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+    final LambdaPermission expected = LambdaPermission.builder()
         .properties(lambdaPermissionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_PERMISSION.getValue(), lambdaPermission);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasLambdaPermission(expected);
   }
 
   @Test
@@ -395,16 +361,12 @@ class LambdaTest extends TemplateSupport {
         .sourceArn(sourceArn)
         .build();
 
-    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+    final LambdaPermission expected = LambdaPermission.builder()
         .properties(lambdaPermissionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_PERMISSION.getValue(), lambdaPermission);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasLambdaPermission(expected);
   }
 
   @Test
@@ -438,16 +400,12 @@ class LambdaTest extends TemplateSupport {
         .sourceArn(sourceArn)
         .build();
 
-    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+    final LambdaPermission expected = LambdaPermission.builder()
         .properties(lambdaPermissionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.LAMBDA_PERMISSION.getValue(), lambdaPermission);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    LambdaAssert.assertThat(template)
+        .hasLambdaPermission(expected);
   }
 
   private static PolicyStatement getAllowSnsPublishPolicyStatement(final String pattern) {
