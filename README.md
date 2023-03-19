@@ -235,8 +235,8 @@ and the following trust relationship
             "SNS:Unsubscribe"
          ],
          "Resource": [
-            "arn:aws:topic:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-topic.fifo",
-            "arn:aws:topic:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-topic"
+            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-topic.fifo",
+            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-topic"
          ]
       },
       {
