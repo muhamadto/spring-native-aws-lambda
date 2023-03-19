@@ -19,7 +19,9 @@ public enum CdkResourceType {
   POLICY("AWS::IAM::Policy"),
   ROLE("AWS::IAM::Role"),
   SNS("AWS::SNS::Topic"),
-  SNS_SUBSCRIPTION("AWS::SNS::Subscription");
+  SNS_SUBSCRIPTION("AWS::SNS::Subscription"),
+  SQS("AWS::SQS::Queue"),
+  QUEUE_POLICY("AWS::SQS::QueuePolicy");
 
   private String value;
 }

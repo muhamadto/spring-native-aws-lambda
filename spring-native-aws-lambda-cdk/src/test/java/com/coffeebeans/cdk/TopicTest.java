@@ -9,22 +9,22 @@ import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
 import com.coffeebeans.cdk.resource.IntrinsicFunctionBasedArn;
 import com.coffeebeans.cdk.resource.ResourceReference;
-import com.coffeebeans.cdk.resource.Sns;
-import com.coffeebeans.cdk.resource.SnsProperties;
-import com.coffeebeans.cdk.resource.SnsSnsSubscriptionProperties;
-import com.coffeebeans.cdk.resource.SnsSubscription;
 import com.coffeebeans.cdk.resource.Tag;
+import com.coffeebeans.cdk.resource.Topic;
+import com.coffeebeans.cdk.resource.TopicProperties;
+import com.coffeebeans.cdk.resource.TopicSubscription;
+import com.coffeebeans.cdk.resource.TopicSubscriptionProperties;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-class SnsTest extends TemplateSupport {
+class TopicTest extends TemplateSupport {
 
   public static final String TEST = "test";
 
   @Test
-  void should_have_success_sns() {
+  void should_have_success_topic() {
 
-    final SnsProperties snsProperties = SnsProperties.builder()
+    final TopicProperties topicProperties = TopicProperties.builder()
         .contentBasedDeduplication(true)
         .fifoTopic(true)
         .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
@@ -32,11 +32,11 @@ class SnsTest extends TemplateSupport {
         .topicName(exact("spring-native-aws-lambda-function-success-topic.fifo"))
         .build();
 
-    final Sns sns = Sns.builder()
-        .properties(snsProperties)
+    final Topic topic = Topic.builder()
+        .properties(topicProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(SNS.getValue(), sns);
+    final Map<String, Map<String, Object>> actual = template.findResources(SNS.getValue(), topic);
 
     assertThat(actual)
         .isNotNull()
@@ -45,19 +45,19 @@ class SnsTest extends TemplateSupport {
   }
 
   @Test
-  void should_have_failure_sns() {
+  void should_have_failure_topic() {
 
-    final SnsProperties snsProperties = SnsProperties.builder()
+    final TopicProperties topicProperties = TopicProperties.builder()
         .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .topicName(exact("spring-native-aws-lambda-function-failure-topic"))
         .build();
 
-    final Sns sns = Sns.builder()
-        .properties(snsProperties)
+    final Topic topic = Topic.builder()
+        .properties(topicProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(SNS.getValue(), sns);
+    final Map<String, Map<String, Object>> actual = template.findResources(SNS.getValue(), topic);
 
     assertThat(actual)
         .isNotNull()
@@ -66,7 +66,7 @@ class SnsTest extends TemplateSupport {
   }
 
   @Test
-  void should_have_subscription_to_success_sns() {
+  void should_have_subscription_to_success_topic() {
     final ResourceReference topicArn = ResourceReference.builder()
         .reference(stringLikeRegexp("springnativeawslambdafunctionsuccesstopicfifo(.*)"))
         .build();
@@ -76,17 +76,17 @@ class SnsTest extends TemplateSupport {
         .attributesArn("Arn")
         .build();
 
-    final SnsSnsSubscriptionProperties snsSnsSubscriptionProperties = SnsSnsSubscriptionProperties.builder()
+    final TopicSubscriptionProperties topicSubscriptionProperties = TopicSubscriptionProperties.builder()
         .protocol(exact("sqs"))
         .topicArn(topicArn)
         .endpoint(endpoint)
         .build();
 
-    final SnsSubscription snsSubscription = SnsSubscription.builder()
-        .properties(snsSnsSubscriptionProperties)
+    final TopicSubscription topicSubscription = TopicSubscription.builder()
+        .properties(topicSubscriptionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(SNS_SUBSCRIPTION.getValue(), snsSubscription);
+    final Map<String, Map<String, Object>> actual = template.findResources(SNS_SUBSCRIPTION.getValue(), topicSubscription);
 
     assertThat(actual)
         .isNotNull()
@@ -95,7 +95,7 @@ class SnsTest extends TemplateSupport {
   }
 
   @Test
-  void should_have_subscription_to_failure_sns() {
+  void should_have_subscription_to_failure_topic() {
     final ResourceReference topicArn = ResourceReference.builder()
         .reference(stringLikeRegexp("springnativeawslambdafunctionfailuretopic(.*)"))
         .build();
@@ -105,17 +105,17 @@ class SnsTest extends TemplateSupport {
         .attributesArn("Arn")
         .build();
 
-    final SnsSnsSubscriptionProperties snsSnsSubscriptionProperties = SnsSnsSubscriptionProperties.builder()
+    final TopicSubscriptionProperties topicSubscriptionProperties = TopicSubscriptionProperties.builder()
         .protocol(exact("sqs"))
         .topicArn(topicArn)
         .endpoint(endpoint)
         .build();
 
-    final SnsSubscription snsSubscription = SnsSubscription.builder()
-        .properties(snsSnsSubscriptionProperties)
+    final TopicSubscription topicSubscription = TopicSubscription.builder()
+        .properties(topicSubscriptionProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(SNS_SUBSCRIPTION.getValue(), snsSubscription);
+    final Map<String, Map<String, Object>> actual = template.findResources(SNS_SUBSCRIPTION.getValue(), topicSubscription);
 
     assertThat(actual)
         .isNotNull()

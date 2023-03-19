@@ -30,10 +30,13 @@ public class PolicyStatement {
   @Singular
   @JsonProperty("Resource")
   @JsonFormat(with = Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
-  private List<ResourceReference> resources;
+  private List<Object> resources;
 
   @JsonProperty("Principal")
   private PolicyPrincipal principal;
+
+  @JsonProperty("Condition")
+  private PolicyStatementCondition condition;
 
   @JsonProperty("Effect")
   public String getEffect() {

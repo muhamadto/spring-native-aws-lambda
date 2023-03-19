@@ -1,6 +1,6 @@
 package com.coffeebeans.cdk.resource;
 
-import static com.coffeebeans.cdk.resource.CdkResourceType.SNS;
+import static com.coffeebeans.cdk.resource.CdkResourceType.SNS_SUBSCRIPTION;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,13 +15,13 @@ import lombok.Getter;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Sns {
+public class TopicSubscription {
 
   @JsonIgnore
-  private final CdkResourceType type = SNS;
+  private final CdkResourceType type = SNS_SUBSCRIPTION;
 
   @JsonProperty("Properties")
-  private SnsProperties properties;
+  private TopicSubscriptionProperties properties;
 
   @JsonProperty("Type")
   public String getType() {

@@ -15,7 +15,7 @@ import software.amazon.awscdk.assertions.Matcher;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class SnsProperties {
+public class TopicProperties {
 
   @JsonProperty("ContentBasedDeduplication")
   private Boolean contentBasedDeduplication;
