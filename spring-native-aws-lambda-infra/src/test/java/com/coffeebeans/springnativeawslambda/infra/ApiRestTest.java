@@ -159,11 +159,16 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_post_method() {
 
-    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(
-            List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
-                ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
-                IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
-                "/invocations"))
+    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder()
+        .joinArn(EMPTY)
+        .joinArn(List.of(
+            "arn:",
+            ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+            ":apigateway:",
+            ResourceReference.builder().reference(exact("AWS::Region")).build(),
+            ":lambda:path/2015-03-31/functions/",
+            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
+            "/invocations"))
         .build();
 
     final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
@@ -188,11 +193,17 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_proxy_method() {
 
-    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(
-        List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
-            ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
+    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder()
+        .joinArn(EMPTY)
+        .joinArn(List.of(
+            "arn:",
+            ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+            ":apigateway:",
+            ResourceReference.builder().reference(exact("AWS::Region")).build(),
+            ":lambda:path/2015-03-31/functions/",
             IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
-            "/invocations")).build();
+            "/invocations"))
+        .build();
 
     final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
         .integrationHttpMethod(exact("POST")).uri(uri).build();
