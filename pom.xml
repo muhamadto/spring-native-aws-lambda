@@ -58,7 +58,7 @@
 
   <modules>
     <module>spring-native-aws-lambda-function</module>
-    <module>spring-native-aws-lambda-cdk</module>
+    <module>spring-native-aws-lambda-infra</module>
   </modules>
 
   <dependencyManagement>
