@@ -16,7 +16,6 @@ import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
 import com.coffeebeans.cdk.resource.IntrinsicFunctionBasedArn;
-import com.coffeebeans.cdk.resource.PartitionedArn;
 import com.coffeebeans.cdk.resource.PolicyDocument;
 import com.coffeebeans.cdk.resource.PolicyPrincipal;
 import com.coffeebeans.cdk.resource.PolicyStatement;
@@ -49,15 +48,11 @@ class ApiRestTest extends TemplateSupport {
 
   @Test
   void should_have_rest_api() {
-    final RestApiProperties restApiProperties = RestApiProperties.builder()
-        .name(exact("spring-native-aws-lambda-function-rest-api"))
-        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
-        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
+    final RestApiProperties restApiProperties = RestApiProperties.builder().name(exact("spring-native-aws-lambda-function-rest-api"))
+        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build()).tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final RestApi restApi = RestApi.builder()
-        .properties(restApiProperties)
-        .build();
+    final RestApi restApi = RestApi.builder().properties(restApiProperties).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI.getValue(), restApi);
 
@@ -67,20 +62,13 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_rest_api_account() {
     final IntrinsicFunctionBasedArn cloudWatchRoleArn = IntrinsicFunctionBasedArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-        .attributesArn("Arn")
-        .build();
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build();
 
-    final RestApiAccountProperties restApiAccountProperties = RestApiAccountProperties.builder()
-        .cloudWatchRoleArn(cloudWatchRoleArn)
-        .build();
+    final RestApiAccountProperties restApiAccountProperties = RestApiAccountProperties.builder().cloudWatchRoleArn(cloudWatchRoleArn).build();
 
-    final RestApiAccount restApiAccount = RestApiAccount.builder()
-        .properties(restApiAccountProperties)
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-        .updateReplacePolicy(stringLikeRegexp("Retain"))
-        .deletionPolicy(stringLikeRegexp("Retain"))
-        .build();
+    final RestApiAccount restApiAccount = RestApiAccount.builder().properties(restApiAccountProperties)
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).updateReplacePolicy(stringLikeRegexp("Retain"))
+        .deletionPolicy(stringLikeRegexp("Retain")).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_ACCOUNT.getValue(), restApiAccount);
 
@@ -91,20 +79,15 @@ class ApiRestTest extends TemplateSupport {
   void should_have_rest_api_deployment() {
 
     final RestApiDeploymentProperties restApiDeploymentProperties = RestApiDeploymentProperties.builder()
-        .restApiId(ResourceReference.builder()
-            .reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-            .build())
-        .description(exact("Automatically created by the RestApi construct"))
-        .build();
+        .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
+        .description(exact("Automatically created by the RestApi construct")).build();
 
-    final RestApiDeployment restApiDeployment = RestApiDeployment.builder()
-        .properties(restApiDeploymentProperties)
+    final RestApiDeployment restApiDeployment = RestApiDeployment.builder().properties(restApiDeploymentProperties)
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiproxyANY(.*)"))
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiproxy(.*)"))
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiANY(.*)"))
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapinamePOST(.*)"))
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)"))
-        .build();
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)")).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_DEPLOYMENT.getValue(), restApiDeployment);
 
@@ -114,26 +97,17 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_rest_api_stage() {
 
-    final ResourceReference restApiId = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-        .build();
+    final ResourceReference restApiId = ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build();
 
     final ResourceReference deploymentId = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapiDeployment(.*)"))
-        .build();
+        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapiDeployment(.*)")).build();
 
-    final RestApiStageProperties restApiDeploymentProperties = RestApiStageProperties.builder()
-        .restApiId(restApiId)
-        .deploymentId(deploymentId)
-        .stageName(exact("test"))
-        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
-        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
-        .build();
+    final RestApiStageProperties restApiDeploymentProperties = RestApiStageProperties.builder().restApiId(restApiId).deploymentId(deploymentId)
+        .stageName(exact("test")).tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
+        .tag(Tag.builder().key("ENV").value(exact(TEST)).build()).build();
 
-    final RestApiStage restApiDeployment = RestApiStage.builder()
-        .properties(restApiDeploymentProperties)
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiAccount(.*)"))
-        .build();
+    final RestApiStage restApiDeployment = RestApiStage.builder().properties(restApiDeploymentProperties)
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiAccount(.*)")).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_STAGE.getValue(), restApiDeployment);
 
@@ -144,23 +118,14 @@ class ApiRestTest extends TemplateSupport {
   void should_have_proxy_resource() {
 
     final IntrinsicFunctionBasedArn parentId = IntrinsicFunctionBasedArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-        .attributesArn(exact("RootResourceId"))
-        .build();
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).attributesArn(exact("RootResourceId")).build();
 
-    final ResourceReference restApiId = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-        .build();
+    final ResourceReference restApiId = ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build();
 
-    final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder()
-        .parentId(parentId)
-        .pathPart(exact("{proxy+}"))
-        .restApiId(restApiId)
-        .build();
+    final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder().parentId(parentId).pathPart(exact("{proxy+}"))
+        .restApiId(restApiId).build();
 
-    final RestApiResource restApiResource = RestApiResource.builder()
-        .properties(restApiResourceProperties)
-        .build();
+    final RestApiResource restApiResource = RestApiResource.builder().properties(restApiResourceProperties).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_RESOURCE.getValue(), restApiResource);
 
@@ -171,23 +136,14 @@ class ApiRestTest extends TemplateSupport {
   void should_have_account_resource() {
 
     final IntrinsicFunctionBasedArn parentId = IntrinsicFunctionBasedArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-        .attributesArn(exact("RootResourceId"))
-        .build();
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).attributesArn(exact("RootResourceId")).build();
 
-    final ResourceReference restApiId = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-        .build();
+    final ResourceReference restApiId = ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build();
 
-    final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder()
-        .parentId(parentId)
-        .pathPart(exact("name"))
-        .restApiId(restApiId)
-        .build();
+    final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder().parentId(parentId).pathPart(exact("name"))
+        .restApiId(restApiId).build();
 
-    final RestApiResource restApiResource = RestApiResource.builder()
-        .properties(restApiResourceProperties)
-        .build();
+    final RestApiResource restApiResource = RestApiResource.builder().properties(restApiResourceProperties).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_RESOURCE.getValue(), restApiResource);
     assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
@@ -196,38 +152,21 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_post_method() {
 
-    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder()
-        .joinArn(EMPTY)
-        .joinArn(List.of(
-            "arn:",
-            ResourceReference.builder().reference(exact("AWS::Partition")).build(),
-            ":apigateway:",
-            ResourceReference.builder().reference(exact("AWS::Region")).build(),
-            ":lambda:path/2015-03-31/functions/",
-            IntrinsicFunctionBasedArn.builder()
-                .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-                .attributesArn("Arn")
-                .build(),
-            "/invocations"))
-        .build();
+    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(
+        List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
+            ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
+            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
+            "/invocations")).build();
 
-    final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder()
-        .type(exact("AWS_PROXY"))
-        .integrationHttpMethod(exact("POST"))
-        .uri(uri)
-        .build();
+    final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
+        .integrationHttpMethod(exact("POST")).uri(uri).build();
 
-    final RestApiMethodProperties restApiMethodProperties = RestApiNonRootMethodProperties.builder()
-        .httpMethod(exact("POST"))
+    final RestApiMethodProperties restApiMethodProperties = RestApiNonRootMethodProperties.builder().httpMethod(exact("POST"))
         .resourceId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)")).build())
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
-        .authorizationType(exact("NONE"))
-        .integration(restApiMethodIntegration)
-        .build();
+        .authorizationType(exact("NONE")).integration(restApiMethodIntegration).build();
 
-    final RestApiMethod restApiMethod = RestApiMethod.builder()
-        .properties(restApiMethodProperties)
-        .build();
+    final RestApiMethod restApiMethod = RestApiMethod.builder().properties(restApiMethodProperties).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_METHOD.getValue(), restApiMethod);
     assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
@@ -236,38 +175,21 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_proxy_method() {
 
-    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder()
-        .joinArn(EMPTY)
-        .joinArn(List.of(
-            "arn:",
-            ResourceReference.builder().reference(exact("AWS::Partition")).build(),
-            ":apigateway:",
-            ResourceReference.builder().reference(exact("AWS::Region")).build(),
-            ":lambda:path/2015-03-31/functions/",
-            IntrinsicFunctionBasedArn.builder()
-                .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-                .attributesArn("Arn")
-                .build(),
-            "/invocations"))
-        .build();
+    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(
+        List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
+            ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
+            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
+            "/invocations")).build();
 
-    final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder()
-        .type(exact("AWS_PROXY"))
-        .integrationHttpMethod(exact("POST"))
-        .uri(uri)
-        .build();
+    final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
+        .integrationHttpMethod(exact("POST")).uri(uri).build();
 
-    final RestApiMethodProperties restApiMethodProperties = RestApiNonRootMethodProperties.builder()
-        .httpMethod(exact("ANY"))
+    final RestApiMethodProperties restApiMethodProperties = RestApiNonRootMethodProperties.builder().httpMethod(exact("ANY"))
         .resourceId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiproxy(.*)")).build())
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
-        .authorizationType(exact("NONE"))
-        .integration(restApiMethodIntegration)
-        .build();
+        .authorizationType(exact("NONE")).integration(restApiMethodIntegration).build();
 
-    final RestApiMethod restApiMethod = RestApiMethod.builder()
-        .properties(restApiMethodProperties)
-        .build();
+    final RestApiMethod restApiMethod = RestApiMethod.builder().properties(restApiMethodProperties).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_METHOD.getValue(), restApiMethod);
     assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
@@ -276,39 +198,22 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_root_method() {
 
-    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder()
-        .joinArn(EMPTY)
-        .joinArn(List.of(
-            "arn:",
-            ResourceReference.builder().reference(exact("AWS::Partition")).build(),
-            ":apigateway:",
-            ResourceReference.builder().reference(exact("AWS::Region")).build(),
-            ":lambda:path/2015-03-31/functions/",
-            IntrinsicFunctionBasedArn.builder()
-                .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-                .attributesArn("Arn")
-                .build(),
-            "/invocations"))
-        .build();
+    final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(
+        List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
+            ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
+            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
+            "/invocations")).build();
 
-    final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder()
-        .type(exact("AWS_PROXY"))
-        .integrationHttpMethod(exact("POST"))
-        .uri(uri)
-        .build();
+    final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
+        .integrationHttpMethod(exact("POST")).uri(uri).build();
 
-    final RestApiMethodProperties restApiMethodProperties = RestApiRootMethodProperties.builder()
-        .resourceId(IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-            .attributesArn(exact("RootResourceId")).build())
-        .httpMethod(exact("ANY"))
+    final RestApiMethodProperties restApiMethodProperties = RestApiRootMethodProperties.builder().resourceId(
+            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
+                .attributesArn(exact("RootResourceId")).build()).httpMethod(exact("ANY"))
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
-        .authorizationType(exact("NONE"))
-        .integration(restApiMethodIntegration)
-        .build();
+        .authorizationType(exact("NONE")).integration(restApiMethodIntegration).build();
 
-    final RestApiMethod restApiMethod = RestApiMethod.builder()
-        .properties(restApiMethodProperties)
-        .build();
+    final RestApiMethod restApiMethod = RestApiMethod.builder().properties(restApiMethodProperties).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(APIGATEWAY_RESTAPI_METHOD.getValue(), restApiMethod);
     assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
@@ -321,25 +226,15 @@ class ApiRestTest extends TemplateSupport {
 
     final PolicyDocument assumeRolePolicyDocument = PolicyDocument.builder().statement(policyStatement).build();
 
-    // TODO fixme
-    final PartitionedArn partitionedArn = PartitionedArn.builder().partition("AWS::Partition").service("iam").resourceType("policy")
-        .resourceId("service-role/AmazonAPIGatewayPushToCloudWatchLogs").build();
+    final List<Object> arn = List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs");
 
-    final IntrinsicFunctionBasedArn managedPolicyArn = IntrinsicFunctionBasedArn.builder()
-        .joinArn(EMPTY)
-        .joinArn(partitionedArn.asList())
-        .build();
+    final IntrinsicFunctionBasedArn managedPolicyArn = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(arn).build();
 
-    final RoleProperties roleProperties = RoleProperties.builder()
-        .managedPolicyArn(managedPolicyArn)
-        .assumeRolePolicyDocument(assumeRolePolicyDocument)
-        .build();
+    final RoleProperties roleProperties = RoleProperties.builder().managedPolicyArn(managedPolicyArn)
+        .assumeRolePolicyDocument(assumeRolePolicyDocument).build();
 
-    final Role role = Role.builder()
-        .properties(roleProperties)
-        .deletionPolicy(RETAIN)
-        .updateReplacePolicy(RETAIN)
-        .build();
+    final Role role = Role.builder().properties(roleProperties).deletionPolicy(RETAIN).updateReplacePolicy(RETAIN).build();
 
     final Map<String, Map<String, Object>> actual = template.findResources(ROLE.getValue(), role);
 

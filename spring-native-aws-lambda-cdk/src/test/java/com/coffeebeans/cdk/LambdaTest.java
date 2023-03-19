@@ -23,7 +23,6 @@ import com.coffeebeans.cdk.resource.LambdaEventInvokeConfigProperties;
 import com.coffeebeans.cdk.resource.LambdaPermission;
 import com.coffeebeans.cdk.resource.LambdaPermissionProperties;
 import com.coffeebeans.cdk.resource.LambdaProperties;
-import com.coffeebeans.cdk.resource.PartitionedArn;
 import com.coffeebeans.cdk.resource.Policy;
 import com.coffeebeans.cdk.resource.PolicyDocument;
 import com.coffeebeans.cdk.resource.PolicyPrincipal;
@@ -99,17 +98,14 @@ class LambdaTest extends TemplateSupport {
         .statement(policyStatement)
         .build();
 
-    //TODO fixme
-    final PartitionedArn partitionedArn = PartitionedArn.builder()
-        .partition("AWS::Partition")
-        .service("iam")
-        .resourceType("policy")
-        .resourceId("service-role/AWSLambdaBasicExecutionRole")
-        .build();
+    final List<Object> arn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole");
 
     final IntrinsicFunctionBasedArn managedPolicyArn = IntrinsicFunctionBasedArn.builder()
         .joinArn(EMPTY)
-        .joinArn(partitionedArn.asList())
+        .joinArn(arn)
         .build();
 
     final RoleProperties roleProperties = RoleProperties.builder()
