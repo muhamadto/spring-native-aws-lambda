@@ -1,11 +1,10 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.coffeebeans.springnativeawslambda.infra.assertion.QueueAssert.assertThat;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType;
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
 import com.coffeebeans.springnativeawslambda.infra.resource.PolicyDocument;
 import com.coffeebeans.springnativeawslambda.infra.resource.PolicyPrincipal;
@@ -49,18 +48,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SQS.getValue(), queue);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasQueue(expected);
   }
 
   @Test
@@ -75,18 +70,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SQS.getValue(), queue);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasQueue(expected);
   }
 
   @Test
@@ -123,16 +114,12 @@ class QueueTest extends TemplateSupport {
         .policyDocument(policyDocument)
         .build();
 
-    final QueuePolicy queuePolicy = QueuePolicy.builder()
+    final QueuePolicy expected = QueuePolicy.builder()
         .properties(queuePolicyProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.QUEUE_POLICY.getValue(), queuePolicy);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasQueuePolicy(expected);
   }
 
   @Test
@@ -155,18 +142,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SQS.getValue(), queue);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasQueue(expected);
   }
 
   @Test
@@ -178,18 +161,14 @@ class QueueTest extends TemplateSupport {
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final Queue queue = Queue.builder()
+    final Queue expected = Queue.builder()
         .properties(queueProperties)
         .updateReplacePolicy(exact("Delete"))
         .deletionPolicy(exact("Delete"))
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.SQS.getValue(), queue);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasQueue(expected);
   }
 
   @Test
@@ -226,15 +205,11 @@ class QueueTest extends TemplateSupport {
         .policyDocument(policyDocument)
         .build();
 
-    final QueuePolicy queuePolicy = QueuePolicy.builder()
+    final QueuePolicy expected = QueuePolicy.builder()
         .properties(queuePolicyProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.QUEUE_POLICY.getValue(), queuePolicy);
-
-    assertThat(actual)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    assertThat(template)
+        .hasQueuePolicy(expected);
   }
 }

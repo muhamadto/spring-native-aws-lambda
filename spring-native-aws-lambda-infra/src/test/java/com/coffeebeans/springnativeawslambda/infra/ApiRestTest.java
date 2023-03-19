@@ -2,12 +2,12 @@ package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.assertj.core.api.Assertions.assertThat;
 import static software.amazon.awscdk.CfnDeletionPolicy.RETAIN;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType;
+import com.coffeebeans.springnativeawslambda.infra.assertion.ApiRestAssert;
+import com.coffeebeans.springnativeawslambda.infra.assertion.IamAssert;
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
 import com.coffeebeans.springnativeawslambda.infra.resource.PolicyDocument;
 import com.coffeebeans.springnativeawslambda.infra.resource.PolicyPrincipal;
@@ -33,7 +33,6 @@ import com.coffeebeans.springnativeawslambda.infra.resource.Role;
 import com.coffeebeans.springnativeawslambda.infra.resource.RoleProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class ApiRestTest extends TemplateSupport {
@@ -46,27 +45,34 @@ class ApiRestTest extends TemplateSupport {
         .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build()).tag(Tag.builder().key("ENV").value(exact(TEST)).build())
         .build();
 
-    final RestApi restApi = RestApi.builder().properties(restApiProperties).build();
+    final RestApi expected = RestApi.builder()
+        .properties(restApiProperties)
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI.getValue(), restApi);
-
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApi(expected);
   }
 
   @Test
   void should_have_rest_api_account() {
     final IntrinsicFunctionBasedArn cloudWatchRoleArn = IntrinsicFunctionBasedArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build();
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
 
-    final RestApiAccountProperties restApiAccountProperties = RestApiAccountProperties.builder().cloudWatchRoleArn(cloudWatchRoleArn).build();
+    final RestApiAccountProperties restApiAccountProperties = RestApiAccountProperties.builder()
+        .cloudWatchRoleArn(cloudWatchRoleArn)
+        .build();
 
-    final RestApiAccount restApiAccount = RestApiAccount.builder().properties(restApiAccountProperties)
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).updateReplacePolicy(stringLikeRegexp("Retain"))
-        .deletionPolicy(stringLikeRegexp("Retain")).build();
+    final RestApiAccount expected = RestApiAccount.builder()
+        .properties(restApiAccountProperties)
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
+        .updateReplacePolicy(stringLikeRegexp("Retain"))
+        .deletionPolicy(stringLikeRegexp("Retain"))
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_ACCOUNT.getValue(), restApiAccount);
-
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiAccount(expected);
   }
 
   @Test
@@ -76,17 +82,16 @@ class ApiRestTest extends TemplateSupport {
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
         .description(exact("Automatically created by the RestApi construct")).build();
 
-    final RestApiDeployment restApiDeployment = RestApiDeployment.builder().properties(restApiDeploymentProperties)
+    final RestApiDeployment expected = RestApiDeployment.builder().properties(restApiDeploymentProperties)
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiproxyANY(.*)"))
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiproxy(.*)"))
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiANY(.*)"))
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapinamePOST(.*)"))
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)")).build();
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)"))
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_DEPLOYMENT.getValue(),
-        restApiDeployment);
-
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiDeployment(expected);
   }
 
   @Test
@@ -101,12 +106,12 @@ class ApiRestTest extends TemplateSupport {
         .stageName(exact("test")).tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
         .tag(Tag.builder().key("ENV").value(exact(TEST)).build()).build();
 
-    final RestApiStage restApiDeployment = RestApiStage.builder().properties(restApiDeploymentProperties)
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiAccount(.*)")).build();
+    final RestApiStage expected = RestApiStage.builder().properties(restApiDeploymentProperties)
+        .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiAccount(.*)"))
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_STAGE.getValue(), restApiDeployment);
-
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiStage(expected);
   }
 
   @Test
@@ -120,11 +125,12 @@ class ApiRestTest extends TemplateSupport {
     final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder().parentId(parentId).pathPart(exact("{proxy+}"))
         .restApiId(restApiId).build();
 
-    final RestApiResource restApiResource = RestApiResource.builder().properties(restApiResourceProperties).build();
+    final RestApiResource expected = RestApiResource.builder()
+        .properties(restApiResourceProperties)
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_RESOURCE.getValue(), restApiResource);
-
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiResource(expected);
   }
 
   @Test
@@ -133,38 +139,50 @@ class ApiRestTest extends TemplateSupport {
     final IntrinsicFunctionBasedArn parentId = IntrinsicFunctionBasedArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).attributesArn(exact("RootResourceId")).build();
 
-    final ResourceReference restApiId = ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build();
+    final ResourceReference restApiId = ResourceReference.builder()
+        .reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
+        .build();
 
-    final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder().parentId(parentId).pathPart(exact("name"))
-        .restApiId(restApiId).build();
+    final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder()
+        .parentId(parentId).pathPart(exact("name"))
+        .restApiId(restApiId)
+        .build();
 
-    final RestApiResource restApiResource = RestApiResource.builder().properties(restApiResourceProperties).build();
+    final RestApiResource expected = RestApiResource.builder()
+        .properties(restApiResourceProperties)
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_RESOURCE.getValue(), restApiResource);
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiResource(expected);
   }
 
   @Test
   void should_have_post_method() {
 
     final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(
-        List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
-            ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
-            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
-            "/invocations")).build();
+            List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
+                ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
+                IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
+                "/invocations"))
+        .build();
 
     final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
-        .integrationHttpMethod(exact("POST")).uri(uri).build();
+        .integrationHttpMethod(exact("POST"))
+        .uri(uri)
+        .build();
 
     final RestApiMethodProperties restApiMethodProperties = RestApiNonRootMethodProperties.builder().httpMethod(exact("POST"))
         .resourceId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)")).build())
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
-        .authorizationType(exact("NONE")).integration(restApiMethodIntegration).build();
+        .authorizationType(exact("NONE")).integration(restApiMethodIntegration)
+        .build();
 
-    final RestApiMethod restApiMethod = RestApiMethod.builder().properties(restApiMethodProperties).build();
+    final RestApiMethod expected = RestApiMethod.builder()
+        .properties(restApiMethodProperties)
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_METHOD.getValue(), restApiMethod);
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiMethod(expected);
   }
 
   @Test
@@ -184,34 +202,42 @@ class ApiRestTest extends TemplateSupport {
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
         .authorizationType(exact("NONE")).integration(restApiMethodIntegration).build();
 
-    final RestApiMethod restApiMethod = RestApiMethod.builder().properties(restApiMethodProperties).build();
+    final RestApiMethod expected = RestApiMethod.builder()
+        .properties(restApiMethodProperties)
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_METHOD.getValue(), restApiMethod);
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiMethod(expected);
   }
 
   @Test
   void should_have_root_method() {
 
     final IntrinsicFunctionBasedArn uri = IntrinsicFunctionBasedArn.builder().joinArn(EMPTY).joinArn(
-        List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
-            ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
-            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
-            "/invocations")).build();
+            List.of("arn:", ResourceReference.builder().reference(exact("AWS::Partition")).build(), ":apigateway:",
+                ResourceReference.builder().reference(exact("AWS::Region")).build(), ":lambda:path/2015-03-31/functions/",
+                IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)")).attributesArn("Arn").build(),
+                "/invocations"))
+        .build();
 
     final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
-        .integrationHttpMethod(exact("POST")).uri(uri).build();
+        .integrationHttpMethod(exact("POST"))
+        .uri(uri)
+        .build();
 
     final RestApiMethodProperties restApiMethodProperties = RestApiRootMethodProperties.builder().resourceId(
             IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
                 .attributesArn(exact("RootResourceId")).build()).httpMethod(exact("ANY"))
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
-        .authorizationType(exact("NONE")).integration(restApiMethodIntegration).build();
+        .authorizationType(exact("NONE")).integration(restApiMethodIntegration)
+        .build();
 
-    final RestApiMethod restApiMethod = RestApiMethod.builder().properties(restApiMethodProperties).build();
+    final RestApiMethod expected = RestApiMethod.builder()
+        .properties(restApiMethodProperties)
+        .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.APIGATEWAY_RESTAPI_METHOD.getValue(), restApiMethod);
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    ApiRestAssert.assertThat(template)
+        .hasRestApiMethod(expected);
   }
 
   @Test
@@ -230,10 +256,9 @@ class ApiRestTest extends TemplateSupport {
     final RoleProperties roleProperties = RoleProperties.builder().managedPolicyArn(managedPolicyArn)
         .assumeRolePolicyDocument(assumeRolePolicyDocument).build();
 
-    final Role role = Role.builder().properties(roleProperties).deletionPolicy(RETAIN).updateReplacePolicy(RETAIN).build();
+    final Role expected = Role.builder().properties(roleProperties).deletionPolicy(RETAIN).updateReplacePolicy(RETAIN).build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(CdkResourceType.ROLE.getValue(), role);
-
-    assertThat(actual).isNotNull().isNotEmpty().hasSize(1);
+    IamAssert.assertThat(template)
+        .hasRole(expected);
   }
 }
