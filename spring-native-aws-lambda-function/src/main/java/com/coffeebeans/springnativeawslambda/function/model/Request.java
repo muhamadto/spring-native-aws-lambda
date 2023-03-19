@@ -1,4 +1,4 @@
-package com.coffeebeans.springnativeawslambda.model;
+package com.coffeebeans.springnativeawslambda.function.model;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.coffeebeans.springnativeawslambda;
+package com.coffeebeans.springnativeawslambda.function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

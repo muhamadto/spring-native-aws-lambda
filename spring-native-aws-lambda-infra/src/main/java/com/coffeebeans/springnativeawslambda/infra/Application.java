@@ -1,6 +1,5 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
-import static com.coffeebeans.springnativeawslambda.infra.SpringNativeAwsLambdaStack.LAMBDA_FUNCTION_ID;
 import static com.coffeebeans.springnativeawslambda.infra.StackUtils.createStack;
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_KEY_ENV;
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
@@ -21,7 +20,8 @@ public final class Application {
   private static final String PRD_STACK_NAME = "spring-native-aws-lambda-function-prd-stack";
   private static final String ENVIRONMENT_NAME_DEV = "dev";
   private static final String ENVIRONMENT_NAME_PRD = "prd";
-  private static final String LAMBDA_CODE_PATH = LAMBDA_FUNCTION_ID + "/target/spring-native-aws-lambda-function-native-zip.zip";
+  private static final String LAMBDA_CODE_PATH =
+      SpringNativeAwsLambdaStack.LAMBDA_FUNCTION_ID + "/target/spring-native-aws-lambda-function-native-zip.zip";
   private static final String QUALIFIER = "cbcore";
   private static final String FILE_ASSETS_BUCKET_NAME = "cbcore-cdk-bucket";
 

@@ -1,4 +1,4 @@
-package com.coffeebeans.springnativeawslambda.model;
+package com.coffeebeans.springnativeawslambda.function.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;

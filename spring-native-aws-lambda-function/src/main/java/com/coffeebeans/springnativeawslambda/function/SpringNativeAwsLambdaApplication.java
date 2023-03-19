@@ -1,6 +1,6 @@
-package com.coffeebeans.springnativeawslambda;
+package com.coffeebeans.springnativeawslambda.function;
 
-import com.coffeebeans.springnativeawslambda.model.Request;
+import com.coffeebeans.springnativeawslambda.function.model.Request;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.nativex.hint.NativeHint;

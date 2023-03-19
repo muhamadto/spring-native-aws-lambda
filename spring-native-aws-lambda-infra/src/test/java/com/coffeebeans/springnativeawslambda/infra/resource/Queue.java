@@ -1,7 +1,5 @@
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.SQS;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +17,7 @@ import software.amazon.awscdk.assertions.Matcher;
 public class Queue {
 
   @JsonIgnore
-  private final CdkResourceType type = SQS;
+  private final CdkResourceType type = CdkResourceType.SQS;
 
   @JsonProperty("Properties")
   private QueueProperties properties;

@@ -42,7 +42,7 @@ class CustomRuntime2FunctionTest {
   public static final @NotNull Duration DEFAULT_TIMEOUT = Duration.seconds(10);
   @TempDir
   private static Path TEMP_DIR;
-  private CustomRuntime2Function.Builder customRuntime2FunctionBuilder;
+  private Builder customRuntime2FunctionBuilder;
   private Stack stack;
   private String id;
   private SnsDestination onFailure;
