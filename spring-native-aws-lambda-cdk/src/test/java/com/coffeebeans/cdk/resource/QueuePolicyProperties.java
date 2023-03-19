@@ -14,13 +14,12 @@ import lombok.Singular;
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class IntrinsicFunctionBasedArn {
+public class QueuePolicyProperties {
 
   @Singular
-  @JsonProperty("Fn::GetAtt")
-  public List<Object> attributesArns;
+  @JsonProperty("Queues")
+  private List<ResourceReference> queues;
 
-  @Singular
-  @JsonProperty("Fn::Join")
-  public List<Object> joinArns;
+  @JsonProperty("PolicyDocument")
+  private PolicyDocument policyDocument;
 }

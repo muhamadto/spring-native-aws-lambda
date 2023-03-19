@@ -8,19 +8,25 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
+import software.amazon.awscdk.assertions.Matcher;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class IntrinsicFunctionBasedArn {
+public class TopicProperties {
+
+  @JsonProperty("ContentBasedDeduplication")
+  private Boolean contentBasedDeduplication;
+
+  @JsonProperty("FifoTopic")
+  private Boolean fifoTopic;
+
+  @JsonProperty("TopicName")
+  private Matcher topicName;
 
   @Singular
-  @JsonProperty("Fn::GetAtt")
-  public List<Object> attributesArns;
-
-  @Singular
-  @JsonProperty("Fn::Join")
-  public List<Object> joinArns;
+  @JsonProperty("Tags")
+  private List<Tag> tags;
 }

@@ -42,8 +42,7 @@ public class ApiBaseStack extends Stack {
   }
 
   @NotNull
-  protected Queue createQueue(
-      @NotBlank final String queueId) {
+  protected Queue createQueue(@NotBlank final String queueId) {
     final DeadLetterQueue deadLetterQueue = createDeadLetterQueue(queueId + DEAD_LETTER_QUEUE_SUFFIX);
 
     return Queue.Builder.create(this, queueId)

@@ -1,6 +1,6 @@
 package com.coffeebeans.cdk.resource;
 
-import static com.coffeebeans.cdk.resource.CdkResourceType.ROLE;
+import static com.coffeebeans.cdk.resource.CdkResourceType.SQS;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,26 +9,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import software.amazon.awscdk.CfnDeletionPolicy;
+import software.amazon.awscdk.assertions.Matcher;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Role {
+public class Queue {
 
   @JsonIgnore
-  private final CdkResourceType type = ROLE;
+  private final CdkResourceType type = SQS;
 
   @JsonProperty("Properties")
-  private RoleProperties properties;
+  private QueueProperties properties;
 
   @JsonProperty("UpdateReplacePolicy")
-  private CfnDeletionPolicy updateReplacePolicy;
+  private Matcher updateReplacePolicy;
 
   @JsonProperty("DeletionPolicy")
-  private CfnDeletionPolicy deletionPolicy;
+  private Matcher deletionPolicy;
 
   @JsonProperty("Type")
   public String getType() {

@@ -1,6 +1,9 @@
 package com.coffeebeans.cdk;
 
 import static com.coffeebeans.cdk.TagUtils.TAG_VALUE_COST_CENTRE;
+import static com.coffeebeans.cdk.resource.CdkResourceType.LAMBDA_EVENT_INVOKE_CONFIG;
+import static com.coffeebeans.cdk.resource.CdkResourceType.LAMBDA_FUNCTION;
+import static com.coffeebeans.cdk.resource.CdkResourceType.LAMBDA_PERMISSION;
 import static com.coffeebeans.cdk.resource.CdkResourceType.POLICY;
 import static com.coffeebeans.cdk.resource.CdkResourceType.ROLE;
 import static com.coffeebeans.cdk.resource.PolicyStatementEffect.ALLOW;
@@ -12,9 +15,14 @@ import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 import com.coffeebeans.cdk.resource.IntrinsicFunctionBasedArn;
 import com.coffeebeans.cdk.resource.Lambda;
 import com.coffeebeans.cdk.resource.LambdaCode;
+import com.coffeebeans.cdk.resource.LambdaDestinationConfig;
+import com.coffeebeans.cdk.resource.LambdaDestinationReference;
 import com.coffeebeans.cdk.resource.LambdaEnvironment;
+import com.coffeebeans.cdk.resource.LambdaEventInvokeConfig;
+import com.coffeebeans.cdk.resource.LambdaEventInvokeConfigProperties;
+import com.coffeebeans.cdk.resource.LambdaPermission;
+import com.coffeebeans.cdk.resource.LambdaPermissionProperties;
 import com.coffeebeans.cdk.resource.LambdaProperties;
-import com.coffeebeans.cdk.resource.PartitionedArn;
 import com.coffeebeans.cdk.resource.Policy;
 import com.coffeebeans.cdk.resource.PolicyDocument;
 import com.coffeebeans.cdk.resource.PolicyPrincipal;
@@ -24,13 +32,13 @@ import com.coffeebeans.cdk.resource.ResourceReference;
 import com.coffeebeans.cdk.resource.Role;
 import com.coffeebeans.cdk.resource.RoleProperties;
 import com.coffeebeans.cdk.resource.Tag;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import software.amazon.awscdk.assertions.Matcher;
 
 class LambdaTest extends TemplateSupport {
 
-  private static final String FUNCTION_RESOURCE_TYPE = "AWS::Lambda::Function";
   public static final String TEST = "test";
 
   @Test
@@ -41,8 +49,8 @@ class LambdaTest extends TemplateSupport {
         .build();
 
     final IntrinsicFunctionBasedArn roleArn = IntrinsicFunctionBasedArn.builder()
-        .getAttributesArn(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
-        .getAttributesArn("Arn")
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
+        .attributesArn("Arn")
         .build();
 
     final LambdaEnvironment lambdaEnvironment = LambdaEnvironment.builder()
@@ -70,7 +78,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaProperties)
         .build();
 
-    final Map<String, Map<String, Object>> actual = template.findResources(FUNCTION_RESOURCE_TYPE, lambda);
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_FUNCTION.getValue(), lambda);
 
     assertThat(actual)
         .isNotNull()
@@ -90,16 +98,14 @@ class LambdaTest extends TemplateSupport {
         .statement(policyStatement)
         .build();
 
-    final PartitionedArn partitionedArn = PartitionedArn.builder()
-        .partition("AWS::Partition")
-        .service("iam")
-        .resourceType("policy")
-        .resourceId("service-role/AWSLambdaBasicExecutionRole")
-        .build();
+    final List<Object> arn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole");
 
     final IntrinsicFunctionBasedArn managedPolicyArn = IntrinsicFunctionBasedArn.builder()
         .joinArn(EMPTY)
-        .joinArn(partitionedArn.asList())
+        .joinArn(arn)
         .build();
 
     final RoleProperties roleProperties = RoleProperties.builder()
@@ -155,6 +161,298 @@ class LambdaTest extends TemplateSupport {
         .hasSize(1);
   }
 
+  @Test
+  void should_have_event_invoke_config_for_success_and_failure() {
+
+    final LambdaDestinationReference onFailure = createDestinationReference("springnativeawslambdafunctionfailuretopic(.*)");
+    final LambdaDestinationReference onSuccess = createDestinationReference("springnativeawslambdafunctionsuccesstopicfifo(.*)");
+
+    final LambdaEventInvokeConfigProperties lambdaEventInvokeConfigProperties = LambdaEventInvokeConfigProperties.builder()
+        .functionName(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunction(.*)")).build())
+        .maximumRetryAttempts(2)
+        .qualifier(exact("$LATEST"))
+        .lambdaDestinationConfig(LambdaDestinationConfig.builder()
+            .onFailure(onFailure)
+            .onSuccess(onSuccess)
+            .build())
+        .build();
+
+    final LambdaEventInvokeConfig lambdaEventInvokeConfig = LambdaEventInvokeConfig.builder()
+        .properties(lambdaEventInvokeConfigProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_EVENT_INVOKE_CONFIG.getValue(), lambdaEventInvokeConfig);
+
+    assertThat(actual)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
+  @Test
+  void should_have_permission_to_allow_rest_api_root_call_lambda() {
+
+    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
+
+    final List<Object> joinArn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":execute-api:",
+        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        ":",
+        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        ":",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        "/",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        "/*/"
+    );
+
+    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+        .joinArns(List.of(EMPTY, joinArn))
+        .build();
+
+    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+        .action("lambda:InvokeFunction")
+        .principal("apigateway.amazonaws.com")
+        .functionName(functionName)
+        .sourceArn(sourceArn)
+        .build();
+
+    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+        .properties(lambdaPermissionProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_PERMISSION.getValue(), lambdaPermission);
+
+    assertThat(actual)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
+  @Test
+  void should_have_permission_to_allow_rest_api_root_test_call_lambda() {
+
+    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
+
+    final List<Object> joinArn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":execute-api:",
+        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        ":",
+        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        ":",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        "/test-invoke-stage/*/*"
+    );
+
+    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+        .joinArns(List.of(EMPTY, joinArn))
+        .build();
+
+    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+        .action("lambda:InvokeFunction")
+        .principal("apigateway.amazonaws.com")
+        .functionName(functionName)
+        .sourceArn(sourceArn)
+        .build();
+
+    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+        .properties(lambdaPermissionProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_PERMISSION.getValue(), lambdaPermission);
+
+    assertThat(actual)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
+  @Test
+  void should_have_permission_to_allow_rest_api_proxy_to_call_lambda() {
+
+    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
+
+    final List<Object> joinArn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":execute-api:",
+        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        ":",
+        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        ":",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        "/",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiDeploymentStagetest(.*)")).build(),
+        "/*/*"
+    );
+
+    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+        .joinArns(List.of(EMPTY, joinArn))
+        .build();
+
+    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+        .action("lambda:InvokeFunction")
+        .principal("apigateway.amazonaws.com")
+        .functionName(functionName)
+        .sourceArn(sourceArn)
+        .build();
+
+    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+        .properties(lambdaPermissionProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_PERMISSION.getValue(), lambdaPermission);
+
+    assertThat(actual)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
+  @Test
+  void should_have_permission_to_allow_rest_api_proxy_test_to_call_lambda() {
+
+    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
+
+    final List<Object> joinArn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":execute-api:",
+        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        ":",
+        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        ":",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        "/test-invoke-stage/*/*"
+    );
+
+    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+        .joinArns(List.of(EMPTY, joinArn))
+        .build();
+
+    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+        .action("lambda:InvokeFunction")
+        .principal("apigateway.amazonaws.com")
+        .functionName(functionName)
+        .sourceArn(sourceArn)
+        .build();
+
+    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+        .properties(lambdaPermissionProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_PERMISSION.getValue(), lambdaPermission);
+
+    assertThat(actual)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
+  @Test
+  void should_have_permission_to_allow_post_rest_api_method_to_call_lambda() {
+
+    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
+
+    final List<Object> joinArn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":execute-api:",
+        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        ":",
+        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        ":",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        "/",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiDeploymentStagetest(.*)")).build(),
+        "/POST/name"
+    );
+
+    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+        .joinArns(List.of(EMPTY, joinArn))
+        .build();
+
+    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+        .action("lambda:InvokeFunction")
+        .principal("apigateway.amazonaws.com")
+        .functionName(functionName)
+        .sourceArn(sourceArn)
+        .build();
+
+    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+        .properties(lambdaPermissionProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_PERMISSION.getValue(), lambdaPermission);
+
+    assertThat(actual)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
+  @Test
+  void should_have_permission_to_allow_post_rest_api_method_test_to_call_lambda() {
+
+    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
+        .attributesArn("Arn")
+        .build();
+
+    final List<Object> joinArn = List.of(
+        "arn:",
+        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        ":execute-api:",
+        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        ":",
+        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        ":",
+        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        "/test-invoke-stage/POST/name"
+    );
+
+    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+        .joinArns(List.of(EMPTY, joinArn))
+        .build();
+
+    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+        .action("lambda:InvokeFunction")
+        .principal("apigateway.amazonaws.com")
+        .functionName(functionName)
+        .sourceArn(sourceArn)
+        .build();
+
+    final LambdaPermission lambdaPermission = LambdaPermission.builder()
+        .properties(lambdaPermissionProperties)
+        .build();
+
+    final Map<String, Map<String, Object>> actual = template.findResources(LAMBDA_PERMISSION.getValue(), lambdaPermission);
+
+    assertThat(actual)
+        .isNotNull()
+        .isNotEmpty()
+        .hasSize(1);
+  }
+
   private static PolicyStatement getAllowSnsPublishPolicyStatement(final String pattern) {
     final ResourceReference resourceReference = ResourceReference.builder().reference(stringLikeRegexp(pattern)).build();
 
@@ -162,6 +460,12 @@ class LambdaTest extends TemplateSupport {
         .effect(ALLOW)
         .action("sns:Publish")
         .resource(resourceReference)
+        .build();
+  }
+
+  private static LambdaDestinationReference createDestinationReference(String pattern) {
+    return LambdaDestinationReference.builder()
+        .destination(ResourceReference.builder().reference(stringLikeRegexp(pattern)).build())
         .build();
   }
 }

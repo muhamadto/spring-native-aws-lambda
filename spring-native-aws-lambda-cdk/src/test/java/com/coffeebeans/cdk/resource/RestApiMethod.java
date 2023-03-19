@@ -1,6 +1,6 @@
 package com.coffeebeans.cdk.resource;
 
-import static com.coffeebeans.cdk.resource.CdkResourceType.ROLE;
+import static com.coffeebeans.cdk.resource.CdkResourceType.APIGATEWAY_RESTAPI_METHOD;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,26 +9,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import software.amazon.awscdk.CfnDeletionPolicy;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Role {
+public class RestApiMethod {
 
   @JsonIgnore
-  private final CdkResourceType type = ROLE;
+  private final CdkResourceType type = APIGATEWAY_RESTAPI_METHOD;
 
   @JsonProperty("Properties")
-  private RoleProperties properties;
-
-  @JsonProperty("UpdateReplacePolicy")
-  private CfnDeletionPolicy updateReplacePolicy;
-
-  @JsonProperty("DeletionPolicy")
-  private CfnDeletionPolicy deletionPolicy;
+  private RestApiMethodProperties properties;
 
   @JsonProperty("Type")
   public String getType() {
