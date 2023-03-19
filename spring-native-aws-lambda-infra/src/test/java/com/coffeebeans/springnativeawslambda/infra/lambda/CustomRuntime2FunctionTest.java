@@ -1,12 +1,13 @@
 package com.coffeebeans.springnativeawslambda.infra.lambda;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static software.amazon.awscdk.services.lambda.Architecture.ARM_64;
 import static software.amazon.awscdk.services.lambda.CodeSigningConfig.fromCodeSigningConfigArn;
 import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
 import static software.amazon.awscdk.services.sns.Topic.fromTopicArn;
 
-import com.coffeebeans.springnativeawslambda.function.infra.TestLambdaUtils;
+import com.coffeebeans.springnativeawslambda.infra.TestLambdaUtils;
 import com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function.Builder;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -41,7 +42,7 @@ class CustomRuntime2FunctionTest {
   public static final @NotNull Duration DEFAULT_TIMEOUT = Duration.seconds(10);
   @TempDir
   private static Path TEMP_DIR;
-  private CustomRuntime2Function.Builder customRuntime2FunctionBuilder;
+  private Builder customRuntime2FunctionBuilder;
   private Stack stack;
   private String id;
   private SnsDestination onFailure;
