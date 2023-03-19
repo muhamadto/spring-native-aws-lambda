@@ -23,9 +23,7 @@ import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceTy
 
 import com.coffeebeans.springnativeawslambda.infra.resource.Policy;
 import com.coffeebeans.springnativeawslambda.infra.resource.Role;
-import java.util.Map;
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.Assertions;
 import software.amazon.awscdk.assertions.Template;
 
 public class IamAssert extends AbstractAssert<IamAssert, Template> {
@@ -39,23 +37,14 @@ public class IamAssert extends AbstractAssert<IamAssert, Template> {
   }
 
   public IamAssert hasRole(final Role expected) {
-    final Map<String, Map<String, Object>> roles = actual.findResources(ROLE.getValue(), expected);
+    actual.hasResource(ROLE.getValue(), expected);
 
-    Assertions.assertThat(roles)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
 
     return this;
   }
 
   public IamAssert hasPolicy(final Policy expected) {
-    final Map<String, Map<String, Object>> policies = actual.findResources(POLICY.getValue(), expected);
-
-    Assertions.assertThat(policies)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    actual.hasResource(POLICY.getValue(), expected);
 
     return this;
   }

@@ -23,9 +23,7 @@ import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceTy
 
 import com.coffeebeans.springnativeawslambda.infra.resource.Topic;
 import com.coffeebeans.springnativeawslambda.infra.resource.TopicSubscription;
-import java.util.Map;
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.Assertions;
 import software.amazon.awscdk.assertions.Template;
 
 public class TopicAssert extends AbstractAssert<TopicAssert, Template> {
@@ -40,23 +38,13 @@ public class TopicAssert extends AbstractAssert<TopicAssert, Template> {
 
   public TopicAssert hasTopic(final Topic expected) {
 
-    final Map<String, Map<String, Object>> topics = actual.findResources(SNS.getValue(), expected);
-
-    Assertions.assertThat(topics)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    actual.hasResource(SNS.getValue(), expected);
 
     return this;
   }
 
   public TopicAssert hasTopicSubscription(final TopicSubscription expected) {
-    final Map<String, Map<String, Object>> topicSubscriptions = actual.findResources(SNS_SUBSCRIPTION.getValue(), expected);
-
-    Assertions.assertThat(topicSubscriptions)
-        .isNotNull()
-        .isNotEmpty()
-        .hasSize(1);
+    actual.hasResource(SNS_SUBSCRIPTION.getValue(), expected);
 
     return this;
   }
