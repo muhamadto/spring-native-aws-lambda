@@ -28,12 +28,12 @@ import software.amazon.awscdk.assertions.Template;
 
 public class TopicAssert extends AbstractAssert<TopicAssert, Template> {
 
-  private TopicAssert(final Template template) {
-    super(template, TopicAssert.class);
+  private TopicAssert(final Template actual) {
+    super(actual, TopicAssert.class);
   }
 
-  public static TopicAssert assertThat(final Template template) {
-    return new TopicAssert(template);
+  public static TopicAssert assertThat(final Template actual) {
+    return new TopicAssert(actual);
   }
 
   public TopicAssert hasTopic(final Topic expected) {

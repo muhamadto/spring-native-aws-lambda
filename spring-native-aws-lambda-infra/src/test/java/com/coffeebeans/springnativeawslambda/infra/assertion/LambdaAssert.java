@@ -30,12 +30,12 @@ import software.amazon.awscdk.assertions.Template;
 
 public class LambdaAssert extends AbstractAssert<LambdaAssert, Template> {
 
-  private LambdaAssert(final Template template) {
-    super(template, LambdaAssert.class);
+  private LambdaAssert(final Template actual) {
+    super(actual, LambdaAssert.class);
   }
 
-  public static LambdaAssert assertThat(final Template template) {
-    return new LambdaAssert(template);
+  public static LambdaAssert assertThat(final Template actual) {
+    return new LambdaAssert(actual);
   }
 
   public LambdaAssert hasFunction(final Lambda expected) {

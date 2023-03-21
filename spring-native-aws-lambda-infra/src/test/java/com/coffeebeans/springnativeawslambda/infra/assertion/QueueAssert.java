@@ -28,12 +28,12 @@ import software.amazon.awscdk.assertions.Template;
 
 public class QueueAssert extends AbstractAssert<QueueAssert, Template> {
 
-  private QueueAssert(final Template template) {
-    super(template, QueueAssert.class);
+  private QueueAssert(final Template actual) {
+    super(actual, QueueAssert.class);
   }
 
-  public static QueueAssert assertThat(final Template template) {
-    return new QueueAssert(template);
+  public static QueueAssert assertThat(final Template actual) {
+    return new QueueAssert(actual);
   }
 
   public QueueAssert hasQueue(final Queue expected) {

@@ -36,12 +36,12 @@ import software.amazon.awscdk.assertions.Template;
 
 public class ApiRestAssert extends AbstractAssert<ApiRestAssert, Template> {
 
-  private ApiRestAssert(final Template template) {
-    super(template, ApiRestAssert.class);
+  private ApiRestAssert(final Template actual) {
+    super(actual, ApiRestAssert.class);
   }
 
-  public static ApiRestAssert assertThat(final Template template) {
-    return new ApiRestAssert(template);
+  public static ApiRestAssert assertThat(final Template actual) {
+    return new ApiRestAssert(actual);
   }
 
   public ApiRestAssert hasRestApi(final RestApi expected) {

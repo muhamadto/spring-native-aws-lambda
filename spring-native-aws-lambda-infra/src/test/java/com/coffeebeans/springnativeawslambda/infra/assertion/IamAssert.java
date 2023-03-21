@@ -28,12 +28,12 @@ import software.amazon.awscdk.assertions.Template;
 
 public class IamAssert extends AbstractAssert<IamAssert, Template> {
 
-  private IamAssert(final Template template) {
-    super(template, IamAssert.class);
+  private IamAssert(final Template actual) {
+    super(actual, IamAssert.class);
   }
 
-  public static IamAssert assertThat(final Template template) {
-    return new IamAssert(template);
+  public static IamAssert assertThat(final Template actual) {
+    return new IamAssert(actual);
   }
 
   public IamAssert hasRole(final Role expected) {
