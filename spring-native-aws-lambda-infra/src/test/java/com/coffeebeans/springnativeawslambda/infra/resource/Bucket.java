@@ -18,6 +18,8 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.BUCKET;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +40,7 @@ import software.amazon.awscdk.assertions.Matcher;
 public class Bucket {
 
   @JsonProperty("Type")
-  private final CdkResourceType type = CdkResourceType.BUCKET;
+  static String type = BUCKET.getValue();
 
   @JsonProperty("Properties")
   private final Properties properties;

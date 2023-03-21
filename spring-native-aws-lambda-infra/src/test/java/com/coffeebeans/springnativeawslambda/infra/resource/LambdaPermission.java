@@ -18,29 +18,28 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.LAMBDA_PERMISSION;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class LambdaPermission {
-
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.LAMBDA_PERMISSION;
-
-  @JsonProperty("Properties")
-  private LambdaPermissionProperties properties;
+public record LambdaPermission(
+    @JsonProperty("Properties") LambdaPermissionProperties properties) {
 
   @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
+  static String type = LAMBDA_PERMISSION.getValue();
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaPermissionProperties(
+      @JsonProperty("Action") String action,
+      @JsonProperty("FunctionName") IntrinsicFunctionBasedArn functionName,
+      @JsonProperty("Principal") String principal,
+      @JsonProperty("SourceArn") IntrinsicFunctionBasedArn sourceArn
+  ) {
+
   }
 }

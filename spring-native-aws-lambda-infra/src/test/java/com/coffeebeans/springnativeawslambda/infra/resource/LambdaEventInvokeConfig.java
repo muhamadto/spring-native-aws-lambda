@@ -18,29 +18,31 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.LAMBDA_EVENT_INVOKE_CONFIG;
+
+import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaDestinationConfig;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import software.amazon.awscdk.assertions.Matcher;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class LambdaEventInvokeConfig {
-
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.LAMBDA_EVENT_INVOKE_CONFIG;
-
-  @JsonProperty("Properties")
-  private LambdaEventInvokeConfigProperties properties;
+public record LambdaEventInvokeConfig(
+    @JsonProperty("Properties") LambdaEventInvokeConfigProperties properties
+) {
 
   @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
+  static String type = LAMBDA_EVENT_INVOKE_CONFIG.getValue();
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaEventInvokeConfigProperties(
+      @JsonProperty("DestinationConfig") LambdaDestinationConfig lambdaDestinationConfig,
+      @JsonProperty("FunctionName") ResourceReference functionName,
+      @JsonProperty("MaximumRetryAttempts") Integer maximumRetryAttempts,
+      @JsonProperty("Qualifier") Matcher qualifier
+  ) {
+
   }
 }

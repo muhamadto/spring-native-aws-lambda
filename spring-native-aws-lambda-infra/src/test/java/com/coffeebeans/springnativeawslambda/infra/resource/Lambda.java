@@ -17,14 +17,13 @@
  */
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.LAMBDA_FUNCTION;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import java.util.Map;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Singular;
 import software.amazon.awscdk.assertions.Matcher;
 
@@ -68,25 +67,87 @@ import software.amazon.awscdk.assertions.Matcher;
  *
  * @author Muhammad Hamadto
  */
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Lambda {
-
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.LAMBDA_FUNCTION;
-
-  @Singular
-  @JsonProperty("DependsOn")
-  private List<Matcher> dependencies;
-
-  @JsonProperty("Properties")
-  private LambdaProperties properties;
+public record Lambda(
+    @Singular @JsonProperty("DependsOn") List<Matcher> dependencies,
+    @JsonProperty("Properties") LambdaProperties properties,
+    @JsonProperty("Type") String typeValue
+) {
 
   @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
+  static String type = LAMBDA_FUNCTION.getValue();
+
+  /**
+   * This class is used to represent the lambda code.
+   * <br>
+   * Example of using {@code S3Bucket} and {@code S3Key} function
+   * <pre>
+   *   final LambdaCode lambdaCode = LambdaCode.builder()
+   *          .s3Bucket(exact("test-cdk-bucket"))
+   *          .s3Key(stringLikeRegexp("(.*).zip"))
+   *          .build();
+   *  </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaCode(
+      @JsonProperty("S3Bucket") Matcher s3Bucket,
+      @JsonProperty("S3Key") Matcher s3Key
+  ) {
+
+  }
+
+  /**
+   * This class is used to represent the lambda destination config. Example of using {@code OnFailure} and {@code OnSuccess} function
+   * <pre>
+   *   final LambdaDestinationConfig lambdaDestinationConfig = LambdaDestinationConfig.builder()
+   *       .onFailure(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(failureDestinationPattern)).build()).build())
+   *       .OnSuccess(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(successDestinationPattern)).build()).build())
+   *       .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaDestinationConfig(
+      @JsonProperty("OnFailure") LambdaDestinationReference onFailure,
+      @JsonProperty("OnSuccess") LambdaDestinationReference onSuccess
+  ) {
+
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaProperties(@JsonProperty("Code") LambdaCode code,
+                                 @JsonProperty("Role") IntrinsicFunctionBasedArn roleArn,
+                                 @JsonProperty("Environment") LambdaEnvironment environment,
+                                 @JsonProperty("Tags") @Singular List<Tag> tags,
+                                 @JsonProperty("Description") Matcher description,
+                                 @JsonProperty("FunctionName") Matcher functionName,
+                                 @JsonProperty("Handler") Matcher handler,
+                                 @JsonProperty("MemorySize") Integer memorySize,
+                                 @JsonProperty("Runtime") Matcher runtime,
+                                 @JsonProperty("Timeout") Integer timeout) {
+
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaDestinationReference(
+      @JsonProperty("Destination") ResourceReference destination
+  ) {
+
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaEnvironment(
+      @Singular @JsonProperty("Variables") Map<String, Matcher> variables
+  ) {
+
   }
 }
