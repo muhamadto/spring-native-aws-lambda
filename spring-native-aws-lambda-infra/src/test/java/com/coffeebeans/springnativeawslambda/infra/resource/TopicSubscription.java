@@ -18,29 +18,33 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.TOPIC_SUBSCRIPTION;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import java.util.Map;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import software.amazon.awscdk.assertions.Matcher;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class TopicSubscription {
-
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.SNS_SUBSCRIPTION;
-
-  @JsonProperty("Properties")
-  private TopicSubscriptionProperties properties;
+public record TopicSubscription(
+    @JsonProperty("Properties") TopicSubscriptionProperties properties) {
 
   @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
+  public String type() {
+    return TOPIC_SUBSCRIPTION.getValue();
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record TopicSubscriptionProperties(
+      @JsonProperty("TopicArn") ResourceReference topicArn,
+      @JsonProperty("Protocol") Matcher protocol,
+      @JsonProperty("Endpoint") IntrinsicFunctionBasedArn endpoint,
+      @JsonProperty("FilterPolicy") Map<String, Object> filterPolicy
+  ) {
+
   }
 }
+

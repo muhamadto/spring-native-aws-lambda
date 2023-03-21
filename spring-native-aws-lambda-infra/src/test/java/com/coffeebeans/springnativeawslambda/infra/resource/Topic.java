@@ -18,29 +18,34 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.TOPIC;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import java.util.List;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Singular;
+import software.amazon.awscdk.assertions.Matcher;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Topic {
-
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.SNS;
-
-  @JsonProperty("Properties")
-  private TopicProperties properties;
+public record Topic(
+    @JsonProperty("Properties") TopicProperties properties) {
 
   @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
+  public String type() {
+    return TOPIC.getValue();
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record TopicProperties(
+      @JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
+      @JsonProperty("FifoTopic") Boolean fifoTopic,
+      @JsonProperty("TopicName") Matcher topicName,
+      @Singular @JsonProperty("Tags") List<Tag> tags
+  ) {
+
   }
 }
+

@@ -18,26 +18,26 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
-import com.amazonaws.services.cloudformation.model.Template;
-import com.coffeebeans.springnativeawslambda.infra.resource.Bucket;
-import software.amazon.awscdk.assertions.AbstractAssert;
-import software.amazon.awscdk.assertions.Assertion;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.BUCKET;
 
-import static com.example.infra.resource.ResourceTypes.S3_BUCKET;
+import com.coffeebeans.springnativeawslambda.infra.resource.Bucket;
+import org.assertj.core.api.AbstractAssert;
+import software.amazon.awscdk.assertions.Template;
+
 
 public class BucketAssert extends AbstractAssert<BucketAssert, Template> {
 
-    public BucketAssert(final Template actual) {
-        super(actual, BucketAssert.class);
-    }
+  public BucketAssert(final Template actual) {
+    super(actual, BucketAssert.class);
+  }
 
-    public static BucketAssert assertThat(final Template actual) {
-        return new BucketAssert(actual, BucketAssert.class);
-    }
+  public static BucketAssert assertThat(final Template actual) {
+    return new BucketAssert(actual);
+  }
 
-    public BucketAssert hasBucket(final Bucket expected) {
-        actual.hasResource(S3_BUCKET.getValue(), expected);
+  public BucketAssert hasBucket(final Bucket expected) {
+    actual.hasResource(BUCKET.getValue(), expected);
 
-        return this;
-    }
+    return this;
+  }
 }

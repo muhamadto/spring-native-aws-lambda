@@ -18,8 +18,8 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.SNS;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.SNS_SUBSCRIPTION;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.TOPIC;
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.TOPIC_SUBSCRIPTION;
 
 import com.coffeebeans.springnativeawslambda.infra.resource.Topic;
 import com.coffeebeans.springnativeawslambda.infra.resource.TopicSubscription;
@@ -38,13 +38,13 @@ public class TopicAssert extends AbstractAssert<TopicAssert, Template> {
 
   public TopicAssert hasTopic(final Topic expected) {
 
-    actual.hasResource(SNS.getValue(), expected);
+    actual.hasResource(TOPIC.getValue(), expected);
 
     return this;
   }
 
   public TopicAssert hasTopicSubscription(final TopicSubscription expected) {
-    actual.hasResource(SNS_SUBSCRIPTION.getValue(), expected);
+    actual.hasResource(TOPIC_SUBSCRIPTION.getValue(), expected);
 
     return this;
   }

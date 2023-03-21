@@ -59,7 +59,7 @@ import software.amazon.awscdk.assertions.Matcher;
  *         .environment(lambdaEnvironment)
  *         .build();
  *
- *     final Lambda expected = Lambda.builder()
+ *     final Lambda lambda = Lambda.builder()
  *         .dependency(stringLikeRegexp("somePolicyIdentifier(.*)"))
  *         .dependency(stringLikeRegexp("someRoleIdentifier(.*)"))
  *         .properties(lambdaProperties)

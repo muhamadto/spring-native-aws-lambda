@@ -18,36 +18,44 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import java.util.List;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Singular;
 import software.amazon.awscdk.assertions.Matcher;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Queue {
-
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.SQS;
-
-  @JsonProperty("Properties")
-  private QueueProperties properties;
-
-  @JsonProperty("UpdateReplacePolicy")
-  private Matcher updateReplacePolicy;
-
-  @JsonProperty("DeletionPolicy")
-  private Matcher deletionPolicy;
+public record Queue(
+    @JsonProperty("Properties") QueueProperties properties,
+    @JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
+    @JsonProperty("DeletionPolicy") Matcher deletionPolicy
+) {
 
   @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
+  public String type() {
+    return CdkResourceType.QUEUE.getValue();
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record QueueProperties(
+      @JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
+      @JsonProperty("FifoQueue") Boolean fifoQueue,
+      @JsonProperty("QueueName") Matcher queueName,
+      @JsonProperty("DeduplicationScope") Matcher deduplicationScope,
+      @JsonProperty("RedrivePolicy") QueueRedrivePolicy redrivePolicy,
+      @Singular @JsonProperty("Tags") List<Tag> tags
+  ) {
+
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record QueueRedrivePolicy(
+      @JsonProperty("deadLetterTargetArn") IntrinsicFunctionBasedArn deadLetterTargetArn,
+      @JsonProperty("maxReceiveCount") Integer maxReceiveCount) {
+
   }
 }

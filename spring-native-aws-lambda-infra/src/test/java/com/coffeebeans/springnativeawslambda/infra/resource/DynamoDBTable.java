@@ -20,12 +20,11 @@ package com.coffeebeans.springnativeawslambda.infra.resource;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 @Builder
@@ -34,13 +33,49 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class DynamoDBTable {
 
-    @JsonProperty("DeletionPolicy")
-    private String deletionPolicy;
+  @JsonProperty("DeletionPolicy")
+  private String deletionPolicy;
 
-    @JsonProperty("Properties")
-    private DynamoDBTableProperties properties;
+  @JsonProperty("Properties")
+  private DynamoDBTableProperties properties;
 
-    @JsonProperty("UpdateReplacePolicy")
-    private String updateReplacePolicy;
+  @JsonProperty("UpdateReplacePolicy")
+  private String updateReplacePolicy;
 
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record DynamoDBTableKeySchema(
+      @JsonProperty("AttributeName") String attributeName,
+      @JsonProperty("KeyType") String keyType
+  ) {
+
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record DynamoDBTableAttributeDefinition(
+      @JsonProperty("AttributeName") String attributeName,
+      @JsonProperty("AttributeType") String attributeType
+  ) {
+
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record DynamoDBTableProperties(
+      @JsonProperty("AttributeDefinitions") List<DynamoDBTableAttributeDefinition> attributeDefinitions,
+      @JsonProperty("KeySchema") List<DynamoDBTableKeySchema> keySchema,
+      @JsonProperty("TableName") String tableName,
+      @JsonProperty("BillingMode") String billingMode,
+      @JsonProperty("ProvisionedThroughput") DynamoDBTableProvisionedThroughput provisionedThroughput
+  ) {
+
+  }
+
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record DynamoDBTableProvisionedThroughput(@JsonProperty("ReadCapacityUnits") Integer readCapacityUnits,
+                                                   @JsonProperty("WriteCapacityUnits") Integer writeCapacityUnits) {
+
+  }
 }

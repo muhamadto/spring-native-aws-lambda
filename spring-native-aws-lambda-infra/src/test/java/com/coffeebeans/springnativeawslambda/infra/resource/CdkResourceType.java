@@ -36,10 +36,12 @@ public enum CdkResourceType {
   LAMBDA_PERMISSION("AWS::Lambda::Permission"),
   POLICY("AWS::IAM::Policy"),
   ROLE("AWS::IAM::Role"),
-  SNS("AWS::SNS::Topic"),
-  SNS_SUBSCRIPTION("AWS::SNS::Subscription"),
-  SQS("AWS::SQS::Queue"),
-  QUEUE_POLICY("AWS::SQS::QueuePolicy");
+  TOPIC("AWS::SNS::Topic"),
+  TOPIC_SUBSCRIPTION("AWS::SNS::Subscription"),
+  QUEUE("AWS::SQS::Queue"),
+  QUEUE_POLICY("AWS::SQS::QueuePolicy"),
+
+  BUCKET("AWS::S3::Bucket");
 
   private String value;
 }

@@ -18,8 +18,8 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.QUEUE;
 import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.QUEUE_POLICY;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.SQS;
 
 import com.coffeebeans.springnativeawslambda.infra.resource.Queue;
 import com.coffeebeans.springnativeawslambda.infra.resource.QueuePolicy;
@@ -37,7 +37,7 @@ public class QueueAssert extends AbstractAssert<QueueAssert, Template> {
   }
 
   public QueueAssert hasQueue(final Queue expected) {
-    actual.hasResource(SQS.getValue(), expected);
+    actual.hasResource(QUEUE.getValue(), expected);
 
     return this;
   }

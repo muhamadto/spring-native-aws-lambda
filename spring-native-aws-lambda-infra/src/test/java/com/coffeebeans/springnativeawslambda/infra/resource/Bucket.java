@@ -18,69 +18,55 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import java.util.List;
+import software.amazon.awscdk.assertions.Matcher;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonFormat(shape = Shape.STRING)
 public class Bucket {
-    @JsonProperty("Type")
-    private final String type = "AWS::S3::Bucket";
 
-    @JsonProperty("Properties")
-    private final Properties properties;
+  @JsonProperty("Type")
+  private final CdkResourceType type = CdkResourceType.BUCKET;
 
-    @JsonProperty("UpdateReplacePolicy")
-    private final Matcher updateReplacePolicy;
+  @JsonProperty("Properties")
+  private final Properties properties;
 
-    @JsonProperty("DeletionPolicy")
-    private final Matcher deletionPolicy;
+  @JsonProperty("UpdateReplacePolicy")
+  private final Matcher updateReplacePolicy;
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class Properties {
-        @JsonProperty("BucketName")
-        private final String bucketName;
+  @JsonProperty("DeletionPolicy")
+  private final Matcher deletionPolicy;
 
-        @JsonProperty("LifecycleConfiguration")
-        private final LifecycleConfiguration lifecycleConfiguration;
-    }
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record Properties(@JsonProperty("BucketName") String bucketName,
+                           @JsonProperty("LifecycleConfiguration") LifecycleConfiguration lifecycleConfiguration) {
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class LifecycleConfiguration {
-        @JsonProperty("Rules")
-        private final List<Rule> rules;
-    }
+  }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class Rule {
-        @JsonProperty("ExpirationInDays")
-        private final int expirationInDays;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LifecycleConfiguration(@JsonProperty("Rules") List<Rule> rules) {
 
-        @JsonProperty("Status")
-        private final String status;
+  }
 
-        @JsonProperty("Prefix")
-        private final String prefix;
-    }
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record Rule(@JsonProperty("ExpirationInDays") int expirationInDays,
+                     @JsonProperty("Status") String status,
+                     @JsonProperty("Prefix") String prefix) {
+
+  }
 }

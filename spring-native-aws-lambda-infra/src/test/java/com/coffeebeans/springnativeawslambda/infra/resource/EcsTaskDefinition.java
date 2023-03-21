@@ -20,219 +20,119 @@ package com.coffeebeans.springnativeawslambda.infra.resource;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import software.amazon.awscdk.assertions.Matcher;
 
-import java.util.List;
-
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class EcsTaskDefinition {
+public record EcsTaskDefinition(
+    @JsonProperty("ContainerDefinitions") List<Container> containerDefinitions,
+    @JsonProperty("Cpu") String cpu,
+    @JsonProperty("ExecutionRoleArn") ExecutionRoleArn executionRoleArn,
+    @JsonProperty("Family") String family,
+    @JsonProperty("Memory") String memory,
+    @JsonProperty("NetworkMode") String networkMode,
+    @JsonProperty("RequiresCompatibilities") List<Matcher> requiresCompatibilities,
+    @JsonProperty("TaskRoleArn") TaskRoleArn taskRoleArn
+) {
 
-    @JsonProperty("ContainerDefinitions")
-    private List<Container> containerDefinitions;
-    
-    @JsonProperty("Cpu")
-    private String cpu;
-    
-    @JsonProperty("ExecutionRoleArn")
-    private ExecutionRoleArn executionRoleArn;
-    
-    @JsonProperty("Family")
-    private String family;
-    
-    @JsonProperty("Memory")
-    private String memory;
-    
-    @JsonProperty("NetworkMode")
-    private String networkMode;
-    
-    @JsonProperty("RequiresCompatibilities")
-    private List<Matcher> requiresCompatibilities;
-    
-    @JsonProperty("TaskRoleArn")
-    private TaskRoleArn taskRoleArn;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record Container(
+      @JsonProperty("DockerLabels") DockerLabels dockerLabels,
+      @JsonProperty("Environment") List<EnvironmentVariable> environment,
+      @JsonProperty("Essential") Boolean essential,
+      @JsonProperty("Image") ContainerImage image,
+      @JsonProperty("LogConfiguration") LogConfiguration logConfiguration,
+      @JsonProperty("Memory") Matcher memory,
+      @JsonProperty("MemoryReservation") Matcher memoryReservation,
+      @JsonProperty("Name") Matcher name,
+      @JsonProperty("PortMappings") List<PortMapping> portMappings,
+      @JsonProperty("Secrets") List<Secret> secrets
+  ) {
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class Container {
+  }
 
-        @JsonProperty("DockerLabels")
-        private DockerLabels dockerLabels;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record DockerLabels(
+      @JsonProperty("Env") Matcher env,
+      @JsonProperty("Type") Matcher type,
+      @JsonProperty("Version") Version version
+  ) {
 
-        @JsonProperty("Environment")
-        private List<EnvironmentVariable> environment;
+  }
 
-        @JsonProperty("Essential")
-        private Boolean essential;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record EnvironmentVariable(
+      @JsonProperty("Name") Matcher name,
+      @JsonProperty("Value") Matcher value
+  ) {
 
-        @JsonProperty("Image")
-        private ContainerImage image;
+  }
 
-        @JsonProperty("LogConfiguration")
-        private LogConfiguration logConfiguration;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record ContainerImage(
+      @JsonProperty("Fn::Join") List<Object> fnJoin
+  ) {
 
-        @JsonProperty("Memory")
-        private Matcher memory;
+  }
 
-        @JsonProperty("MemoryReservation")
-        private Matcher memoryReservation;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LogConfiguration(
+      @JsonProperty("LogDriver") Matcher logDriver
+  ) {
 
-        @JsonProperty("Name")
-        private Matcher name;
+  }
 
-        @JsonProperty("PortMappings")
-        private List<PortMapping> portMappings;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record PortMapping(
+      @JsonProperty("ContainerPort") Integer containerPort,
+      @JsonProperty("HostPort") Integer hostPort,
+      @JsonProperty("Protocol") Matcher protocol
+  ) {
 
-        @JsonProperty("Secrets")
-        private List<Secret> secrets;
-    }
+  }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class DockerLabels {
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record Secret(
+      @JsonProperty("Name") Matcher name,
+      @JsonProperty("ValueFrom") Matcher valueFrom
+  ) {
 
-        @JsonProperty("Env")
-        private Matcher env;
+  }
 
-        @JsonProperty("Type")
-        private Matcher type;
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record ExecutionRoleArn(
+      @JsonProperty("Fn::GetAtt") List<Object> fnGetAtt
+  ) {
 
-        @JsonProperty("Version")
-        private Version version;
-    }
+  }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class EnvironmentVariable {
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record TaskRoleArn(
+      @JsonProperty("Fn::GetAtt") List<Object> fnGetAtt
+  ) {
 
-        @JsonProperty("Name")
-        private Matcher name;
+  }
 
-        @JsonProperty("Value")
-        private Matcher value;
-    }
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record Version(
+      @JsonProperty("major") int major,
+      @JsonProperty("minor") int minor,
+      @JsonProperty("patch") int patch,
+      @JsonProperty("preRelease") String preRelease,
+      @JsonProperty("buildMetadata") String buildMetadata
+  ) {
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class ContainerImage {
-
-        @JsonProperty("Fn::Join")
-        private List<Object> fnJoin;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class LogConfiguration {
-
-        @JsonProperty("LogDriver")
-        private Matcher logDriver;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class PortMapping {
-
-        @JsonProperty("ContainerPort")
-        private Integer containerPort;
-
-        @JsonProperty("HostPort")
-        private Integer hostPort;
-
-        @JsonProperty("Protocol")
-        private Matcher protocol;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class Secret {
-
-        @JsonProperty("Name")
-        private Matcher name;
-
-        @JsonProperty("ValueFrom")
-        private Matcher valueFrom;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class ExecutionRoleArn {
-
-        @JsonProperty("Fn::GetAtt")
-        private List<Object> fnGetAtt;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class TaskRoleArn {
-
-        @JsonProperty("Fn::GetAtt")
-        private List<Object> fnGetAtt;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class Version {
-
-        @JsonProperty("major")
-        private int major;
-    
-        @JsonProperty("minor")
-        private int minor;
-    
-        @JsonProperty("patch")
-        private int patch;
-
-        @JsonProperty("preRelease")
-        private String preRelease;
-
-        @JsonProperty("buildMetadata")
-        private String buildMetadata;
-
-    }
+  }
 }
