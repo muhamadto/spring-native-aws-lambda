@@ -18,6 +18,8 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.QUEUE_POLICY;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
@@ -30,9 +32,7 @@ public record QueuePolicy(
     @JsonProperty("Properties") QueuePolicyProperties properties) {
 
   @JsonProperty("Type")
-  public String type() {
-    return CdkResourceType.QUEUE_POLICY.getValue();
-  }
+  static String type = QUEUE_POLICY.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)

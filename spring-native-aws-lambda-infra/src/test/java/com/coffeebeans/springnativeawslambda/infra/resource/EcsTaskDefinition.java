@@ -18,6 +18,8 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.ECS_TASK_DEFINITION;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
@@ -36,6 +38,9 @@ public record EcsTaskDefinition(
     @JsonProperty("RequiresCompatibilities") List<Matcher> requiresCompatibilities,
     @JsonProperty("TaskRoleArn") TaskRoleArn taskRoleArn
 ) {
+
+  @JsonProperty("Type")
+  static String type = ECS_TASK_DEFINITION.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)

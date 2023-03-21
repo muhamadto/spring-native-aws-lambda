@@ -32,9 +32,7 @@ public record TopicSubscription(
     @JsonProperty("Properties") TopicSubscriptionProperties properties) {
 
   @JsonProperty("Type")
-  public String type() {
-    return TOPIC_SUBSCRIPTION.getValue();
-  }
+  static String type = TOPIC_SUBSCRIPTION.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)

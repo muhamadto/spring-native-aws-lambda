@@ -18,29 +18,23 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.DYNAMODB_TABLE;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class DynamoDBTable {
+public record DynamoDBTable(
+    @JsonProperty("DeletionPolicy") String deletionPolicy,
+    @JsonProperty("Properties") DynamoDBTableProperties properties,
+    @JsonProperty("UpdateReplacePolicy") String updateReplacePolicy
+) {
 
-  @JsonProperty("DeletionPolicy")
-  private String deletionPolicy;
-
-  @JsonProperty("Properties")
-  private DynamoDBTableProperties properties;
-
-  @JsonProperty("UpdateReplacePolicy")
-  private String updateReplacePolicy;
+  @JsonProperty("Type")
+  static String type = DYNAMODB_TABLE.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)

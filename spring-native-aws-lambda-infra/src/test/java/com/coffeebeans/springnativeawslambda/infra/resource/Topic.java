@@ -33,9 +33,7 @@ public record Topic(
     @JsonProperty("Properties") TopicProperties properties) {
 
   @JsonProperty("Type")
-  public String type() {
-    return TOPIC.getValue();
-  }
+  static String type = TOPIC.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)

@@ -40,8 +40,10 @@ public enum CdkResourceType {
   TOPIC_SUBSCRIPTION("AWS::SNS::Subscription"),
   QUEUE("AWS::SQS::Queue"),
   QUEUE_POLICY("AWS::SQS::QueuePolicy"),
-
-  BUCKET("AWS::S3::Bucket");
+  BUCKET("AWS::S3::Bucket"),
+  ECS_TASK_DEFINITION("AWS::ECS::TaskDefinition"),
+  DYNAMODB_TABLE("AWS::DynamoDB::Table"),
+  ;
 
   private String value;
 }
