@@ -28,18 +28,15 @@ import lombok.Singular;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record QueuePolicy(
-    @JsonProperty("Properties") QueuePolicyProperties properties) {
+public record QueuePolicy(@JsonProperty("Properties") QueuePolicyProperties properties) {
 
   @JsonProperty("Type")
   static String type = QUEUE_POLICY.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record QueuePolicyProperties(
-      @Singular @JsonProperty("Queues") List<ResourceReference> queues,
-      @JsonProperty("PolicyDocument") PolicyDocument policyDocument
-  ) {
+  public record QueuePolicyProperties(@Singular @JsonProperty("Queues") List<ResourceReference> queues,
+                                      @JsonProperty("PolicyDocument") PolicyDocument policyDocument) {
 
   }
 }

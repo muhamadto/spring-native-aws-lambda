@@ -20,46 +20,30 @@ package com.coffeebeans.springnativeawslambda.infra.resource;
 
 import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.BUCKET;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import software.amazon.awscdk.assertions.Matcher;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonFormat(shape = Shape.STRING)
-public class Bucket {
+public record Bucket(@JsonProperty("Properties") Properties properties,
+                     @JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
+                     @JsonProperty("DeletionPolicy") Matcher deletionPolicy) {
 
-  @JsonProperty("Type")
-  static String type = BUCKET.getValue();
+ @JsonProperty("Type")
+ static String type = BUCKET.getValue();
 
-  @JsonProperty("Properties")
-  private final Properties properties;
+ @Builder
+ @JsonInclude(JsonInclude.Include.NON_EMPTY)
+ public record Properties(@JsonProperty("BucketName") String bucketName,
+                          @JsonProperty("LifecycleConfiguration") LifecycleConfiguration lifecycleConfiguration) {
 
-  @JsonProperty("UpdateReplacePolicy")
-  private final Matcher updateReplacePolicy;
+ }
 
-  @JsonProperty("DeletionPolicy")
-  private final Matcher deletionPolicy;
-
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record Properties(@JsonProperty("BucketName") String bucketName,
-                           @JsonProperty("LifecycleConfiguration") LifecycleConfiguration lifecycleConfiguration) {
-
-  }
-
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+ @Builder
+ @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record LifecycleConfiguration(@JsonProperty("Rules") List<Rule> rules) {
 
   }

@@ -27,42 +27,34 @@ import lombok.Builder;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record DynamoDBTable(
-    @JsonProperty("DeletionPolicy") String deletionPolicy,
-    @JsonProperty("Properties") DynamoDBTableProperties properties,
-    @JsonProperty("UpdateReplacePolicy") String updateReplacePolicy
-) {
+public record DynamoDBTable(@JsonProperty("DeletionPolicy") String deletionPolicy,
+                            @JsonProperty("Properties") DynamoDBTableProperties properties,
+                            @JsonProperty("UpdateReplacePolicy") String updateReplacePolicy) {
 
   @JsonProperty("Type")
   static String type = DYNAMODB_TABLE.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record DynamoDBTableKeySchema(
-      @JsonProperty("AttributeName") String attributeName,
-      @JsonProperty("KeyType") String keyType
-  ) {
+  public record DynamoDBTableKeySchema(@JsonProperty("AttributeName") String attributeName,
+                                       @JsonProperty("KeyType") String keyType) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record DynamoDBTableAttributeDefinition(
-      @JsonProperty("AttributeName") String attributeName,
-      @JsonProperty("AttributeType") String attributeType
-  ) {
+  public record DynamoDBTableAttributeDefinition(@JsonProperty("AttributeName") String attributeName,
+                                                 @JsonProperty("AttributeType") String attributeType) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record DynamoDBTableProperties(
-      @JsonProperty("AttributeDefinitions") List<DynamoDBTableAttributeDefinition> attributeDefinitions,
-      @JsonProperty("KeySchema") List<DynamoDBTableKeySchema> keySchema,
-      @JsonProperty("TableName") String tableName,
-      @JsonProperty("BillingMode") String billingMode,
-      @JsonProperty("ProvisionedThroughput") DynamoDBTableProvisionedThroughput provisionedThroughput
-  ) {
+  public record DynamoDBTableProperties(@JsonProperty("AttributeDefinitions") List<DynamoDBTableAttributeDefinition> attributeDefinitions,
+                                        @JsonProperty("KeySchema") List<DynamoDBTableKeySchema> keySchema,
+                                        @JsonProperty("TableName") String tableName,
+                                        @JsonProperty("BillingMode") String billingMode,
+                                        @JsonProperty("ProvisionedThroughput") DynamoDBTableProvisionedThroughput provisionedThroughput) {
 
   }
 

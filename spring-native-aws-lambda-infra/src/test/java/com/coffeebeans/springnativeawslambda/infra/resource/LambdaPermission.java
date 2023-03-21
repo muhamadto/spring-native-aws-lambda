@@ -26,20 +26,17 @@ import lombok.Builder;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record LambdaPermission(
-    @JsonProperty("Properties") LambdaPermissionProperties properties) {
+public record LambdaPermission(@JsonProperty("Properties") LambdaPermissionProperties properties) {
 
   @JsonProperty("Type")
   static String type = LAMBDA_PERMISSION.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaPermissionProperties(
-      @JsonProperty("Action") String action,
-      @JsonProperty("FunctionName") IntrinsicFunctionBasedArn functionName,
-      @JsonProperty("Principal") String principal,
-      @JsonProperty("SourceArn") IntrinsicFunctionBasedArn sourceArn
-  ) {
+  public record LambdaPermissionProperties(@JsonProperty("Action") String action,
+                                           @JsonProperty("FunctionName") IntrinsicFunctionBasedArn functionName,
+                                           @JsonProperty("Principal") String principal,
+                                           @JsonProperty("SourceArn") IntrinsicFunctionBasedArn sourceArn) {
 
   }
 }

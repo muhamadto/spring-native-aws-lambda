@@ -28,21 +28,17 @@ import software.amazon.awscdk.assertions.Matcher;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record LambdaEventInvokeConfig(
-    @JsonProperty("Properties") LambdaEventInvokeConfigProperties properties
-) {
+public record LambdaEventInvokeConfig(@JsonProperty("Properties") LambdaEventInvokeConfigProperties properties) {
 
   @JsonProperty("Type")
   static String type = LAMBDA_EVENT_INVOKE_CONFIG.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaEventInvokeConfigProperties(
-      @JsonProperty("DestinationConfig") LambdaDestinationConfig lambdaDestinationConfig,
-      @JsonProperty("FunctionName") ResourceReference functionName,
-      @JsonProperty("MaximumRetryAttempts") Integer maximumRetryAttempts,
-      @JsonProperty("Qualifier") Matcher qualifier
-  ) {
+  public record LambdaEventInvokeConfigProperties(@JsonProperty("DestinationConfig") LambdaDestinationConfig lambdaDestinationConfig,
+                                                  @JsonProperty("FunctionName") ResourceReference functionName,
+                                                  @JsonProperty("MaximumRetryAttempts") Integer maximumRetryAttempts,
+                                                  @JsonProperty("Qualifier") Matcher qualifier) {
 
   }
 }

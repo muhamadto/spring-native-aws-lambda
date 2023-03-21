@@ -28,116 +28,94 @@ import software.amazon.awscdk.assertions.Matcher;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record EcsTaskDefinition(
-    @JsonProperty("ContainerDefinitions") List<Container> containerDefinitions,
-    @JsonProperty("Cpu") String cpu,
-    @JsonProperty("ExecutionRoleArn") ExecutionRoleArn executionRoleArn,
-    @JsonProperty("Family") String family,
-    @JsonProperty("Memory") String memory,
-    @JsonProperty("NetworkMode") String networkMode,
-    @JsonProperty("RequiresCompatibilities") List<Matcher> requiresCompatibilities,
-    @JsonProperty("TaskRoleArn") TaskRoleArn taskRoleArn
-) {
+public record EcsTaskDefinition(@JsonProperty("ContainerDefinitions") List<Container> containerDefinitions,
+                                @JsonProperty("Cpu") String cpu,
+                                @JsonProperty("ExecutionRoleArn") ExecutionRoleArn executionRoleArn,
+                                @JsonProperty("Family") String family,
+                                @JsonProperty("Memory") String memory,
+                                @JsonProperty("NetworkMode") String networkMode,
+                                @JsonProperty("RequiresCompatibilities") List<Matcher> requiresCompatibilities,
+                                @JsonProperty("TaskRoleArn") TaskRoleArn taskRoleArn) {
 
   @JsonProperty("Type")
   static String type = ECS_TASK_DEFINITION.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record Container(
-      @JsonProperty("DockerLabels") DockerLabels dockerLabels,
-      @JsonProperty("Environment") List<EnvironmentVariable> environment,
-      @JsonProperty("Essential") Boolean essential,
-      @JsonProperty("Image") ContainerImage image,
-      @JsonProperty("LogConfiguration") LogConfiguration logConfiguration,
-      @JsonProperty("Memory") Matcher memory,
-      @JsonProperty("MemoryReservation") Matcher memoryReservation,
-      @JsonProperty("Name") Matcher name,
-      @JsonProperty("PortMappings") List<PortMapping> portMappings,
-      @JsonProperty("Secrets") List<Secret> secrets
-  ) {
+  public record Container(@JsonProperty("DockerLabels") DockerLabels dockerLabels,
+                          @JsonProperty("Environment") List<EnvironmentVariable> environment,
+                          @JsonProperty("Essential") Boolean essential,
+                          @JsonProperty("Image") ContainerImage image,
+                          @JsonProperty("LogConfiguration") LogConfiguration logConfiguration,
+                          @JsonProperty("Memory") Matcher memory,
+                          @JsonProperty("MemoryReservation") Matcher memoryReservation,
+                          @JsonProperty("Name") Matcher name,
+                          @JsonProperty("PortMappings") List<PortMapping> portMappings,
+                          @JsonProperty("Secrets") List<Secret> secrets) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record DockerLabels(
-      @JsonProperty("Env") Matcher env,
-      @JsonProperty("Type") Matcher type,
-      @JsonProperty("Version") Version version
-  ) {
+  public record DockerLabels(@JsonProperty("Env") Matcher env,
+                             @JsonProperty("Type") Matcher type,
+                             @JsonProperty("Version") Version version) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record EnvironmentVariable(
-      @JsonProperty("Name") Matcher name,
-      @JsonProperty("Value") Matcher value
-  ) {
+  public record EnvironmentVariable(@JsonProperty("Name") Matcher name,
+                                    @JsonProperty("Value") Matcher value) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record ContainerImage(
-      @JsonProperty("Fn::Join") List<Object> fnJoin
-  ) {
+  public record ContainerImage(@JsonProperty("Fn::Join") List<Object> fnJoin) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LogConfiguration(
-      @JsonProperty("LogDriver") Matcher logDriver
-  ) {
+  public record LogConfiguration(@JsonProperty("LogDriver") Matcher logDriver) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record PortMapping(
-      @JsonProperty("ContainerPort") Integer containerPort,
-      @JsonProperty("HostPort") Integer hostPort,
-      @JsonProperty("Protocol") Matcher protocol
-  ) {
+  public record PortMapping(@JsonProperty("ContainerPort") Integer containerPort,
+                            @JsonProperty("HostPort") Integer hostPort,
+                            @JsonProperty("Protocol") Matcher protocol) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record Secret(
-      @JsonProperty("Name") Matcher name,
-      @JsonProperty("ValueFrom") Matcher valueFrom
-  ) {
+  public record Secret(@JsonProperty("Name") Matcher name,
+                       @JsonProperty("ValueFrom") Matcher valueFrom) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record ExecutionRoleArn(
-      @JsonProperty("Fn::GetAtt") List<Object> fnGetAtt
-  ) {
+  public record ExecutionRoleArn(@JsonProperty("Fn::GetAtt") List<Object> fnGetAtt) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record TaskRoleArn(
-      @JsonProperty("Fn::GetAtt") List<Object> fnGetAtt
-  ) {
+  public record TaskRoleArn(@JsonProperty("Fn::GetAtt") List<Object> fnGetAtt) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record Version(
-      @JsonProperty("major") int major,
-      @JsonProperty("minor") int minor,
-      @JsonProperty("patch") int patch,
-      @JsonProperty("preRelease") String preRelease,
-      @JsonProperty("buildMetadata") String buildMetadata
-  ) {
+  public record Version(@JsonProperty("major") int major,
+                        @JsonProperty("minor") int minor,
+                        @JsonProperty("patch") int patch,
+                        @JsonProperty("preRelease") String preRelease,
+                        @JsonProperty("buildMetadata") String buildMetadata) {
 
   }
 }

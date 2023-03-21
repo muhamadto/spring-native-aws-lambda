@@ -28,20 +28,17 @@ import software.amazon.awscdk.assertions.Matcher;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record TopicSubscription(
-    @JsonProperty("Properties") TopicSubscriptionProperties properties) {
+public record TopicSubscription(@JsonProperty("Properties") TopicSubscriptionProperties properties) {
 
   @JsonProperty("Type")
   static String type = TOPIC_SUBSCRIPTION.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record TopicSubscriptionProperties(
-      @JsonProperty("TopicArn") ResourceReference topicArn,
-      @JsonProperty("Protocol") Matcher protocol,
-      @JsonProperty("Endpoint") IntrinsicFunctionBasedArn endpoint,
-      @JsonProperty("FilterPolicy") Map<String, Object> filterPolicy
-  ) {
+  public record TopicSubscriptionProperties(@JsonProperty("TopicArn") ResourceReference topicArn,
+                                            @JsonProperty("Protocol") Matcher protocol,
+                                            @JsonProperty("Endpoint") IntrinsicFunctionBasedArn endpoint,
+                                            @JsonProperty("FilterPolicy") Map<String, Object> filterPolicy) {
 
   }
 }

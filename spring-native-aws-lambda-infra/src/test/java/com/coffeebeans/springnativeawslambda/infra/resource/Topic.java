@@ -29,20 +29,17 @@ import software.amazon.awscdk.assertions.Matcher;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record Topic(
-    @JsonProperty("Properties") TopicProperties properties) {
+public record Topic(@JsonProperty("Properties") TopicProperties properties) {
 
   @JsonProperty("Type")
   static String type = TOPIC.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record TopicProperties(
-      @JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
-      @JsonProperty("FifoTopic") Boolean fifoTopic,
-      @JsonProperty("TopicName") Matcher topicName,
-      @Singular @JsonProperty("Tags") List<Tag> tags
-  ) {
+  public record TopicProperties(@JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
+                                @JsonProperty("FifoTopic") Boolean fifoTopic,
+                                @JsonProperty("TopicName") Matcher topicName,
+                                @Singular @JsonProperty("Tags") List<Tag> tags) {
 
   }
 }

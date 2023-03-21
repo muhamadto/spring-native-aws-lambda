@@ -29,33 +29,28 @@ import software.amazon.awscdk.assertions.Matcher;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record Queue(
-    @JsonProperty("Properties") QueueProperties properties,
-    @JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
-    @JsonProperty("DeletionPolicy") Matcher deletionPolicy
-) {
+public record Queue(@JsonProperty("Properties") QueueProperties properties,
+                    @JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
+                    @JsonProperty("DeletionPolicy") Matcher deletionPolicy) {
 
   @JsonProperty("Type")
   static String type = QUEUE.getValue();
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record QueueProperties(
-      @JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
-      @JsonProperty("FifoQueue") Boolean fifoQueue,
-      @JsonProperty("QueueName") Matcher queueName,
-      @JsonProperty("DeduplicationScope") Matcher deduplicationScope,
-      @JsonProperty("RedrivePolicy") QueueRedrivePolicy redrivePolicy,
-      @Singular @JsonProperty("Tags") List<Tag> tags
-  ) {
+  public record QueueProperties(@JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
+                                @JsonProperty("FifoQueue") Boolean fifoQueue,
+                                @JsonProperty("QueueName") Matcher queueName,
+                                @JsonProperty("DeduplicationScope") Matcher deduplicationScope,
+                                @JsonProperty("RedrivePolicy") QueueRedrivePolicy redrivePolicy,
+                                @Singular @JsonProperty("Tags") List<Tag> tags) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record QueueRedrivePolicy(
-      @JsonProperty("deadLetterTargetArn") IntrinsicFunctionBasedArn deadLetterTargetArn,
-      @JsonProperty("maxReceiveCount") Integer maxReceiveCount) {
+  public record QueueRedrivePolicy(@JsonProperty("deadLetterTargetArn") IntrinsicFunctionBasedArn deadLetterTargetArn,
+                                   @JsonProperty("maxReceiveCount") Integer maxReceiveCount) {
 
   }
 }

@@ -69,11 +69,9 @@ import software.amazon.awscdk.assertions.Matcher;
  */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record Lambda(
-    @Singular @JsonProperty("DependsOn") List<Matcher> dependencies,
-    @JsonProperty("Properties") LambdaProperties properties,
-    @JsonProperty("Type") String typeValue
-) {
+public record Lambda(@Singular @JsonProperty("DependsOn") List<Matcher> dependencies,
+                     @JsonProperty("Properties") LambdaProperties properties,
+                     @JsonProperty("Type") String typeValue) {
 
   @JsonProperty("Type")
   static String type = LAMBDA_FUNCTION.getValue();
@@ -93,10 +91,8 @@ public record Lambda(
    */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaCode(
-      @JsonProperty("S3Bucket") Matcher s3Bucket,
-      @JsonProperty("S3Key") Matcher s3Key
-  ) {
+  public record LambdaCode(@JsonProperty("S3Bucket") Matcher s3Bucket,
+                           @JsonProperty("S3Key") Matcher s3Key) {
 
   }
 
@@ -113,10 +109,8 @@ public record Lambda(
    */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaDestinationConfig(
-      @JsonProperty("OnFailure") LambdaDestinationReference onFailure,
-      @JsonProperty("OnSuccess") LambdaDestinationReference onSuccess
-  ) {
+  public record LambdaDestinationConfig(@JsonProperty("OnFailure") LambdaDestinationReference onFailure,
+                                        @JsonProperty("OnSuccess") LambdaDestinationReference onSuccess) {
 
   }
 
@@ -137,17 +131,13 @@ public record Lambda(
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaDestinationReference(
-      @JsonProperty("Destination") ResourceReference destination
-  ) {
+  public record LambdaDestinationReference(@JsonProperty("Destination") ResourceReference destination) {
 
   }
 
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaEnvironment(
-      @Singular @JsonProperty("Variables") Map<String, Matcher> variables
-  ) {
+  public record LambdaEnvironment(@Singular @JsonProperty("Variables") Map<String, Matcher> variables) {
 
   }
 }
