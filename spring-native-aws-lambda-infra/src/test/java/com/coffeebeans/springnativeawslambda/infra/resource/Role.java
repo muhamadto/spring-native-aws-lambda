@@ -18,36 +18,25 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import software.amazon.awscdk.CfnDeletionPolicy;
+import lombok.Singular;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Role {
+public record Role(@JsonProperty("Properties") RoleProperties properties,
+@JsonProperty("UpdateReplacePolicy") CfnDeletionPolicy updateReplacePolicy,
+@JsonProperty("DeletionPolicy") CfnDeletionPolicy deletionPolicy){
 
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.ROLE;
+@JsonProperty("Type")
+static String type=ROLE.getValue();
 
-  @JsonProperty("Properties")
-  private RoleProperties properties;
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record RoleProperties(
 
-  @JsonProperty("UpdateReplacePolicy")
-  private CfnDeletionPolicy updateReplacePolicy;
+@JsonProperty("PolicyName") Matcher policyName,
+@JsonProperty("AssumeRolePolicyDocument") PolicyDocument assumeRolePolicyDocument,
+@Singular @JsonProperty("ManagedPolicyArns") List<IntrinsicFunctionBasedArn> managedPolicyArns){
 
-  @JsonProperty("DeletionPolicy")
-  private CfnDeletionPolicy deletionPolicy;
-
-  @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
-  }
-}
+    }
+    }

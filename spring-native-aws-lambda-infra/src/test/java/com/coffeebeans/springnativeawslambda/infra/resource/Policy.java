@@ -18,32 +18,87 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.POLICY;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
+
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record Policy(@Singular @JsonProperty("DependsOn") List<Matcher> dependencies,
+@JsonProperty("Properties") PolicyProperties properties,
+@JsonProperty("Type") String typeValue){
+
+@JsonProperty("Type")
+static String type=POLICY.getValue();
+
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record PolicyProperties(
+
+@JsonProperty("PolicyName") Matcher policyName,
+
+@JsonProperty("PolicyDocument") PolicyDocument policyDocument,
+
+@Singular @JsonProperty("Roles") List<ResourceReference> roles){
+
+    }
+
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record PolicyDocument(
+@Singular @JsonProperty("Statement") List<PolicyStatement> statements){
+
+@JsonProperty("Version")
+static String version="2012-10-17";
+
+    }
+
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record PolicyStatement(
+@JsonIgnore PolicyStatementEffect effect,
+@Singular @JsonProperty("Action") @JsonFormat(with = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED) List<String> actions,
+@Singular @JsonProperty("Resource") @JsonFormat(with = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED) List<Object> resources,
+@JsonProperty("Principal") PolicyPrincipal principal,
+@JsonProperty("Condition") PolicyStatementCondition condition
+    ){
+
+@JsonProperty("Effect")
+public String getEffect(){
+    return effect.getValue();
+    }
 
 @Getter
-@Builder
-@AllArgsConstructor
-@EqualsAndHashCode
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Policy {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public enum PolicyStatementEffect {
+  ALLOW("Allow"),
+  DENY("Deny");
 
-  @JsonIgnore
-  private final CdkResourceType type = POLICY;
+  private String value;
 
-  @JsonProperty("Properties")
-  private PolicyProperties properties;
-
-  @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
+  @JsonValue
+  @Override
+  public String toString() {
+    return value;
   }
 }
+  }
+
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record PolicyPrincipal(
+@JsonProperty("Service") Matcher service){
+
+    }
+
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record PolicyStatementCondition(
+@JsonProperty("ArnEquals") Map<String, ResourceReference> arnEquals){
+
+    }
+    }
 

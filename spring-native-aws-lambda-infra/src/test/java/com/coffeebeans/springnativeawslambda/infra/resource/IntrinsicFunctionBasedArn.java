@@ -18,17 +18,11 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Singular;
 
 /**
- * This class is used to represent the intrinsic function based arn.
+ * This record is used to represent the intrinsic function based arn.
  * <br>
  * Example of using {@code Fn::GetAtt} function
  * <pre>
@@ -57,18 +51,10 @@ import lombok.Singular;
  *
  * @author Muhammad Hamadto
  */
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class IntrinsicFunctionBasedArn {
+public record IntrinsicFunctionBasedArn(
+@Singular @JsonProperty("Fn::GetAtt") List<Object> attributesArns,
+@Singular @JsonProperty("Fn::Join") List<Object> joinArns){
 
-  @Singular
-  @JsonProperty("Fn::GetAtt")
-  public List<Object> attributesArns;
-
-  @Singular
-  @JsonProperty("Fn::Join")
-  public List<Object> joinArns;
-}
+    }

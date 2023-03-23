@@ -18,31 +18,20 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Singular;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RestApi {
+public record RestApi(@JsonProperty("Properties") RestApiProperties properties){
 
-  @JsonIgnore
-  private final CdkResourceType type = APIGATEWAY_RESTAPI;
+@JsonProperty("Type")
+static String type=APIGATEWAY_RESTAPI.getValue();
 
-  @JsonProperty("Properties")
-  private RestApiProperties properties;
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record RestApiProperties(@JsonProperty("Name") Matcher name,
+@JsonProperty("Tags") @Singular List<Tag> tags){
 
-  @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
-  }
-}
+    }
+    }

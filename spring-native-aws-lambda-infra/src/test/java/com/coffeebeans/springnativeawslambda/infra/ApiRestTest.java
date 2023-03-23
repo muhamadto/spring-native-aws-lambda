@@ -19,6 +19,7 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
+import static com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement.PolicyStatementEffect.ALLOW;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static software.amazon.awscdk.CfnDeletionPolicy.RETAIN;
 import static software.amazon.awscdk.assertions.Match.exact;
@@ -27,28 +28,25 @@ import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 import com.coffeebeans.springnativeawslambda.infra.assertion.ApiRestAssert;
 import com.coffeebeans.springnativeawslambda.infra.assertion.IamAssert;
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyDocument;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyPrincipal;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatement;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatementEffect;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyPrincipal;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement;
 import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApi;
+import com.coffeebeans.springnativeawslambda.infra.resource.RestApi.RestApiProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiAccount;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiAccountProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.RestApiAccount.RestApiAccountProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiDeployment;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiDeploymentProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.RestApiDeployment.RestApiDeploymentProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiMethod;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiMethodIntegration;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiMethodProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiNonRootMethodProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.RestApiMethod.RestApiMethodIntegration;
+import com.coffeebeans.springnativeawslambda.infra.resource.RestApiMethod.RestApiMethodProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiResource;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiResourceProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiRootMethodProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.RestApiResource.RestApiResourceProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiStage;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiStageProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.RestApiStage.RestApiStageProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.Role;
-import com.coffeebeans.springnativeawslambda.infra.resource.RoleProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.Role.RoleProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -194,8 +192,8 @@ class ApiRestTest extends TemplateSupport {
         .uri(uri)
         .build();
 
-    final RestApiMethodProperties restApiMethodProperties = RestApiNonRootMethodProperties.builder().httpMethod(exact("POST"))
-        .resourceId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)")).build())
+    final RestApiMethodProperties restApiMethodProperties = RestApiMethodProperties.builder().httpMethod(exact("POST"))
+        .nonRootResourceId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)")).build())
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
         .authorizationType(exact("NONE")).integration(restApiMethodIntegration)
         .build();
@@ -226,8 +224,8 @@ class ApiRestTest extends TemplateSupport {
     final RestApiMethodIntegration restApiMethodIntegration = RestApiMethodIntegration.builder().type(exact("AWS_PROXY"))
         .integrationHttpMethod(exact("POST")).uri(uri).build();
 
-    final RestApiMethodProperties restApiMethodProperties = RestApiNonRootMethodProperties.builder().httpMethod(exact("ANY"))
-        .resourceId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiproxy(.*)")).build())
+    final RestApiMethodProperties restApiMethodProperties = RestApiMethodProperties.builder().httpMethod(exact("ANY"))
+        .nonRootResourceId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiproxy(.*)")).build())
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
         .authorizationType(exact("NONE")).integration(restApiMethodIntegration).build();
 
@@ -254,9 +252,10 @@ class ApiRestTest extends TemplateSupport {
         .uri(uri)
         .build();
 
-    final RestApiMethodProperties restApiMethodProperties = RestApiRootMethodProperties.builder().resourceId(
-            IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
-                .attributesArn(exact("RootResourceId")).build()).httpMethod(exact("ANY"))
+    final RestApiMethodProperties restApiMethodProperties = RestApiMethodProperties.builder()
+        .rootResourceId(IntrinsicFunctionBasedArn.builder().attributesArn(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)"))
+            .attributesArn(exact("RootResourceId")).build())
+        .httpMethod(exact("ANY"))
         .restApiId(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build())
         .authorizationType(exact("NONE")).integration(restApiMethodIntegration)
         .build();
@@ -272,7 +271,7 @@ class ApiRestTest extends TemplateSupport {
   @Test
   void should_have_role_with_AmazonAPIGatewayPushToCloudWatchLogs_policy_for_rest_api_to_push_logs_to_cloud_watch() {
     final PolicyStatement policyStatement = PolicyStatement.builder()
-        .principal(PolicyPrincipal.builder().service(exact("apigateway.amazonaws.com")).build()).effect(PolicyStatementEffect.ALLOW)
+        .principal(PolicyPrincipal.builder().service(exact("apigateway.amazonaws.com")).build()).effect(ALLOW)
         .action("sts:AssumeRole").build();
 
     final PolicyDocument assumeRolePolicyDocument = PolicyDocument.builder().statement(policyStatement).build();

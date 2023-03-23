@@ -18,29 +18,41 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RestApiMethod {
+public record RestApiMethod(@JsonProperty("Properties") RestApiMethodProperties properties){
 
-  @JsonIgnore
-  private final CdkResourceType type = CdkResourceType.APIGATEWAY_RESTAPI_METHOD;
+@JsonProperty("Type")
+static String type=APIGATEWAY_RESTAPI_METHOD.getValue();
 
-  @JsonProperty("Properties")
-  private RestApiMethodProperties properties;
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record RestApiMethodProperties(@JsonProperty("HttpMethod") Matcher httpMethod,
+@JsonProperty("RestApiId") ResourceReference restApiId,
+@JsonProperty("Integration") RestApiMethodIntegration integration,
+@JsonProperty("AuthorizationType") Matcher authorizationType,
+@JsonIgnore IntrinsicFunctionBasedArn rootResourceId,
+@JsonIgnore ResourceReference nonRootResourceId){
 
-  @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
-  }
-}
+@JsonProperty("ResourceId")
+public Object getResourceId(){
+final boolean allNull=ObjectUtils.allNull(rootResourceId,nonRootResourceId);
+
+    if(allNull){
+    throw new IllegalStateException("Either rootResourceId or nonRootResourceId must be set");
+
+    }
+    return rootResourceId!=null?rootResourceId:nonRootResourceId;
+    }
+    }
+
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record RestApiMethodIntegration(@JsonProperty("IntegrationHttpMethod") Matcher integrationHttpMethod,
+@JsonProperty("Type") Matcher type,
+@JsonProperty("Uri") IntrinsicFunctionBasedArn uri){
+
+    }
+    }

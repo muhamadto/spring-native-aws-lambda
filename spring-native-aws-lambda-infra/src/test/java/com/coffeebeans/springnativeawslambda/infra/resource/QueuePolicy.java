@@ -18,11 +18,6 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.QUEUE_POLICY;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 import lombok.Builder;
 import lombok.Singular;
 

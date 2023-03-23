@@ -18,41 +18,100 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.BUCKET;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 import lombok.Builder;
-import software.amazon.awscdk.assertions.Matcher;
 
+/**
+ * Creates S3 bucket for AWS CDK stack testing. Here is an example of how to use it:
+ * <pre>
+ *       final Bucket Bucket = Bucket.builder()
+ *         .properties(Bucket.BucketProperties.builder()
+ *             .bucketName("my-bucket")
+ *             .lifecycleConfiguration(Bucket.LifecycleConfiguration.builder()
+ *                 .rules(List.of(Bucket.Rule.builder()
+ *                     .expirationInDays(30)
+ *                     .status("Enabled")
+ *                     .prefix("my-prefix")
+ *                     .build()))
+ *                 .build())
+ *             .build())
+ *         .build();
+ *    </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record Bucket(@JsonProperty("Properties") Properties properties,
-                     @JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
-                     @JsonProperty("DeletionPolicy") Matcher deletionPolicy) {
+public record Bucket(@JsonProperty("Properties") BucketProperties bucketProperties,
+@JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
+@JsonProperty("DeletionPolicy") Matcher deletionPolicy){
 
- @JsonProperty("Type")
- static String type = BUCKET.getValue();
+@JsonProperty("Type")
+static String type=BUCKET.getValue();
 
- @Builder
- @JsonInclude(JsonInclude.Include.NON_EMPTY)
- public record Properties(@JsonProperty("BucketName") String bucketName,
-                          @JsonProperty("LifecycleConfiguration") LifecycleConfiguration lifecycleConfiguration) {
+/**
+ * This record is used to represent the S3 bucket properties.
+ * <pre>
+ *   BucketProperties bucketProperties = BucketProperties.builder()
+ *             .bucketName("my-bucket")
+ *             .lifecycleConfiguration(Bucket.LifecycleConfiguration.builder()
+ *                 .rules(List.of(Bucket.Rule.builder()
+ *                     .expirationInDays(30)
+ *                     .status("Enabled")
+ *                     .prefix("my-prefix")
+ *                     .build()))
+ *                 .build())
+ *             .build();
+ *
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record BucketProperties(@JsonProperty("BucketName") String bucketName,
+@JsonProperty("LifecycleConfiguration") LifecycleConfiguration lifecycleConfiguration){
 
- }
+    }
 
- @Builder
- @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LifecycleConfiguration(@JsonProperty("Rules") List<Rule> rules) {
+/**
+ * This record is used to represent the S3 bucket lifecycle configuration.
+ * <pre>
+ *   final LifecycleConfiguration lifecycleConfiguration = LifecycleConfiguration.builder()
+ *         .rules(List.of(Rule.builder()
+ *             .expirationInDays(30)
+ *             .status("Enabled")
+ *             .prefix("my-prefix")
+ *             .build()))
+ *         .build();
+ *
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record LifecycleConfiguration(@JsonProperty("Rules") List<Rule> rules){
 
-  }
+    }
 
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record Rule(@JsonProperty("ExpirationInDays") int expirationInDays,
-                     @JsonProperty("Status") String status,
-                     @JsonProperty("Prefix") String prefix) {
+/**
+ * This record is used to represent the S3 bucket lifecycle configuration rule.
+ * <pre>
+ *   final Rule rule = Rule.builder()
+ *         .expirationInDays(30)
+ *         .status("Enabled")
+ *         .prefix("my-prefix")
+ *         .build();
+ *
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record Rule(@JsonProperty("ExpirationInDays") int expirationInDays,
+@JsonProperty("Status") String status,
+@JsonProperty("Prefix") String prefix){
 
-  }
-}
+    }
+    }

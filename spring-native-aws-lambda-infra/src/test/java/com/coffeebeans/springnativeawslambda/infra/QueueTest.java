@@ -20,15 +20,15 @@ package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
 import static com.coffeebeans.springnativeawslambda.infra.assertion.QueueAssert.assertThat;
+import static com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement.PolicyStatementEffect.ALLOW;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyDocument;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyPrincipal;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatement;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatementCondition;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatementEffect;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyPrincipal;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatementCondition;
 import com.coffeebeans.springnativeawslambda.infra.resource.Queue;
 import com.coffeebeans.springnativeawslambda.infra.resource.Queue.QueueProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.Queue.QueueRedrivePolicy;
@@ -116,7 +116,7 @@ class QueueTest extends TemplateSupport {
         .build();
 
     final PolicyStatement policyStatement = PolicyStatement.builder()
-        .effect(PolicyStatementEffect.ALLOW)
+        .effect(ALLOW)
         .principal(PolicyPrincipal.builder().service(exact("sns.amazonaws.com")).build())
         .resource(resource)
         .action("sqs:SendMessage")
@@ -207,7 +207,7 @@ class QueueTest extends TemplateSupport {
         .build();
 
     final PolicyStatement policyStatement = PolicyStatement.builder()
-        .effect(PolicyStatementEffect.ALLOW)
+        .effect(ALLOW)
         .principal(PolicyPrincipal.builder().service(exact("sns.amazonaws.com")).build())
         .resource(resource)
         .action("sqs:SendMessage")

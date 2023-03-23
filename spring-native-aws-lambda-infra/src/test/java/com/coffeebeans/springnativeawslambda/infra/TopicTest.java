@@ -74,6 +74,7 @@ class TopicTest extends TemplateSupport {
     final TopicSubscription expected = TopicSubscription.builder().properties(topicSubscriptionProperties).build();
 
     assertThat(template).hasTopicSubscription(expected);
+
   }
 
   @Test

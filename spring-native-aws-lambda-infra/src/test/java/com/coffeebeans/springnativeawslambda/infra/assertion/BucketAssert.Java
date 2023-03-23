@@ -19,9 +19,16 @@
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
 import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.BUCKET;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 import com.coffeebeans.springnativeawslambda.infra.resource.Bucket;
+import com.coffeebeans.springnativeawslambda.infra.resource.Bucket.BucketProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.Optional;
+import org.apache.commons.collections4.MapUtils;
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Assertions;
 import software.amazon.awscdk.assertions.Template;
 
 
@@ -40,4 +47,57 @@ public class BucketAssert extends AbstractAssert<BucketAssert, Template> {
 
     return this;
   }
+
+  public BucketAssert hasBucketWithName(final String bucketName) {
+    isNotNull();
+    final Map<String, Map<String, Object>> buckets = actual.findResources(BUCKET.getValue());
+
+    if (MapUtils.isEmpty(buckets)) {
+      failWithMessage("No bucket found");
+    }
+
+    final Optional<Bucket> bucket = buckets.keySet().stream()
+        .map((value) -> new ObjectMapper().convertValue(value, Bucket.class))
+        .filter((b) -> equalsIgnoreCase(bucketName, b.bucketProperties().bucketName()))
+        .findFirst();
+
+    if (bucket.isPresent()) {
+      failWithMessage("No bucket found");
+    }
+
+    final BucketProperties bucketProperties = bucket.get().bucketProperties();
+
+    Assertions
+        .assertThat(bucketProperties.bucketName())
+        .isEqualTo(bucketName);
+    return this;
+  }
+
+//  public BucketAssert hasLifecycleConfiguration(final LifecycleConfiguration lifecycleConfig) {
+//    isNotNull();
+//    final Bucket actualBucket = (Bucket) actual.getResource(BUCKET.getValue());
+//    final Properties properties = actualBucket.properties();
+//    assertThat(properties.lifecycleConfiguration()).isEqualTo(lifecycleConfig);
+//    return this;
+//  }
+//
+//  public BucketAssert hasRuleWithPrefix(final String prefix) {
+//    isNotNull();
+//    final Bucket actualBucket = (Bucket) actual.getResource(BUCKET.getValue());
+//    final LifecycleConfiguration lifecycleConfig = actualBucket.properties().lifecycleConfiguration();
+//    assertThat(lifecycleConfig.rules())
+//        .filteredOn(rule -> rule.prefix().equals(prefix))
+//        .hasSize(1);
+//    return this;
+//  }
+//
+//  public BucketAssert hasNoRuleWithPrefix(final String prefix) {
+//    isNotNull();
+//    final Bucket actualBucket = (Bucket) actual.findResources(BUCKET.getValue());
+//    final LifecycleConfiguration lifecycleConfig = actualBucket.properties().lifecycleConfiguration();
+//    assertThat(lifecycleConfig.rules())
+//        .filteredOn(rule -> rule.prefix().equals(prefix))
+//        .isEmpty();
+//    return this;
+//  }
 }

@@ -18,38 +18,23 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_STAGE;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Singular;
-import software.amazon.awscdk.assertions.Matcher;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RestApiStage {
+public record RestApiStage(@JsonProperty("Properties") RestApiStageProperties properties,
+@Singular @JsonProperty("DependsOn") List<Matcher> dependencies){
 
-  @JsonIgnore
-  private final CdkResourceType type = APIGATEWAY_RESTAPI_STAGE;
+@JsonProperty("Type")
+static String type=APIGATEWAY_RESTAPI_STAGE.getValue();
 
-  @JsonProperty("Properties")
-  private RestApiStageProperties properties;
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record RestApiStageProperties(@JsonProperty("RestApiId") ResourceReference restApiId,
+@JsonProperty("DeploymentId") ResourceReference deploymentId,
+@JsonProperty("StageName") Matcher stageName,
+@Singular @JsonProperty("Tags") List<Tag> tags){
 
-  @Singular
-  @JsonProperty("DependsOn")
-  private List<Matcher> dependencies;
-
-  @JsonProperty("Type")
-  public String getType() {
-    return type.getValue();
-  }
-}
+    }
+    }

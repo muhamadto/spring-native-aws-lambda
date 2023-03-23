@@ -19,12 +19,13 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
+import static com.coffeebeans.springnativeawslambda.infra.assertion.LambdaAssert.assertThat;
+import static com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement.PolicyStatementEffect.ALLOW;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
 import com.coffeebeans.springnativeawslambda.infra.assertion.IamAssert;
-import com.coffeebeans.springnativeawslambda.infra.assertion.LambdaAssert;
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaCode;
@@ -37,14 +38,13 @@ import com.coffeebeans.springnativeawslambda.infra.resource.LambdaEventInvokeCon
 import com.coffeebeans.springnativeawslambda.infra.resource.LambdaPermission;
 import com.coffeebeans.springnativeawslambda.infra.resource.LambdaPermission.LambdaPermissionProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.Policy;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyDocument;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyPrincipal;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatement;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatementEffect;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyPrincipal;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement;
 import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
 import com.coffeebeans.springnativeawslambda.infra.resource.Role;
-import com.coffeebeans.springnativeawslambda.infra.resource.RoleProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.Role.RoleProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasFunction(expected);
   }
 
@@ -99,7 +99,7 @@ class LambdaTest extends TemplateSupport {
   void should_have_role_with_AWSLambdaBasicExecutionRole_policy_for_lambda_to_assume() {
     final PolicyStatement policyStatement = PolicyStatement.builder()
         .principal(PolicyPrincipal.builder().service(exact("lambda.amazonaws.com")).build())
-        .effect(PolicyStatementEffect.ALLOW)
+        .effect(ALLOW)
         .action("sts:AssumeRole")
         .build();
 
@@ -182,7 +182,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaEventInvokeConfigProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasLambdaEventInvokeConfig(expected);
   }
 
@@ -223,7 +223,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaPermissionProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasLambdaPermission(expected);
   }
 
@@ -262,7 +262,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaPermissionProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasLambdaPermission(expected);
   }
 
@@ -303,7 +303,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaPermissionProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasLambdaPermission(expected);
   }
 
@@ -342,7 +342,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaPermissionProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasLambdaPermission(expected);
   }
 
@@ -383,7 +383,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaPermissionProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasLambdaPermission(expected);
   }
 
@@ -422,7 +422,7 @@ class LambdaTest extends TemplateSupport {
         .properties(lambdaPermissionProperties)
         .build();
 
-    LambdaAssert.assertThat(template)
+    assertThat(template)
         .hasLambdaPermission(expected);
   }
 
@@ -430,7 +430,7 @@ class LambdaTest extends TemplateSupport {
     final ResourceReference resourceReference = ResourceReference.builder().reference(stringLikeRegexp(pattern)).build();
 
     return PolicyStatement.builder()
-        .effect(PolicyStatementEffect.ALLOW)
+        .effect(ALLOW)
         .action("sns:Publish")
         .resource(resourceReference)
         .build();

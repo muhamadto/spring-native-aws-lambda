@@ -17,15 +17,8 @@
  */
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.LAMBDA_FUNCTION;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
-import java.util.Map;
 import lombok.Builder;
 import lombok.Singular;
-import software.amazon.awscdk.assertions.Matcher;
 
 /**
  * Creates a Lambda function for AWS CDK stack testing. Here is an example of how to use it:
@@ -77,7 +70,7 @@ public record Lambda(@Singular @JsonProperty("DependsOn") List<Matcher> dependen
   static String type = LAMBDA_FUNCTION.getValue();
 
   /**
-   * This class is used to represent the lambda code.
+   * This record is used to represent the lambda code.
    * <br>
    * Example of using {@code S3Bucket} and {@code S3Key} function
    * <pre>
@@ -96,48 +89,89 @@ public record Lambda(@Singular @JsonProperty("DependsOn") List<Matcher> dependen
 
   }
 
-  /**
-   * This class is used to represent the lambda destination config. Example of using {@code OnFailure} and {@code OnSuccess} function
-   * <pre>
-   *   final LambdaDestinationConfig lambdaDestinationConfig = LambdaDestinationConfig.builder()
-   *       .onFailure(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(failureDestinationPattern)).build()).build())
-   *       .OnSuccess(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(successDestinationPattern)).build()).build())
-   *       .build();
-   * </pre>
-   *
-   * @author Muhammad Hamadto
-   */
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaDestinationConfig(@JsonProperty("OnFailure") LambdaDestinationReference onFailure,
-                                        @JsonProperty("OnSuccess") LambdaDestinationReference onSuccess) {
+/**
+ * This record is used to represent the lambda destination config. Example of using {@code OnFailure} and {@code OnSuccess} function
+ * <pre>
+ *   final LambdaDestinationConfig lambdaDestinationConfig = LambdaDestinationConfig.builder()
+ *       .onFailure(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(failureDestinationPattern)).build()).build())
+ *       .OnSuccess(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(successDestinationPattern)).build()).build())
+ *       .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record LambdaDestinationConfig(@JsonProperty("OnFailure") LambdaDestinationReference onFailure,
+@JsonProperty("OnSuccess") LambdaDestinationReference onSuccess){
 
-  }
+    }
 
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaProperties(@JsonProperty("Code") LambdaCode code,
-                                 @JsonProperty("Role") IntrinsicFunctionBasedArn roleArn,
-                                 @JsonProperty("Environment") LambdaEnvironment environment,
-                                 @JsonProperty("Tags") @Singular List<Tag> tags,
-                                 @JsonProperty("Description") Matcher description,
-                                 @JsonProperty("FunctionName") Matcher functionName,
-                                 @JsonProperty("Handler") Matcher handler,
-                                 @JsonProperty("MemorySize") Integer memorySize,
-                                 @JsonProperty("Runtime") Matcher runtime,
-                                 @JsonProperty("Timeout") Integer timeout) {
+/**
+ * This record is used to represent the lambda properties.
+ * <pre>
+ *     final LambdaProperties lambdaProperties = LambdaProperties.builder()
+ *         .functionName(exact("lambda-function"))
+ *         .handler(exact("class.fully.qualified.name::handlerMethod"))
+ *         .memorySize(512)
+ *         .runtime(exact("provided.al2"))
+ *         .timeout(3)
+ *         .description(exact("Lambda example"))
+ *         .code(lambdaCode)
+ *         .roleArn(roleArn)
+ *         .tag(Tag.builder().key("COST_CENTRE").value(exact("core")).build())
+ *         .tag(Tag.builder().key("ENV").value(exact("TEST")).build())
+ *         .environment(lambdaEnvironment)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record LambdaProperties(@JsonProperty("Code") LambdaCode code,
+@JsonProperty("Role") IntrinsicFunctionBasedArn roleArn,
+@JsonProperty("Environment") LambdaEnvironment environment,
+@JsonProperty("Tags") @Singular List<Tag> tags,
+@JsonProperty("Description") Matcher description,
+@JsonProperty("FunctionName") Matcher functionName,
+@JsonProperty("Handler") Matcher handler,
+@JsonProperty("MemorySize") Integer memorySize,
+@JsonProperty("Runtime") Matcher runtime,
+@JsonProperty("Timeout") Integer timeout){
 
-  }
+    }
 
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaDestinationReference(@JsonProperty("Destination") ResourceReference destination) {
+/**
+ * This record is used to represent the lambda destination reference.
+ * <pre>
+ *   final LambdaDestinationReference lambdaDestinationReference = LambdaDestinationReference.builder()
+ *    .destination(ResourceReference.builder().reference(stringLikeRegexp(failureDestinationPattern)).build())
+ *    .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 
-  }
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record LambdaDestinationReference(@JsonProperty("Destination") ResourceReference destination){
 
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record LambdaEnvironment(@Singular @JsonProperty("Variables") Map<String, Matcher> variables) {
+    }
 
-  }
-}
+/**
+ * This record is used to represent the lambda environment.
+ * <pre>
+ *   final LambdaEnvironment lambdaEnvironment = LambdaEnvironment.builder()
+ *    .variable("ENV", exact(TEST))
+ *    .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
+@Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record LambdaEnvironment(@Singular @JsonProperty("Variables") Map<String, Matcher> variables){
+
+    }
+    }
