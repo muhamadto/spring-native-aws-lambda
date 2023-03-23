@@ -1,21 +1,38 @@
+/*
+ *   Licensed to Muhammad Hamadto
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
 import static com.coffeebeans.springnativeawslambda.infra.assertion.QueueAssert.assertThat;
-import static software.amazon.awscdk.assertions.Match.exact;
+import static com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement.PolicyStatementEffect.ALLOW;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyDocument;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyPrincipal;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatement;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatementCondition;
-import com.coffeebeans.springnativeawslambda.infra.resource.PolicyStatementEffect;
+import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionArn;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyPrincipal;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement;
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatementCondition;
 import com.coffeebeans.springnativeawslambda.infra.resource.Queue;
+import com.coffeebeans.springnativeawslambda.infra.resource.Queue.QueueProperties;
+import com.coffeebeans.springnativeawslambda.infra.resource.Queue.QueueRedrivePolicy;
 import com.coffeebeans.springnativeawslambda.infra.resource.QueuePolicy;
-import com.coffeebeans.springnativeawslambda.infra.resource.QueuePolicyProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.QueueProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.QueueRedrivePolicy;
+import com.coffeebeans.springnativeawslambda.infra.resource.QueuePolicy.QueuePolicyProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
 import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
 import java.util.Map;
@@ -28,7 +45,7 @@ class QueueTest extends TemplateSupport {
   @Test
   void should_have_success_queue() {
 
-    final IntrinsicFunctionBasedArn deadLetterTargetArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuedlqfifo(.*)"))
         .attributesArn("Arn")
         .build();
@@ -41,17 +58,17 @@ class QueueTest extends TemplateSupport {
     final QueueProperties queueProperties = QueueProperties.builder()
         .contentBasedDeduplication(true)
         .fifoQueue(true)
-        .deduplicationScope(exact("messageGroup"))
-        .queueName(exact("spring-native-aws-lambda-function-success-queue.fifo"))
+        .deduplicationScope("messageGroup")
+        .queueName("spring-native-aws-lambda-function-success-queue.fifo")
         .redrivePolicy(queueRedrivePolicy)
-        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
-        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
+        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
+        .tag(Tag.builder().key("ENV").value(TEST).build())
         .build();
 
     final Queue expected = Queue.builder()
         .properties(queueProperties)
-        .updateReplacePolicy(exact("Delete"))
-        .deletionPolicy(exact("Delete"))
+        .updateReplacePolicy("Delete")
+        .deletionPolicy("Delete")
         .build();
 
     assertThat(template)
@@ -64,16 +81,16 @@ class QueueTest extends TemplateSupport {
     final QueueProperties queueProperties = QueueProperties.builder()
         .contentBasedDeduplication(true)
         .fifoQueue(true)
-        .deduplicationScope(exact("messageGroup"))
-        .queueName(exact("spring-native-aws-lambda-function-success-queue-dlq.fifo"))
-        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
-        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
+        .deduplicationScope("messageGroup")
+        .queueName("spring-native-aws-lambda-function-success-queue-dlq.fifo")
+        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
+        .tag(Tag.builder().key("ENV").value(TEST).build())
         .build();
 
     final Queue expected = Queue.builder()
         .properties(queueProperties)
-        .updateReplacePolicy(exact("Delete"))
-        .deletionPolicy(exact("Delete"))
+        .updateReplacePolicy("Delete")
+        .deletionPolicy("Delete")
         .build();
 
     assertThat(template)
@@ -86,7 +103,7 @@ class QueueTest extends TemplateSupport {
         .reference(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuefifo(.*)"))
         .build();
 
-    final IntrinsicFunctionBasedArn resource = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn resource = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuefifo(.*)"))
         .attributesArn("Arn")
         .build();
@@ -98,8 +115,8 @@ class QueueTest extends TemplateSupport {
         .build();
 
     final PolicyStatement policyStatement = PolicyStatement.builder()
-        .effect(PolicyStatementEffect.ALLOW)
-        .principal(PolicyPrincipal.builder().service(exact("sns.amazonaws.com")).build())
+        .effect(ALLOW)
+        .principal(PolicyPrincipal.builder().service("sns.amazonaws.com").build())
         .resource(resource)
         .action("sqs:SendMessage")
         .condition(policyStatementCondition)
@@ -125,7 +142,7 @@ class QueueTest extends TemplateSupport {
   @Test
   void should_have_failure_queue() {
 
-    final IntrinsicFunctionBasedArn deadLetterTargetArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunctionfailurequeuedlq(.*)"))
         .attributesArn("Arn")
         .build();
@@ -136,16 +153,16 @@ class QueueTest extends TemplateSupport {
         .build();
 
     final QueueProperties queueProperties = QueueProperties.builder()
-        .queueName(exact("spring-native-aws-lambda-function-failure-queue"))
+        .queueName("spring-native-aws-lambda-function-failure-queue")
         .redrivePolicy(queueRedrivePolicy)
-        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
-        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
+        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
+        .tag(Tag.builder().key("ENV").value(TEST).build())
         .build();
 
     final Queue expected = Queue.builder()
         .properties(queueProperties)
-        .updateReplacePolicy(exact("Delete"))
-        .deletionPolicy(exact("Delete"))
+        .updateReplacePolicy("Delete")
+        .deletionPolicy("Delete")
         .build();
 
     assertThat(template)
@@ -156,15 +173,15 @@ class QueueTest extends TemplateSupport {
   void should_have_failure_dead_letter_queue() {
 
     final QueueProperties queueProperties = QueueProperties.builder()
-        .queueName(exact("spring-native-aws-lambda-function-failure-queue-dlq"))
-        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
-        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
+        .queueName("spring-native-aws-lambda-function-failure-queue-dlq")
+        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
+        .tag(Tag.builder().key("ENV").value(TEST).build())
         .build();
 
     final Queue expected = Queue.builder()
         .properties(queueProperties)
-        .updateReplacePolicy(exact("Delete"))
-        .deletionPolicy(exact("Delete"))
+        .updateReplacePolicy("Delete")
+        .deletionPolicy("Delete")
         .build();
 
     assertThat(template)
@@ -177,7 +194,7 @@ class QueueTest extends TemplateSupport {
         .reference(stringLikeRegexp("springnativeawslambdafunctionfailurequeue(.*)"))
         .build();
 
-    final IntrinsicFunctionBasedArn resource = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn resource = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunctionfailurequeue(.*)"))
         .attributesArn("Arn")
         .build();
@@ -189,8 +206,8 @@ class QueueTest extends TemplateSupport {
         .build();
 
     final PolicyStatement policyStatement = PolicyStatement.builder()
-        .effect(PolicyStatementEffect.ALLOW)
-        .principal(PolicyPrincipal.builder().service(exact("sns.amazonaws.com")).build())
+        .effect(ALLOW)
+        .principal(PolicyPrincipal.builder().service("sns.amazonaws.com").build())
         .resource(resource)
         .action("sqs:SendMessage")
         .condition(policyStatementCondition)

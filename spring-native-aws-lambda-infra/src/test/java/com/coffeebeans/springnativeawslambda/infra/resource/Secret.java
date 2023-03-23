@@ -21,22 +21,20 @@ package com.coffeebeans.springnativeawslambda.infra.resource;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
+import software.amazon.awscdk.assertions.Matcher;
 
 /**
- * This record is used to represent tags.
- *
+ * This record represents AWS Secret
  * <pre>
- *   final Tag envTag = Tag.builder()
- *         .key("ENV")
- *         .value(TEST)
+ *     final Secret secret = Secret.builder()
+ *         .name(exact("name"))
+ *         .valueFrom(stringLikeRegexp("arn:aws:secretsmanager:region:******:secret:/team/topSecret"))
  *         .build();
  * </pre>
- *
- * @author Muhammad Hamadto
  */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record Tag(@JsonProperty("Key") String key,
-                  @JsonProperty("Value") String value) {
+public record Secret(@JsonProperty("Name") Matcher name,
+                     @JsonProperty("ValueFrom") Matcher valueFrom) {
 
 }
