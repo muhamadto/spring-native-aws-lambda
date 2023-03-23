@@ -24,6 +24,44 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
+/**
+ * This record is used to represent a Lambda Permission.
+ * <pre>
+ *       final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
+ *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+ *         .attributesArn("Arn")
+ *         .build();
+ *
+ *     final List<Object> joinArn = List.of(
+ *         "arn:",
+ *         ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+ *         ":execute-api:",
+ *         ResourceReference.builder().reference(exact("AWS::Region")).build(),
+ *         ":",
+ *         ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+ *         ":",
+ *         ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build(),
+ *         "/",
+ *         ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build());
+ *
+ *     final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
+ *         .joinArns(List.of(EMPTY, joinArn))
+ *         .build();
+ *
+ *     final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+ *         .action("lambda:InvokeFunction")
+ *         .principal("apigateway.amazonaws.com")
+ *         .functionName(functionName)
+ *         .sourceArn(sourceArn)
+ *         .build();
+ *
+ *     final LambdaPermission lambdaPermission = LambdaPermission.builder()
+ *         .properties(lambdaPermissionProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record LambdaPermission(@JsonProperty("Properties") LambdaPermissionProperties properties) {
@@ -31,12 +69,46 @@ public record LambdaPermission(@JsonProperty("Properties") LambdaPermissionPrope
   @JsonProperty("Type")
   static String type = LAMBDA_PERMISSION.getValue();
 
+  /**
+   * This record is used to represent a Lambda Permission properties.
+   * <pre>
+   *       final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
+   *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+   *         .attributesArn("Arn")
+   *         .build();
+   *
+   *     final List<Object> joinArn = List.of(
+   *         "arn:",
+   *         ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+   *         ":execute-api:",
+   *         ResourceReference.builder().reference(exact("AWS::Region")).build(),
+   *         ":",
+   *         ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+   *         ":",
+   *         ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build(),
+   *         "/",
+   *         ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build());
+   *
+   *     final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
+   *         .joinArns(List.of(EMPTY, joinArn))
+   *         .build();
+   *
+   *     final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
+   *         .action("lambda:InvokeFunction")
+   *         .principal("apigateway.amazonaws.com")
+   *         .functionName(functionName)
+   *         .sourceArn(sourceArn)
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record LambdaPermissionProperties(@JsonProperty("Action") String action,
-                                           @JsonProperty("FunctionName") IntrinsicFunctionBasedArn functionName,
+                                           @JsonProperty("FunctionName") IntrinsicFunctionArn functionName,
                                            @JsonProperty("Principal") String principal,
-                                           @JsonProperty("SourceArn") IntrinsicFunctionBasedArn sourceArn) {
+                                           @JsonProperty("SourceArn") IntrinsicFunctionArn sourceArn) {
 
   }
 }

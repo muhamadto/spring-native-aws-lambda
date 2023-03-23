@@ -20,12 +20,40 @@ package com.coffeebeans.springnativeawslambda.infra.resource;
 
 import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.LAMBDA_EVENT_INVOKE_CONFIG;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaDestinationConfig;
+import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaDestinationReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import software.amazon.awscdk.assertions.Matcher;
 
+/**
+ * This record is used to represent a Lambda EventInvokeConfig.
+ * <pre>
+ *   final LambdaDestinationReference onFailure = LambdaDestinationReference.builder()
+ *         .destination(ResourceReference.builder().reference(stringLikeRegexp(pattern)).build())
+ *         .build();
+ *
+ *     final LambdaDestinationReference onSuccess = LambdaDestinationReference.builder()
+ *         .destination(ResourceReference.builder().reference(stringLikeRegexp(pattern)).build())
+ *         .build();
+ *
+ *     final LambdaEventInvokeConfigProperties lambdaEventInvokeConfigProperties = LambdaEventInvokeConfigProperties.builder()
+ *         .functionName(ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build())
+ *         .maximumRetryAttempts(2)
+ *         .qualifier(exact("$LATEST"))
+ *         .lambdaDestinationConfig(LambdaDestinationConfig.builder()
+ *             .onFailure(onFailure)
+ *             .onSuccess(onSuccess)
+ *             .build())
+ *         .build();
+ *
+ *     final LambdaEventInvokeConfig lambdaEventInvokeConfig = LambdaEventInvokeConfig.builder()
+ *         .properties(lambdaEventInvokeConfigProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record LambdaEventInvokeConfig(@JsonProperty("Properties") LambdaEventInvokeConfigProperties properties) {
@@ -33,12 +61,54 @@ public record LambdaEventInvokeConfig(@JsonProperty("Properties") LambdaEventInv
   @JsonProperty("Type")
   static String type = LAMBDA_EVENT_INVOKE_CONFIG.getValue();
 
+  /**
+   * This record is used to represent a Lambda EventInvokeConfig properties.
+   * <pre>
+   *   final LambdaDestinationReference onFailure = LambdaDestinationReference.builder()
+   *         .destination(ResourceReference.builder().reference(stringLikeRegexp(pattern)).build())
+   *         .build();
+   *
+   *     final LambdaDestinationReference onSuccess = LambdaDestinationReference.builder()
+   *         .destination(ResourceReference.builder().reference(stringLikeRegexp(pattern)).build())
+   *         .build();
+   *
+   *     final LambdaEventInvokeConfigProperties lambdaEventInvokeConfigProperties = LambdaEventInvokeConfigProperties.builder()
+   *         .functionName(ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build())
+   *         .maximumRetryAttempts(2)
+   *         .qualifier(exact("$LATEST"))
+   *         .lambdaDestinationConfig(LambdaDestinationConfig.builder()
+   *             .onFailure(onFailure)
+   *             .onSuccess(onSuccess)
+   *             .build())
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record LambdaEventInvokeConfigProperties(@JsonProperty("DestinationConfig") LambdaDestinationConfig lambdaDestinationConfig,
                                                   @JsonProperty("FunctionName") ResourceReference functionName,
                                                   @JsonProperty("MaximumRetryAttempts") Integer maximumRetryAttempts,
                                                   @JsonProperty("Qualifier") Matcher qualifier) {
+
+  }
+
+  /**
+   * This record represents lambda destination config.
+   * <pre>
+   *   final LambdaDestinationConfig lambdaDestinationConfig = LambdaDestinationConfig.builder()
+   *       .onFailure(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(failureDestinationPattern)).build()).build())
+   *       .OnSuccess(LambdaDestinationReference.builder().destination(ResourceReference.builder().reference(stringLikeRegexp(successDestinationPattern)).build()).build())
+   *       .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LambdaDestinationConfig(@JsonProperty("OnFailure") LambdaDestinationReference onFailure,
+                                        @JsonProperty("OnSuccess") LambdaDestinationReference onSuccess) {
 
   }
 }

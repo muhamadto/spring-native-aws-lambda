@@ -18,20 +18,72 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_RESOURCE;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
+/**
+ * This record is used to represent a ApiGateway rest api resource.
+ *
+ * <pre>
+ *       final IntrinsicFunctionArn parentId = IntrinsicFunctionArn.builder()
+ *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+ *         .attributesArn("RootResourceId"))
+ *         .build();
+ *
+ *     final ResourceReference restApiId = ResourceReference.builder()
+ *         .reference(stringLikeRegexp("identifier(.*)"))
+ *         .build();
+ *
+ *     final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder()
+ *         .parentId(parentId)
+ *         .pathPart("{proxy+}")
+ *         .restApiId(restApiId)
+ *         .build();
+ *
+ *     final RestApiResource restApiResource = RestApiResource.builder()
+ *         .properties(restApiResourceProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record RestApiResource(@JsonProperty("Properties") RestApiResourceProperties properties){
+public record RestApiResource(@JsonProperty("Properties") RestApiResourceProperties properties) {
 
-static String type=APIGATEWAY_RESTAPI_RESOURCE.getValue();
+  static String type = APIGATEWAY_RESTAPI_RESOURCE.getValue();
 
-@Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record RestApiResourceProperties(
-@JsonProperty("ParentId") IntrinsicFunctionBasedArn parentId,
-@JsonProperty("PathPart") Matcher pathPart,
-@JsonProperty("RestApiId") ResourceReference restApiId){
+  /**
+   * This record is used to represent a ApiGateway rest api resource properties.
+   *
+   * <pre>
+   *       final IntrinsicFunctionArn parentId = IntrinsicFunctionArn.builder()
+   *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+   *         .attributesArn("RootResourceId")
+   *         .build();
+   *
+   *     final ResourceReference restApiId = ResourceReference.builder()
+   *         .reference(stringLikeRegexp("identifier(.*)"))
+   *         .build();
+   *
+   *     final RestApiResourceProperties restApiResourceProperties = RestApiResourceProperties.builder()
+   *         .parentId(parentId)
+   *         .pathPart("{proxy+}")
+   *         .restApiId(restApiId)
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record RestApiResourceProperties(
+      @JsonProperty("ParentId") IntrinsicFunctionArn parentId,
+      @JsonProperty("PathPart") String pathPart,
+      @JsonProperty("RestApiId") ResourceReference restApiId) {
 
-    }
-    }
+  }
+}

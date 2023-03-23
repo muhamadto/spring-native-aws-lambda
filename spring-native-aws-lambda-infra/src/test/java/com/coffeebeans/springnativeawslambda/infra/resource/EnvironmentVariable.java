@@ -23,20 +23,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 /**
- * This record is used to represent tags.
- *
+ * This record represents an environment variable.
  * <pre>
- *   final Tag envTag = Tag.builder()
- *         .key("ENV")
- *         .value(TEST)
- *         .build();
+ *   final EnvironmentVariable environmentVariable = EnvironmentVariable.builder()
+ *    .variable("ENV", "TEST")
+ *    .build();
  * </pre>
  *
  * @author Muhammad Hamadto
  */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record Tag(@JsonProperty("Key") String key,
-                  @JsonProperty("Value") String value) {
+public record EnvironmentVariable(@JsonProperty("Name") String name,
+                                  @JsonProperty("Value") String value) {
 
 }
