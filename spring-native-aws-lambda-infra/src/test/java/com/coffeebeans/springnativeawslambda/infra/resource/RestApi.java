@@ -48,10 +48,6 @@ public record RestApi(@JsonProperty("Properties") RestApiProperties properties,
                       @JsonProperty("Type") String type
 ) {
 
-//  @JsonProperty("Type")
-//  static String type = APIGATEWAY_RESTAPI.getValue();
-
-  @JsonProperty("Type")
   public String type() {
     return APIGATEWAY_RESTAPI.getValue();
   }
