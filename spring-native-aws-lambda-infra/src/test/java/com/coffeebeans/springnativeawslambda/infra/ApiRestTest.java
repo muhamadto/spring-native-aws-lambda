@@ -19,20 +19,18 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
+import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKAssert.assertThat;
 import static com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement.PolicyStatementEffect.ALLOW;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.assertion.ApiRestAssert;
 import com.coffeebeans.springnativeawslambda.infra.assertion.IamAssert;
 import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionArn;
 import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
 import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyPrincipal;
 import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement;
 import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApi;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApi.RestApiProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiAccount;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiAccount.RestApiAccountProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApiDeployment;
@@ -56,18 +54,11 @@ class ApiRestTest extends TemplateSupport {
 
   @Test
   void should_have_rest_api() {
-    final RestApiProperties restApiProperties = RestApiProperties.builder()
-        .name("spring-native-aws-lambda-function-rest-api")
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .build();
 
-    final RestApi expected = RestApi.builder()
-        .properties(restApiProperties)
-        .build();
-
-    ApiRestAssert.assertThat(template)
-        .hasRestApi(expected);
+    assertThat(template)
+        .hasRestApiWithName("spring-native-aws-lambda-function-rest-api")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST);
   }
 
   @Test
@@ -88,7 +79,7 @@ class ApiRestTest extends TemplateSupport {
         .deletionPolicy("Retain")
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiAccount(expected);
   }
 
@@ -107,7 +98,7 @@ class ApiRestTest extends TemplateSupport {
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiname(.*)"))
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiDeployment(expected);
   }
 
@@ -134,7 +125,7 @@ class ApiRestTest extends TemplateSupport {
         .dependency(stringLikeRegexp("springnativeawslambdafunctionrestapiAccount(.*)"))
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiStage(expected);
   }
 
@@ -160,7 +151,7 @@ class ApiRestTest extends TemplateSupport {
         .properties(restApiResourceProperties)
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiResource(expected);
   }
 
@@ -184,7 +175,7 @@ class ApiRestTest extends TemplateSupport {
         .properties(restApiResourceProperties)
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiResource(expected);
   }
 
@@ -221,7 +212,7 @@ class ApiRestTest extends TemplateSupport {
         .properties(restApiMethodProperties)
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiMethod(expected);
   }
 
@@ -258,7 +249,7 @@ class ApiRestTest extends TemplateSupport {
         .properties(restApiMethodProperties)
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiMethod(expected);
   }
 
@@ -295,7 +286,7 @@ class ApiRestTest extends TemplateSupport {
         .properties(restApiMethodProperties)
         .build();
 
-    ApiRestAssert.assertThat(template)
+    assertThat(template)
         .hasRestApiMethod(expected);
   }
 
