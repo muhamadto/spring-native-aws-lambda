@@ -26,14 +26,14 @@ import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
 import com.coffeebeans.springnativeawslambda.infra.assertion.IamAssert;
-import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionBasedArn;
+import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionArn;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaCode;
-import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaDestinationConfig;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaDestinationReference;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaEnvironment;
 import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.LambdaEventInvokeConfig;
+import com.coffeebeans.springnativeawslambda.infra.resource.LambdaEventInvokeConfig.LambdaDestinationConfig;
 import com.coffeebeans.springnativeawslambda.infra.resource.LambdaEventInvokeConfig.LambdaEventInvokeConfigProperties;
 import com.coffeebeans.springnativeawslambda.infra.resource.LambdaPermission;
 import com.coffeebeans.springnativeawslambda.infra.resource.LambdaPermission.LambdaPermissionProperties;
@@ -57,31 +57,31 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_lambda_function() {
     final LambdaCode lambdaCode = LambdaCode.builder()
-        .s3Bucket(exact("test-cdk-bucket"))
+        .s3Bucket("test-cdk-bucket")
         .s3Key(stringLikeRegexp("(.*).zip"))
         .build();
 
-    final IntrinsicFunctionBasedArn roleArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn roleArn = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
         .attributesArn("Arn")
         .build();
 
     final LambdaEnvironment lambdaEnvironment = LambdaEnvironment.builder()
-        .variable("ENV", exact(TEST))
-        .variable("SPRING_PROFILES_ACTIVE", exact(TEST))
+        .variable("ENV", TEST)
+        .variable("SPRING_PROFILES_ACTIVE", TEST)
         .build();
 
     final LambdaProperties lambdaProperties = LambdaProperties.builder()
-        .functionName(exact("spring-native-aws-lambda-function"))
-        .handler(exact("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest"))
+        .functionName("spring-native-aws-lambda-function")
+        .handler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
         .memorySize(512)
-        .runtime(exact("provided.al2"))
+        .runtime("provided.al2")
         .timeout(3)
-        .description(exact("Lambda example with spring native"))
+        .description("Lambda example with spring native")
         .code(lambdaCode)
         .roleArn(roleArn)
-        .tag(Tag.builder().key("COST_CENTRE").value(exact(TAG_VALUE_COST_CENTRE)).build())
-        .tag(Tag.builder().key("ENV").value(exact(TEST)).build())
+        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
+        .tag(Tag.builder().key("ENV").value(TEST).build())
         .environment(lambdaEnvironment)
         .build();
 
@@ -98,7 +98,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_role_with_AWSLambdaBasicExecutionRole_policy_for_lambda_to_assume() {
     final PolicyStatement policyStatement = PolicyStatement.builder()
-        .principal(PolicyPrincipal.builder().service(exact("lambda.amazonaws.com")).build())
+        .principal(PolicyPrincipal.builder().service("lambda.amazonaws.com").build())
         .effect(ALLOW)
         .action("sts:AssumeRole")
         .build();
@@ -112,7 +112,7 @@ class LambdaTest extends TemplateSupport {
         ResourceReference.builder().reference(exact("AWS::Partition")).build(),
         ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole");
 
-    final IntrinsicFunctionBasedArn managedPolicyArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn managedPolicyArn = IntrinsicFunctionArn.builder()
         .joinArn(EMPTY)
         .joinArn(arn)
         .build();
@@ -189,7 +189,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_permission_to_allow_rest_api_root_call_lambda() {
 
-    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
         .attributesArn("Arn")
         .build();
@@ -208,7 +208,7 @@ class LambdaTest extends TemplateSupport {
         "/*/"
     );
 
-    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
         .joinArns(List.of(EMPTY, joinArn))
         .build();
 
@@ -230,7 +230,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_permission_to_allow_rest_api_root_test_call_lambda() {
 
-    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
         .attributesArn("Arn")
         .build();
@@ -247,7 +247,7 @@ class LambdaTest extends TemplateSupport {
         "/test-invoke-stage/*/*"
     );
 
-    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
         .joinArns(List.of(EMPTY, joinArn))
         .build();
 
@@ -269,7 +269,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_permission_to_allow_rest_api_proxy_to_call_lambda() {
 
-    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
         .attributesArn("Arn")
         .build();
@@ -288,7 +288,7 @@ class LambdaTest extends TemplateSupport {
         "/*/*"
     );
 
-    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
         .joinArns(List.of(EMPTY, joinArn))
         .build();
 
@@ -310,7 +310,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_permission_to_allow_rest_api_proxy_test_to_call_lambda() {
 
-    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
         .attributesArn("Arn")
         .build();
@@ -327,7 +327,7 @@ class LambdaTest extends TemplateSupport {
         "/test-invoke-stage/*/*"
     );
 
-    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
         .joinArns(List.of(EMPTY, joinArn))
         .build();
 
@@ -349,7 +349,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_permission_to_allow_post_rest_api_method_to_call_lambda() {
 
-    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
         .attributesArn("Arn")
         .build();
@@ -368,7 +368,7 @@ class LambdaTest extends TemplateSupport {
         "/POST/name"
     );
 
-    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
         .joinArns(List.of(EMPTY, joinArn))
         .build();
 
@@ -390,7 +390,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_permission_to_allow_post_rest_api_method_test_to_call_lambda() {
 
-    final IntrinsicFunctionBasedArn functionName = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
         .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
         .attributesArn("Arn")
         .build();
@@ -407,7 +407,7 @@ class LambdaTest extends TemplateSupport {
         "/test-invoke-stage/POST/name"
     );
 
-    final IntrinsicFunctionBasedArn sourceArn = IntrinsicFunctionBasedArn.builder()
+    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
         .joinArns(List.of(EMPTY, joinArn))
         .build();
 

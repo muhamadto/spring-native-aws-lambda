@@ -18,10 +18,24 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
+import software.amazon.awscdk.assertions.Matcher;
+
+/**
+ * This record is used to represent a reference to a resource.
+ * <pre>
+ *       final ResourceReference resourceReference = ResourceReference.builder()
+ *         .reference(exact("AWS::Partition"))
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record ResourceReference(@JsonProperty("Ref") Matcher reference){
+public record ResourceReference(@JsonProperty("Ref") Matcher reference) {
 
-    }
+}

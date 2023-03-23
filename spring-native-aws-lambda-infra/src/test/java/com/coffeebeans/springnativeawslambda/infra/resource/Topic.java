@@ -25,8 +25,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
 import lombok.Singular;
-import software.amazon.awscdk.assertions.Matcher;
 
+/**
+ * This record represents SNS Topic.
+ *
+ * <pre>
+ *       final TopicProperties topicProperties = TopicProperties.builder()
+ *         .contentBasedDeduplication(true)
+ *         .fifoTopic(true)
+ *         .tag(Tag.builder().key("COST_CENTRE").value("test").build())
+ *         .tag(Tag.builder().key("ENV").value("test").build())
+ *         .topicName("topic-name.fifo")
+ *         .build();
+ *
+ *     final Topic topic = Topic.builder()
+ *         .properties(topicProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record Topic(@JsonProperty("Properties") TopicProperties properties) {
@@ -34,11 +52,26 @@ public record Topic(@JsonProperty("Properties") TopicProperties properties) {
   @JsonProperty("Type")
   static String type = TOPIC.getValue();
 
+  /**
+   * This record represents SNS Topic properties.
+   *
+   * <pre>
+   *       final TopicProperties topicProperties = TopicProperties.builder()
+   *         .contentBasedDeduplication(true)
+   *         .fifoTopic(true)
+   *         .tag(Tag.builder().key("COST_CENTRE").value("test").build())
+   *         .tag(Tag.builder().key("ENV").value("test").build())
+   *         .topicName("topic-name.fifo")
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record TopicProperties(@JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
                                 @JsonProperty("FifoTopic") Boolean fifoTopic,
-                                @JsonProperty("TopicName") Matcher topicName,
+                                @JsonProperty("TopicName") String topicName,
                                 @Singular @JsonProperty("Tags") List<Tag> tags) {
 
   }

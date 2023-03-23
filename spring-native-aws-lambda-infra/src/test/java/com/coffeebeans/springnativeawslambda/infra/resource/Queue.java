@@ -25,31 +25,107 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
 import lombok.Singular;
-import software.amazon.awscdk.assertions.Matcher;
 
+/**
+ * This record represents SQS Queue.
+ *
+ * <pre>
+ *       final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
+ *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+ *         .attributesArn("Arn")
+ *         .build();
+ *
+ *     final QueueRedrivePolicy queueRedrivePolicy = QueueRedrivePolicy.builder()
+ *         .deadLetterTargetArn(deadLetterTargetArn)
+ *         .maxReceiveCount(3)
+ *         .build();
+ *
+ *     final QueueProperties queueProperties = QueueProperties.builder()
+ *         .contentBasedDeduplication(true)
+ *         .fifoQueue(true)
+ *         .deduplicationScope("messageGroup")
+ *         .queueName("queue-name.fifo")
+ *         .redrivePolicy(queueRedrivePolicy)
+ *         .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
+ *         .tag(Tag.builder().key("ENV").value(TEST).build())
+ *         .build();
+ *
+ *     final Queue queue = Queue.builder()
+ *         .properties(queueProperties)
+ *         .updateReplacePolicy("Delete")
+ *         .deletionPolicy("Delete")
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record Queue(@JsonProperty("Properties") QueueProperties properties,
-                    @JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
-                    @JsonProperty("DeletionPolicy") Matcher deletionPolicy) {
+                    @JsonProperty("UpdateReplacePolicy") String updateReplacePolicy,
+                    @JsonProperty("DeletionPolicy") String deletionPolicy) {
 
   @JsonProperty("Type")
   static String type = QUEUE.getValue();
 
+  /**
+   * This record represents SQS Queue properties.
+   *
+   * <pre>
+   *       final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
+   *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+   *         .attributesArn("Arn")
+   *         .build();
+   *
+   *     final QueueRedrivePolicy queueRedrivePolicy = QueueRedrivePolicy.builder()
+   *         .deadLetterTargetArn(deadLetterTargetArn)
+   *         .maxReceiveCount(3)
+   *         .build();
+   *
+   *     final QueueProperties queueProperties = QueueProperties.builder()
+   *         .contentBasedDeduplication(true)
+   *         .fifoQueue(true)
+   *         .deduplicationScope("messageGroup")
+   *         .queueName("queue-name.fifo")
+   *         .redrivePolicy(queueRedrivePolicy)
+   *         .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
+   *         .tag(Tag.builder().key("ENV").value(TEST).build())
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record QueueProperties(@JsonProperty("ContentBasedDeduplication") Boolean contentBasedDeduplication,
                                 @JsonProperty("FifoQueue") Boolean fifoQueue,
-                                @JsonProperty("QueueName") Matcher queueName,
-                                @JsonProperty("DeduplicationScope") Matcher deduplicationScope,
+                                @JsonProperty("QueueName") String queueName,
+                                @JsonProperty("DeduplicationScope") String deduplicationScope,
                                 @JsonProperty("RedrivePolicy") QueueRedrivePolicy redrivePolicy,
                                 @Singular @JsonProperty("Tags") List<Tag> tags) {
 
   }
 
+  /**
+   * This record represents SQS Queue redrive policy.
+   *
+   * <pre>
+   *       final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
+   *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+   *         .attributesArn("Arn")
+   *         .build();
+   *
+   *     final QueueRedrivePolicy queueRedrivePolicy = QueueRedrivePolicy.builder()
+   *         .deadLetterTargetArn(deadLetterTargetArn)
+   *         .maxReceiveCount(3)
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record QueueRedrivePolicy(@JsonProperty("deadLetterTargetArn") IntrinsicFunctionBasedArn deadLetterTargetArn,
+  public record QueueRedrivePolicy(@JsonProperty("deadLetterTargetArn") IntrinsicFunctionArn deadLetterTargetArn,
                                    @JsonProperty("maxReceiveCount") Integer maxReceiveCount) {
 
   }

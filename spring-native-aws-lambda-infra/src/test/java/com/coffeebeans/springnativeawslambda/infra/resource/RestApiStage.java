@@ -18,23 +18,76 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_STAGE;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Builder;
 import lombok.Singular;
+import software.amazon.awscdk.assertions.Matcher;
 
+/**
+ * This record is used to represent a ApiGateway rest api stage.
+ *
+ * <pre>
+ *       final ResourceReference restApiId = ResourceReference.builder()
+ *         .reference(stringLikeRegexp("identifier(.*)"))
+ *         .build();
+ *
+ *     final ResourceReference deploymentId = ResourceReference.builder()
+ *         .reference(stringLikeRegexp("identifier(.*)")).build();
+ *
+ *     final RestApiStageProperties restApiDeploymentProperties = RestApiStageProperties.builder()
+ *         .restApiId(restApiId)
+ *         .deploymentId(deploymentId)
+ *         .stageName("test")
+ *         .tag(Tag.builder().key("COST_CENTRE").value("test").build())
+ *         .tag(Tag.builder().key("ENV").value("test").build()).build();
+ *
+ *     final RestApiStage restApiStage = RestApiStage.builder()
+ *         .properties(restApiDeploymentProperties)
+ *         .dependency(stringLikeRegexp("identifier(.*)"))
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record RestApiStage(@JsonProperty("Properties") RestApiStageProperties properties,
-@Singular @JsonProperty("DependsOn") List<Matcher> dependencies){
+                           @Singular @JsonProperty("DependsOn") List<Matcher> dependencies) {
 
-@JsonProperty("Type")
-static String type=APIGATEWAY_RESTAPI_STAGE.getValue();
+  @JsonProperty("Type")
+  static String type = APIGATEWAY_RESTAPI_STAGE.getValue();
 
-@Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record RestApiStageProperties(@JsonProperty("RestApiId") ResourceReference restApiId,
-@JsonProperty("DeploymentId") ResourceReference deploymentId,
-@JsonProperty("StageName") Matcher stageName,
-@Singular @JsonProperty("Tags") List<Tag> tags){
+  /**
+   * This record is used to represent a ApiGateway rest api stage properties.
+   *
+   * <pre>
+   *       final ResourceReference restApiId = ResourceReference.builder()
+   *         .reference(stringLikeRegexp("identifier(.*)"))
+   *         .build();
+   *
+   *     final ResourceReference deploymentId = ResourceReference.builder()
+   *         .reference(stringLikeRegexp("identifier(.*)")).build();
+   *
+   *     final RestApiStageProperties restApiDeploymentProperties = RestApiStageProperties.builder()
+   *         .restApiId(restApiId)
+   *         .deploymentId(deploymentId)
+   *         .stageName("test")
+   *         .tag(Tag.builder().key("COST_CENTRE").value("test").build())
+   *         .tag(Tag.builder().key("ENV").value("test").build()).build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record RestApiStageProperties(@JsonProperty("RestApiId") ResourceReference restApiId,
+                                       @JsonProperty("DeploymentId") ResourceReference deploymentId,
+                                       @JsonProperty("StageName") String stageName,
+                                       @Singular @JsonProperty("Tags") List<Tag> tags) {
 
-    }
-    }
+  }
+}

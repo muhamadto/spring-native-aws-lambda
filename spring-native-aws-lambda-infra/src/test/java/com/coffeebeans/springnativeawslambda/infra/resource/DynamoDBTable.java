@@ -24,16 +24,102 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
+import lombok.Singular;
 
+/**
+ * This record represents a DynamoDb Table.
+ * <pre>
+ *       final DynamoDBTableProvisionedThroughput dynamoDBTableProvisionedThroughput = DynamoDBTableProvisionedThroughput.builder()
+ *         .readCapacityUnits(1)
+ *         .writeCapacityUnits(1)
+ *         .build();
+ *
+ *     final DynamoDBTableAttributeDefinition attributeDefinition = DynamoDBTableAttributeDefinition.builder()
+ *         .attributeName("id")
+ *         .attributeType("S")
+ *         .build();
+ *
+ *     final DynamoDBTableKeySchema keySchema = DynamoDBTableKeySchema.builder()
+ *         .attributeName("id")
+ *         .keyType("HASH")
+ *         .build();
+ *
+ *     final DynamoDBTableProperties dynamoDBTableProperties = DynamoDBTableProperties.builder()
+ *         .tableName("test")
+ *         .billingMode("mode")
+ *         .provisionedThroughput(dynamoDBTableProvisionedThroughput)
+ *         .attributeDefinition(attributeDefinition)
+ *         .keySchema(keySchema)
+ *         .build();
+ *
+ *     final DynamoDBTable dynamoDBTable = DynamoDBTable.builder()
+ *         .deletionPolicy("Retain")
+ *         .updateReplacePolicy("Retain")
+ *         .properties(dynamoDBTableProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record DynamoDBTable(@JsonProperty("DeletionPolicy") String deletionPolicy,
-                            @JsonProperty("Properties") DynamoDBTableProperties properties,
+public record DynamoDBTable(@JsonProperty("Properties") DynamoDBTableProperties properties,
+                            @JsonProperty("DeletionPolicy") String deletionPolicy,
                             @JsonProperty("UpdateReplacePolicy") String updateReplacePolicy) {
 
   @JsonProperty("Type")
   static String type = DYNAMODB_TABLE.getValue();
 
+  /**
+   * This record represents a DynamoDb Table properties.
+   * <pre>
+   *       final DynamoDBTableProvisionedThroughput dynamoDBTableProvisionedThroughput = DynamoDBTableProvisionedThroughput.builder()
+   *         .readCapacityUnits(1)
+   *         .writeCapacityUnits(1)
+   *         .build();
+   *
+   *     final DynamoDBTableAttributeDefinition attributeDefinition = DynamoDBTableAttributeDefinition.builder()
+   *         .attributeName("id")
+   *         .attributeType("S")
+   *         .build();
+   *
+   *     final DynamoDBTableKeySchema keySchema = DynamoDBTableKeySchema.builder()
+   *         .attributeName("id")
+   *         .keyType("HASH")
+   *         .build();
+   *
+   *     final DynamoDBTableProperties dynamoDBTableProperties = DynamoDBTableProperties.builder()
+   *         .tableName("test")
+   *         .billingMode("mode")
+   *         .provisionedThroughput(dynamoDBTableProvisionedThroughput)
+   *         .attributeDefinition(attributeDefinition)
+   *         .keySchema(keySchema)
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record DynamoDBTableProperties(@Singular @JsonProperty("AttributeDefinitions") List<DynamoDBTableAttributeDefinition> attributeDefinitions,
+                                        @Singular @JsonProperty("KeySchema") List<DynamoDBTableKeySchema> keySchemas,
+                                        @JsonProperty("TableName") String tableName,
+                                        @JsonProperty("BillingMode") String billingMode,
+                                        @JsonProperty("ProvisionedThroughput") DynamoDBTableProvisionedThroughput provisionedThroughput) {
+
+  }
+
+  /**
+   * This record represents a DynamoDb Table key schema.
+   * <pre>
+   *     final DynamoDBTableKeySchema keySchema = DynamoDBTableKeySchema.builder()
+   *         .attributeName("id")
+   *         .keyType("HASH")
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record DynamoDBTableKeySchema(@JsonProperty("AttributeName") String attributeName,
@@ -41,6 +127,17 @@ public record DynamoDBTable(@JsonProperty("DeletionPolicy") String deletionPolic
 
   }
 
+  /**
+   * This record represents a DynamoDb Table attribute definition.
+   * <pre>
+   *     final DynamoDBTableAttributeDefinition attributeDefinition = DynamoDBTableAttributeDefinition.builder()
+   *         .attributeName("id")
+   *         .attributeType("S")
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record DynamoDBTableAttributeDefinition(@JsonProperty("AttributeName") String attributeName,
@@ -48,16 +145,17 @@ public record DynamoDBTable(@JsonProperty("DeletionPolicy") String deletionPolic
 
   }
 
-  @Builder
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  public record DynamoDBTableProperties(@JsonProperty("AttributeDefinitions") List<DynamoDBTableAttributeDefinition> attributeDefinitions,
-                                        @JsonProperty("KeySchema") List<DynamoDBTableKeySchema> keySchema,
-                                        @JsonProperty("TableName") String tableName,
-                                        @JsonProperty("BillingMode") String billingMode,
-                                        @JsonProperty("ProvisionedThroughput") DynamoDBTableProvisionedThroughput provisionedThroughput) {
-
-  }
-
+  /**
+   * This record represents a DynamoDb Table provisioned throughput.
+   * <pre>
+   *       final DynamoDBTableProvisionedThroughput dynamoDBTableProvisionedThroughput = DynamoDBTableProvisionedThroughput.builder()
+   *         .readCapacityUnits(1)
+   *         .writeCapacityUnits(1)
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record DynamoDBTableProvisionedThroughput(@JsonProperty("ReadCapacityUnits") Integer readCapacityUnits,

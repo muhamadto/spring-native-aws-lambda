@@ -18,20 +18,53 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Builder;
 import lombok.Singular;
 
+/**
+ * This record is used to represent a ApiGateway rest api.
+ * <pre>
+ *      final RestApiProperties restApiProperties = RestApiProperties.builder()
+ *         .name("api-gateway-rest-api")
+ *         .tag(Tag.builder().key("COST_CENTRE").value("test").build())
+ *         .tag(Tag.builder().key("ENV").value("test").build())
+ *         .build();
+ *
+ *     final RestApi restApi = RestApi.builder()
+ *         .properties(restApiProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record RestApi(@JsonProperty("Properties") RestApiProperties properties){
+public record RestApi(@JsonProperty("Properties") RestApiProperties properties) {
 
-@JsonProperty("Type")
-static String type=APIGATEWAY_RESTAPI.getValue();
+  @JsonProperty("Type")
+  static String type = APIGATEWAY_RESTAPI.getValue();
 
-@Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record RestApiProperties(@JsonProperty("Name") Matcher name,
-@JsonProperty("Tags") @Singular List<Tag> tags){
+  /**
+   * This record is used to represent a ApiGateway rest api properties.
+   * <pre>
+   *      final RestApiProperties restApiProperties = RestApiProperties.builder()
+   *         .name("api-gateway-rest-api")
+   *         .tag(Tag.builder().key("COST_CENTRE").value("test").build())
+   *         .tag(Tag.builder().key("ENV").value("test").build())
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record RestApiProperties(@JsonProperty("Name") String name,
+                                  @JsonProperty("Tags") @Singular List<Tag> tags) {
 
-    }
-    }
+  }
+}

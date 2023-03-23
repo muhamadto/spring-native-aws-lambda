@@ -18,6 +18,11 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.BUCKET;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Builder;
 
 /**
@@ -42,76 +47,76 @@ import lombok.Builder;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record Bucket(@JsonProperty("Properties") BucketProperties bucketProperties,
-@JsonProperty("UpdateReplacePolicy") Matcher updateReplacePolicy,
-@JsonProperty("DeletionPolicy") Matcher deletionPolicy){
+                     @JsonProperty("UpdateReplacePolicy") String updateReplacePolicy,
+                     @JsonProperty("DeletionPolicy") String deletionPolicy) {
 
-@JsonProperty("Type")
-static String type=BUCKET.getValue();
+  @JsonProperty("Type")
+  static String type = BUCKET.getValue();
 
-/**
- * This record is used to represent the S3 bucket properties.
- * <pre>
- *   BucketProperties bucketProperties = BucketProperties.builder()
- *             .bucketName("my-bucket")
- *             .lifecycleConfiguration(Bucket.LifecycleConfiguration.builder()
- *                 .rules(List.of(Bucket.Rule.builder()
- *                     .expirationInDays(30)
- *                     .status("Enabled")
- *                     .prefix("my-prefix")
- *                     .build()))
- *                 .build())
- *             .build();
- *
- * </pre>
- *
- * @author Muhammad Hamadto
- */
-@Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record BucketProperties(@JsonProperty("BucketName") String bucketName,
-@JsonProperty("LifecycleConfiguration") LifecycleConfiguration lifecycleConfiguration){
+  /**
+   * This record represents S3 bucket.
+   * <pre>
+   *   BucketProperties bucketProperties = BucketProperties.builder()
+   *             .bucketName("my-bucket")
+   *             .lifecycleConfiguration(Bucket.LifecycleConfiguration.builder()
+   *                 .rules(List.of(Bucket.Rule.builder()
+   *                     .expirationInDays(30)
+   *                     .status("Enabled")
+   *                     .prefix("my-prefix")
+   *                     .build()))
+   *                 .build())
+   *             .build();
+   *
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record BucketProperties(@JsonProperty("BucketName") String bucketName,
+                                 @JsonProperty("LifecycleConfiguration") LifecycleConfiguration lifecycleConfiguration) {
 
-    }
+  }
 
-/**
- * This record is used to represent the S3 bucket lifecycle configuration.
- * <pre>
- *   final LifecycleConfiguration lifecycleConfiguration = LifecycleConfiguration.builder()
- *         .rules(List.of(Rule.builder()
- *             .expirationInDays(30)
- *             .status("Enabled")
- *             .prefix("my-prefix")
- *             .build()))
- *         .build();
- *
- * </pre>
- *
- * @author Muhammad Hamadto
- */
-@Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record LifecycleConfiguration(@JsonProperty("Rules") List<Rule> rules){
+  /**
+   * This record represents S3 bucket lifecycle configuration.
+   * <pre>
+   *   final LifecycleConfiguration lifecycleConfiguration = LifecycleConfiguration.builder()
+   *         .rules(List.of(Rule.builder()
+   *             .expirationInDays(30)
+   *             .status("Enabled")
+   *             .prefix("my-prefix")
+   *             .build()))
+   *         .build();
+   *
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record LifecycleConfiguration(@JsonProperty("Rules") List<Rule> rules) {
 
-    }
+  }
 
-/**
- * This record is used to represent the S3 bucket lifecycle configuration rule.
- * <pre>
- *   final Rule rule = Rule.builder()
- *         .expirationInDays(30)
- *         .status("Enabled")
- *         .prefix("my-prefix")
- *         .build();
- *
- * </pre>
- *
- * @author Muhammad Hamadto
- */
-@Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record Rule(@JsonProperty("ExpirationInDays") int expirationInDays,
-@JsonProperty("Status") String status,
-@JsonProperty("Prefix") String prefix){
+  /**
+   * This record represents S3 bucket lifecycle configuration rule.
+   * <pre>
+   *   final Rule rule = Rule.builder()
+   *         .expirationInDays(30)
+   *         .status("Enabled")
+   *         .prefix("my-prefix")
+   *         .build();
+   *
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
+  @Builder
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  public record Rule(@JsonProperty("ExpirationInDays") int expirationInDays,
+                     @JsonProperty("Status") String status,
+                     @JsonProperty("Prefix") String prefix) {
 
-    }
-    }
+  }
+}

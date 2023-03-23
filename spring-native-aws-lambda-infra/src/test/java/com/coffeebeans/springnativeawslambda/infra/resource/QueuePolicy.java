@@ -18,9 +18,55 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.QUEUE_POLICY;
+
+import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Builder;
 import lombok.Singular;
 
+/**
+ * This record represents SQS QueuePolicy.
+ * <pre>
+ *       final ResourceReference queue = ResourceReference.builder()
+ *         .reference(stringLikeRegexp("identifier(.*)"))
+ *         .build();
+ *
+ *     final IntrinsicFunctionArn resource = IntrinsicFunctionArn.builder()
+ *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+ *         .attributesArn("Arn")
+ *         .build();
+ *
+ *     final PolicyStatementCondition policyStatementCondition = PolicyStatementCondition.builder()
+ *         .arnEquals(Map.of("aws:SourceArn", ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build()))
+ *         .build();
+ *
+ *     final PolicyStatement policyStatement = PolicyStatement.builder()
+ *         .effect(ALLOW)
+ *         .principal(PolicyPrincipal.builder().service("sns.amazonaws.com").build())
+ *         .resource(resource)
+ *         .action("sqs:SendMessage")
+ *         .condition(policyStatementCondition)
+ *         .build();
+ *
+ *     final PolicyDocument policyDocument = PolicyDocument.builder()
+ *         .statement(policyStatement)
+ *         .build();
+ *
+ *     final QueuePolicyProperties queuePolicyProperties = QueuePolicyProperties.builder()
+ *         .queue(queue)
+ *         .policyDocument(policyDocument)
+ *         .build();
+ *
+ *     final QueuePolicy queuePolicy = QueuePolicy.builder()
+ *         .properties(queuePolicyProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record QueuePolicy(@JsonProperty("Properties") QueuePolicyProperties properties) {
@@ -28,6 +74,43 @@ public record QueuePolicy(@JsonProperty("Properties") QueuePolicyProperties prop
   @JsonProperty("Type")
   static String type = QUEUE_POLICY.getValue();
 
+  /**
+   * This record represents SQS QueuePolicy properties.
+   *
+   * <pre>
+   *       final ResourceReference queue = ResourceReference.builder()
+   *         .reference(stringLikeRegexp("identifier(.*)"))
+   *         .build();
+   *
+   *     final IntrinsicFunctionArn resource = IntrinsicFunctionArn.builder()
+   *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+   *         .attributesArn("Arn")
+   *         .build();
+   *
+   *     final PolicyStatementCondition policyStatementCondition = PolicyStatementCondition.builder()
+   *         .arnEquals(Map.of("aws:SourceArn", ResourceReference.builder().reference(stringLikeRegexp("identifier(.*)")).build()))
+   *         .build();
+   *
+   *     final PolicyStatement policyStatement = PolicyStatement.builder()
+   *         .effect(ALLOW)
+   *         .principal(PolicyPrincipal.builder().service("sns.amazonaws.com").build())
+   *         .resource(resource)
+   *         .action("sqs:SendMessage")
+   *         .condition(policyStatementCondition)
+   *         .build();
+   *
+   *     final PolicyDocument policyDocument = PolicyDocument.builder()
+   *         .statement(policyStatement)
+   *         .build();
+   *
+   *     final QueuePolicyProperties queuePolicyProperties = QueuePolicyProperties.builder()
+   *         .queue(queue)
+   *         .policyDocument(policyDocument)
+   *         .build();
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record QueuePolicyProperties(@Singular @JsonProperty("Queues") List<ResourceReference> queues,

@@ -39,7 +39,6 @@ public class IamAssert extends AbstractAssert<IamAssert, Template> {
   public IamAssert hasRole(final Role expected) {
     actual.hasResource(ROLE.getValue(), expected);
 
-
     return this;
   }
 

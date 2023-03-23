@@ -24,8 +24,33 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import lombok.Builder;
-import software.amazon.awscdk.assertions.Matcher;
 
+/**
+ * This record represents SNS Topic subscription.
+ *
+ * <pre>
+ *       final ResourceReference topicArn = ResourceReference.builder()
+ *         .reference(stringLikeRegexp("identifier(.*)"))
+ *         .build();
+ *
+ *     final IntrinsicFunctionArn endpoint = IntrinsicFunctionArn.builder()
+ *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+ *         .attributesArn("Arn")
+ *         .build();
+ *
+ *     final TopicSubscriptionProperties topicSubscriptionProperties = TopicSubscriptionProperties.builder()
+ *         .protocol("sqs")
+ *         .topicArn(topicArn)
+ *         .endpoint(endpoint)
+ *         .build();
+ *
+ *     final TopicSubscription topicSubscription = TopicSubscription.builder()
+ *         .properties(topicSubscriptionProperties)
+ *         .build();
+ * </pre>
+ *
+ * @author Muhammad Hamadto
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record TopicSubscription(@JsonProperty("Properties") TopicSubscriptionProperties properties) {
@@ -33,11 +58,34 @@ public record TopicSubscription(@JsonProperty("Properties") TopicSubscriptionPro
   @JsonProperty("Type")
   static String type = TOPIC_SUBSCRIPTION.getValue();
 
+  /**
+   * This record represents SNS Topic subscription properties.
+   *
+   * <pre>
+   *       final ResourceReference topicArn = ResourceReference.builder()
+   *         .reference(stringLikeRegexp("identifier(.*)"))
+   *         .build();
+   *
+   *     final IntrinsicFunctionArn endpoint = IntrinsicFunctionArn.builder()
+   *         .attributesArn(stringLikeRegexp("identifier(.*)"))
+   *         .attributesArn("Arn")
+   *         .build();
+   *
+   *     final TopicSubscriptionProperties topicSubscriptionProperties = TopicSubscriptionProperties.builder()
+   *         .protocol("sqs")
+   *         .topicArn(topicArn)
+   *         .endpoint(endpoint)
+   *         .build();
+   *
+   * </pre>
+   *
+   * @author Muhammad Hamadto
+   */
   @Builder
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   public record TopicSubscriptionProperties(@JsonProperty("TopicArn") ResourceReference topicArn,
-                                            @JsonProperty("Protocol") Matcher protocol,
-                                            @JsonProperty("Endpoint") IntrinsicFunctionBasedArn endpoint,
+                                            @JsonProperty("Protocol") String protocol,
+                                            @JsonProperty("Endpoint") IntrinsicFunctionArn endpoint,
                                             @JsonProperty("FilterPolicy") Map<String, Object> filterPolicy) {
 
   }

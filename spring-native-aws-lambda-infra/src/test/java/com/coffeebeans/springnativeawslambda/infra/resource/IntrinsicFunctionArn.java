@@ -18,15 +18,18 @@
 
 package com.coffeebeans.springnativeawslambda.infra.resource;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Builder;
 import lombok.Singular;
 
 /**
- * This record is used to represent the intrinsic function based arn.
+ * This record represents intrinsic function based arn.
  * <br>
  * Example of using {@code Fn::GetAtt} function
  * <pre>
- *   final IntrinsicFunctionBasedArn roleArn = IntrinsicFunctionBasedArn.builder()
+ *   final IntrinsicFunctionArn arn = IntrinsicFunctionArn.builder()
  *         .attributesArn(stringLikeRegexp("identifier(.*)"))
  *         .attributesArn("Arn")
  *         .build();
@@ -34,7 +37,7 @@ import lombok.Singular;
  * <p>
  * Example from Rest API assertion to illustrate the usage of {@code Fn::Join} function
  * <pre>
- *  final List&lt Object &gt joinArn = List.of(
+ *  final List&lt Object &gt joinArns = List.of(
  *         "arn:",
  *         ResourceReference.builder().reference(exact("AWS::Partition")).build(),
  *         ":execute-api:",
@@ -47,14 +50,17 @@ import lombok.Singular;
  *         ResourceReference.builder().reference(stringLikeRegexp("functionrestapiDeploymentStagetest(.*)")).build(),
  *         "\/*\/*"
  *   );
+ *   final IntrinsicFunctionArn arn = IntrinsicFunctionArn.builder()
+ *         .joinArns(joinArn)
+ *         .build();
  *  </pre>
  *
  * @author Muhammad Hamadto
  */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record IntrinsicFunctionBasedArn(
-@Singular @JsonProperty("Fn::GetAtt") List<Object> attributesArns,
-@Singular @JsonProperty("Fn::Join") List<Object> joinArns){
+public record IntrinsicFunctionArn(
+    @Singular @JsonProperty("Fn::GetAtt") List<Object> attributesArns,
+    @Singular @JsonProperty("Fn::Join") List<Object> joinArns) {
 
-    }
+}
