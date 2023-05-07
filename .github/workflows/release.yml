@@ -26,6 +26,9 @@ jobs:
     container:
       image:  ghcr.io/muhamadto/spring-native-amazonlinux2-base:17-amazonlinux2
       options: --user=worker:ci
+    defaults:
+      run:
+        working-directory: /home/worker
     permissions:
       id-token: write
       contents: read
@@ -44,6 +47,7 @@ jobs:
           aws-region: ap-southeast-2
       - name: Checkout repository
         uses: actions/checkout@v3
+        working-directory: /home/worker
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
