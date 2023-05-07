@@ -39,11 +39,9 @@ class TopicTest extends TemplateSupport {
   void should_have_success_topic() {
 
     final TopicProperties topicProperties = TopicProperties.builder()
-        .contentBasedDeduplication(true)
-        .fifoTopic(true)
         .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
         .tag(Tag.builder().key("ENV").value(TEST).build())
-        .topicName("spring-native-aws-lambda-function-success-topic.fifo")
+        .topicName("spring-native-aws-lambda-function-success-topic")
         .build();
 
     final Topic expected = Topic.builder()
@@ -72,11 +70,11 @@ class TopicTest extends TemplateSupport {
   @Test
   void should_have_subscription_to_success_topic() {
     final ResourceReference topicArn = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionsuccesstopicfifo(.*)"))
+        .reference(stringLikeRegexp("springnativeawslambdafunctionsuccesstopic(.*)"))
         .build();
 
     final IntrinsicFunctionArn endpoint = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuefifo(.*)"))
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueue(.*)"))
         .attributesArn("Arn")
         .build();
 

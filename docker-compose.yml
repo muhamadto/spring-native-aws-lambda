@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   spring-native-aws-lambda-function:
-    image: ghcr.io/muhamadto/spring-native-amazonlinux2-base-java17:latest
+    image: ghcr.io/muhamadto/spring-native-amazonlinux2-base:17-amazonlinux2
     ports:
       - 8080:8080
     networks:
@@ -39,17 +39,6 @@ services:
       "
     depends_on:
       - localstack
-
-  spring-native-aws-lambda-function-infrastructure:
-    image: ghcr.io/muhamadto/spring-native-amazonlinux2-base-java17:latest
-    environment:
-      AWS_ACCESS_KEY_ID: local
-      AWS_SECRET_ACCESS_KEY: local
-      AWS_DEFAULT_REGION: ap-southeast-2
-    entrypoint:
-      - bash
-      - -c
-
 
   localstack:
     image: localstack/localstack:latest

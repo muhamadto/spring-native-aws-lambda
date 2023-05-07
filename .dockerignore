@@ -15,3 +15,6 @@ README.md
 # there is no need to copy it again if you want to use your own setting file, you can comment the
 # line below
 settings-spring.xml
+
+spring-native-aws-lambda-infra
+docker-compose.yml

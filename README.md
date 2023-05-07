@@ -232,10 +232,12 @@ and the following trust relationship
             "SNS:Subscribe",
             "SNS:GetTopicAttributes",
             "SNS:ListSubscriptionsByTopic",
-            "SNS:Unsubscribe"
+            "SNS:Unsubscribe",
+            "SNS:TagResource",
+            "SNS:UntagResource"
          ],
          "Resource": [
-            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-topic.fifo",
+            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-topic",
             "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-topic"
          ]
       },
@@ -252,9 +254,9 @@ and the following trust relationship
          ],
          "Resource": [
             "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-queue-dlq",
-            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-queue-dlq.fifo",
+            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-queue-dlq",
             "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-queue",
-            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-queue.fifo"
+            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-queue"
          ]
       },
       {

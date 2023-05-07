@@ -139,7 +139,7 @@ class LambdaTest extends TemplateSupport {
         .reference(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
         .build();
 
-    final PolicyStatement successSNSPublishPolicyStatement = getAllowSnsPublishPolicyStatement("springnativeawslambdafunctionsuccesstopicfifo(.*)");
+    final PolicyStatement successSNSPublishPolicyStatement = getAllowSnsPublishPolicyStatement("springnativeawslambdafunctionsuccesstopic(.*)");
 
     final PolicyStatement failureSNSPublishPolicyStatement = getAllowSnsPublishPolicyStatement("springnativeawslambdafunctionfailuretopic(.*)");
 
@@ -166,7 +166,7 @@ class LambdaTest extends TemplateSupport {
   void should_have_event_invoke_config_for_success_and_failure() {
 
     final LambdaDestinationReference onFailure = createDestinationReference("springnativeawslambdafunctionfailuretopic(.*)");
-    final LambdaDestinationReference onSuccess = createDestinationReference("springnativeawslambdafunctionsuccesstopicfifo(.*)");
+    final LambdaDestinationReference onSuccess = createDestinationReference("springnativeawslambdafunctionsuccesstopic(.*)");
 
     final LambdaEventInvokeConfigProperties lambdaEventInvokeConfigProperties = LambdaEventInvokeConfigProperties.builder()
         .functionName(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunction(.*)")).build())

@@ -114,7 +114,7 @@ class CustomRuntime2FunctionTest {
         .vpc(Vpc.Builder.create(stack, "test-vpc").build())
         .vpcSubnets(SubnetSelection.builder().build())
         .code(Code.fromAsset(lambdaCodePath.toString()))
-        .handler("com.coffeebeans.cdk.lambda.CustomRuntime2Function::handleRequest");
+        .handler("com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function::handleRequest");
   }
 
   @Test
