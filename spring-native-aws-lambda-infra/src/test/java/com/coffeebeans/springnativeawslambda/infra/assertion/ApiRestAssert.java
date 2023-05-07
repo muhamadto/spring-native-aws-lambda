@@ -18,65 +18,68 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_ACCOUNT;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_DEPLOYMENT;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_METHOD;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_RESOURCE;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.APIGATEWAY_RESTAPI_STAGE;
-
 import com.coffeebeans.springnativeawslambda.infra.resource.RestApi;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiAccount;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiDeployment;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiMethod;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiResource;
-import com.coffeebeans.springnativeawslambda.infra.resource.RestApiStage;
+import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
 import org.assertj.core.api.AbstractAssert;
-import software.amazon.awscdk.assertions.Template;
+import org.assertj.core.api.Assertions;
 
-public class ApiRestAssert extends AbstractAssert<ApiRestAssert, Template> {
+public class ApiRestAssert extends AbstractAssert<ApiRestAssert, RestApi> {
 
-  private ApiRestAssert(final Template actual) {
+  private ApiRestAssert(final RestApi actual) {
     super(actual, ApiRestAssert.class);
   }
 
-  public static ApiRestAssert assertThat(final Template actual) {
+  public static ApiRestAssert assertThat(final RestApi actual) {
     return new ApiRestAssert(actual);
   }
 
-  public ApiRestAssert hasRestApi(final RestApi expected) {
-    actual.hasResource(APIGATEWAY_RESTAPI.getValue(), expected);
+  public ApiRestAssert hasTag(final Tag expected) {
+    Assertions.assertThat(actual.properties().tags())
+        .contains(expected);
 
     return this;
   }
 
-  public ApiRestAssert hasRestApiAccount(final RestApiAccount expected) {
-    actual.hasResource(APIGATEWAY_RESTAPI_ACCOUNT.getValue(), expected);
+  public ApiRestAssert hasTag(final String key, final String value) {
+    Assertions.assertThat(actual.properties().tags())
+        .contains(Tag.builder().key(key).value(value).build());
 
     return this;
   }
 
-  public ApiRestAssert hasRestApiDeployment(final RestApiDeployment expected) {
-    actual.hasResource(APIGATEWAY_RESTAPI_DEPLOYMENT.getValue(), expected);
-
-    return this;
-  }
-
-  public ApiRestAssert hasRestApiStage(final RestApiStage expected) {
-    actual.hasResource(APIGATEWAY_RESTAPI_STAGE.getValue(), expected);
-
-    return this;
-  }
-
-  public ApiRestAssert hasRestApiResource(final RestApiResource expected) {
-    actual.hasResource(APIGATEWAY_RESTAPI_RESOURCE.getValue(), expected);
-
-    return this;
-  }
-
-  public ApiRestAssert hasRestApiMethod(final RestApiMethod expected) {
-    actual.hasResource(APIGATEWAY_RESTAPI_METHOD.getValue(), expected);
-
-    return this;
-  }
+//  public ApiRestAssert hasRestApi(final RestApi expected) {
+//    actual.hasResource(APIGATEWAY_RESTAPI.getValue(), expected);
+//
+//    return this;
+//  }
+//
+//  public ApiRestAssert hasRestApiAccount(final RestApiAccount expected) {
+//    actual.hasResource(APIGATEWAY_RESTAPI_ACCOUNT.getValue(), expected);
+//
+//    return this;
+//  }
+//
+//  public ApiRestAssert hasRestApiDeployment(final RestApiDeployment expected) {
+//    actual.hasResource(APIGATEWAY_RESTAPI_DEPLOYMENT.getValue(), expected);
+//
+//    return this;
+//  }
+//
+//  public ApiRestAssert hasRestApiStage(final RestApiStage expected) {
+//    actual.hasResource(APIGATEWAY_RESTAPI_STAGE.getValue(), expected);
+//
+//    return this;
+//  }
+//
+//  public ApiRestAssert hasRestApiResource(final RestApiResource expected) {
+//    actual.hasResource(APIGATEWAY_RESTAPI_RESOURCE.getValue(), expected);
+//
+//    return this;
+//  }
+//
+//  public ApiRestAssert hasRestApiMethod(final RestApiMethod expected) {
+//    actual.hasResource(APIGATEWAY_RESTAPI_METHOD.getValue(), expected);
+//
+//    return this;
+//  }
 }

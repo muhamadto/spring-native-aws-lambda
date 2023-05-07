@@ -44,10 +44,13 @@ import lombok.Singular;
  */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record RestApi(@JsonProperty("Properties") RestApiProperties properties) {
+public record RestApi(@JsonProperty("Properties") RestApiProperties properties,
+                      @JsonProperty("Type") String type
+) {
 
-  @JsonProperty("Type")
-  static String type = APIGATEWAY_RESTAPI.getValue();
+  public String type() {
+    return APIGATEWAY_RESTAPI.getValue();
+  }
 
   /**
    * This record is used to represent a ApiGateway rest api properties.

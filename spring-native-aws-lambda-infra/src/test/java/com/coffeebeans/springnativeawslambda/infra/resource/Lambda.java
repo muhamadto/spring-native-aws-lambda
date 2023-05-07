@@ -71,8 +71,7 @@ import software.amazon.awscdk.assertions.Matcher;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record Lambda(@Singular @JsonProperty("DependsOn") List<Matcher> dependencies,
-                     @JsonProperty("Properties") LambdaProperties properties,
-                     @JsonProperty("Type") String typeValue) {
+                     @JsonProperty("Properties") LambdaProperties properties) {
 
   @JsonProperty("Type")
   static String type = LAMBDA_FUNCTION.getValue();
