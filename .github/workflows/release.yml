@@ -20,10 +20,6 @@ on:
   release:
     types: [ published ]
 
-defaults:
-  run:
-    working-directory: /home/worker
-
 jobs:
   release:
     runs-on: ubuntu-latest
