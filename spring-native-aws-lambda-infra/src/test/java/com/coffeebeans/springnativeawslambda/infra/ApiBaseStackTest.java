@@ -173,7 +173,7 @@ class ApiBaseStackTest {
 
     final Function actual = this.apiBaseStack.createFunction(vpc,
         "test-function",
-        "com.coffeebeans.cdk.lambda.CustomRuntime2Function::handleRequest",
+        "com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function::handleRequest",
         Code.fromAsset(this.lambdaCodePath.toString()),
         fromTopicArn(this.apiBaseStack, "success-topic", "arn:aws:sns:us-east-1:***:success-topic"),
         fromTopicArn(this.apiBaseStack, "failure-topic", "arn:aws:sns:us-east-1:***:failure-topic"),
@@ -201,7 +201,7 @@ class ApiBaseStackTest {
 
     final Function function = this.apiBaseStack.createFunction(vpc,
         "test-function",
-        "com.coffeebeans.cdk.lambda.CustomRuntime2Function::handleRequest",
+        "com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function::handleRequest",
         Code.fromAsset(this.lambdaCodePath.toString()),
         fromTopicArn(this.apiBaseStack, "success-topic", "arn:aws:sns:us-east-1:***:success-topic"),
         fromTopicArn(this.apiBaseStack, "failure-topic", "arn:aws:sns:us-east-1:***:failure-topic"),

@@ -89,7 +89,7 @@
       </dependency>
       <dependency>
         <groupId>com.coffeebeans</groupId>
-        <artifactId>spring-native-aws-lambda-cdk</artifactId>
+        <artifactId>spring-native-aws-lambda-infra</artifactId>
         <version>${project.version}</version>
       </dependency>
       <!-- SPRING-NATIVE-AWS-LAMBDA ENDS -->

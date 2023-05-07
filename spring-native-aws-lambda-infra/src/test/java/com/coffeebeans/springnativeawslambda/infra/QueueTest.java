@@ -46,7 +46,7 @@ class QueueTest extends TemplateSupport {
   void should_have_success_queue() {
 
     final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuedlqfifo(.*)"))
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuedlq(.*)"))
         .attributesArn("Arn")
         .build();
 
@@ -56,10 +56,7 @@ class QueueTest extends TemplateSupport {
         .build();
 
     final QueueProperties queueProperties = QueueProperties.builder()
-        .contentBasedDeduplication(true)
-        .fifoQueue(true)
-        .deduplicationScope("messageGroup")
-        .queueName("spring-native-aws-lambda-function-success-queue.fifo")
+        .queueName("spring-native-aws-lambda-function-success-queue")
         .redrivePolicy(queueRedrivePolicy)
         .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
         .tag(Tag.builder().key("ENV").value(TEST).build())
@@ -79,10 +76,7 @@ class QueueTest extends TemplateSupport {
   void should_have_success_dead_letter_queue() {
 
     final QueueProperties queueProperties = QueueProperties.builder()
-        .contentBasedDeduplication(true)
-        .fifoQueue(true)
-        .deduplicationScope("messageGroup")
-        .queueName("spring-native-aws-lambda-function-success-queue-dlq.fifo")
+        .queueName("spring-native-aws-lambda-function-success-queue-dlq")
         .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
         .tag(Tag.builder().key("ENV").value(TEST).build())
         .build();
@@ -100,17 +94,17 @@ class QueueTest extends TemplateSupport {
   @Test
   void should_have_success_queue_policy() {
     final ResourceReference queue = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuefifo(.*)"))
+        .reference(stringLikeRegexp("springnativeawslambdafunctionsuccessqueue(.*)"))
         .build();
 
     final IntrinsicFunctionArn resource = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuefifo(.*)"))
+        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueue(.*)"))
         .attributesArn("Arn")
         .build();
 
     final PolicyStatementCondition policyStatementCondition = PolicyStatementCondition.builder()
         .arnEquals(Map.of("aws:SourceArn", ResourceReference.builder()
-            .reference(stringLikeRegexp("springnativeawslambdafunctionsuccesstopicfifo(.*)"))
+            .reference(stringLikeRegexp("springnativeawslambdafunctionsuccesstopic(.*)"))
             .build()))
         .build();
 

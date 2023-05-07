@@ -55,9 +55,9 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
       @NotNull final StackProps props) {
     super(scope, id, props);
 
-    final Queue successQueue = createFifoQueue(SQS_SUCCESS_QUEUE_ID, true, MESSAGE_GROUP);
+    final Queue successQueue = createQueue(SQS_SUCCESS_QUEUE_ID);
     final SqsSubscription successQueueSubscription = createSqsSubscription(successQueue);
-    final Topic successTopic = createFifoTopic(SNS_SUCCESS_TOPIC_ID, true, true);
+    final Topic successTopic = createTopic(SNS_SUCCESS_TOPIC_ID);
     successTopic.addSubscription(successQueueSubscription);
 
     final Queue failureQueue = createQueue(SQS_FAILURE_QUEUE_ID);
