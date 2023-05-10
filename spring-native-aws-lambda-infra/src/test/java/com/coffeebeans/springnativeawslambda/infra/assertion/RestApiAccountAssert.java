@@ -20,27 +20,33 @@ package com.coffeebeans.springnativeawslambda.infra.assertion;
 
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
+import org.jetbrains.annotations.NotNull;
 
-public class TopicAssert extends AbstractCDKResourcesAssert<TopicAssert, Map<String, Object>> {
+@SuppressWarnings("unchecked")
+public class RestApiAccountAssert extends
+    AbstractCDKResourcesAssert<RestApiAccountAssert, Map<String, Object>> {
 
-  private TopicAssert(final Map<String, Object> actual) {
-    super(actual, TopicAssert.class);
+  private RestApiAccountAssert(final Map<String, Object> actual) {
+    super(actual, RestApiAccountAssert.class);
   }
 
-  public static TopicAssert assertThat(final Map<String, Object> actual) {
-    return new TopicAssert(actual);
+  public static RestApiAccountAssert assertThat(final Map<String, Object> actual) {
+    return new RestApiAccountAssert(actual);
   }
 
-  public TopicAssert hasTopic(final String expected) {
-
+  public RestApiAccountAssert hasCloudWatchRole(@NotNull final String expected) {
     final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
+    final Map<String, List<String>> cloudWatchRoleArn = (Map<String, List<String>>) properties.get(
+        "CloudWatchRoleArn");
 
-    final String topicName = (String) properties.get("TopicName");
-
-    Assertions.assertThat(topicName)
-        .isEqualTo(expected);
+    Assertions.assertThat(cloudWatchRoleArn)
+        .isNotEmpty()
+        .extracting("Fn::GetAtt")
+        .asList()
+        .isNotEmpty()
+        .map(e -> (String) e)
+        .anySatisfy(arn -> Assertions.assertThat(arn).matches(e -> e.matches(expected)));
 
     return this;
   }

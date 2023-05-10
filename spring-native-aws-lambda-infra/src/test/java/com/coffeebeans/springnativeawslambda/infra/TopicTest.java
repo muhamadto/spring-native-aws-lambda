@@ -19,16 +19,9 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static com.coffeebeans.springnativeawslambda.infra.assertion.TopicAssert.assertThat;
-import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
+import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionArn;
-import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
-import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
-import com.coffeebeans.springnativeawslambda.infra.resource.Topic;
-import com.coffeebeans.springnativeawslambda.infra.resource.Topic.TopicProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.TopicSubscription;
-import com.coffeebeans.springnativeawslambda.infra.resource.TopicSubscription.TopicSubscriptionProperties;
+import com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert;
 import org.junit.jupiter.api.Test;
 
 class TopicTest extends TemplateSupport {
@@ -37,79 +30,38 @@ class TopicTest extends TemplateSupport {
 
   @Test
   void should_have_success_topic() {
-
-    final TopicProperties topicProperties = TopicProperties.builder()
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .topicName("spring-native-aws-lambda-function-success-topic")
-        .build();
-
-    final Topic expected = Topic.builder()
-        .properties(topicProperties)
-        .build();
-
-    assertThat(template).hasTopic(expected);
+    assertThat(template)
+        .containsTopic("spring-native-aws-lambda-function-success-topic")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST);
   }
 
   @Test
   void should_have_failure_topic() {
 
-    final TopicProperties topicProperties = TopicProperties.builder()
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .topicName("spring-native-aws-lambda-function-failure-topic")
-        .build();
-
-    final Topic expected = Topic.builder()
-        .properties(topicProperties)
-        .build();
-
-    assertThat(template).hasTopic(expected);
+    assertThat(template)
+        .containsTopic("spring-native-aws-lambda-function-failure-topic")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST);
   }
 
   @Test
   void should_have_subscription_to_success_topic() {
-    final ResourceReference topicArn = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionsuccesstopic(.*)"))
-        .build();
+    final String protocol = "sqs";
+    final String topicArn = "springnativeawslambdafunctionsuccesstopic(.*)";
+    final String endpoint = "springnativeawslambdafunctionsuccessqueue(.*)";
 
-    final IntrinsicFunctionArn endpoint = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueue(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final TopicSubscriptionProperties topicSubscriptionProperties = TopicSubscriptionProperties.builder()
-        .protocol("sqs")
-        .topicArn(topicArn)
-        .endpoint(endpoint).build();
-
-    final TopicSubscription expected = TopicSubscription.builder()
-        .properties(topicSubscriptionProperties)
-        .build();
-
-    assertThat(template).hasTopicSubscription(expected);
-
+    assertThat(template)
+        .containsTopicSubscription(topicArn, protocol, endpoint);
   }
 
   @Test
   void should_have_subscription_to_failure_topic() {
-    final ResourceReference topicArn = ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionfailuretopic(.*)"))
-        .build();
+    final String protocol = "sqs";
+    final String topicArn = "springnativeawslambdafunctionfailuretopic(.*)";
+    final String endpoint = "springnativeawslambdafunctionfailurequeue(.*)";
 
-    final IntrinsicFunctionArn endpoint = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionfailurequeue(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final TopicSubscriptionProperties topicSubscriptionProperties = TopicSubscriptionProperties.builder()
-        .protocol("sqs")
-        .topicArn(topicArn)
-        .endpoint(endpoint).build();
-
-    final TopicSubscription expected = TopicSubscription.builder()
-        .properties(topicSubscriptionProperties)
-        .build();
-
-    assertThat(template).hasTopicSubscription(expected);
+    assertThat(template)
+        .containsTopicSubscription(topicArn, protocol, endpoint);
   }
 }

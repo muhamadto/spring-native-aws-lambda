@@ -16,7 +16,7 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.infra.resource;
+package com.coffeebeans.springnativeawslambda.infra.assertion;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

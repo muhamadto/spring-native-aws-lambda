@@ -18,25 +18,27 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.BUCKET;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.Bucket;
-import org.assertj.core.api.AbstractAssert;
-import software.amazon.awscdk.assertions.Template;
+@SuppressWarnings("unchecked")
+public class RestApiAssert extends AbstractCDKResourcesAssert<RestApiAssert, Map<String, Object>> {
 
-
-public class BucketAssert extends AbstractAssert<BucketAssert, Template> {
-
-  public BucketAssert(final Template actual) {
-    super(actual, BucketAssert.class);
+  private RestApiAssert(final Map<String, Object> actual) {
+    super(actual, RestApiAssert.class);
   }
 
-  public static BucketAssert assertThat(final Template actual) {
-    return new BucketAssert(actual);
+  public static RestApiAssert assertThat(final Map<String, Object> actual) {
+    return new RestApiAssert(actual);
   }
 
-  public BucketAssert hasBucket(final Bucket expected) {
-    actual.hasResource(BUCKET.getValue(), expected);
+  public RestApiAssert hasRestApi(final String expected) {
+    final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
+    final String name = (String) properties.get("Name");
+
+    Assertions.assertThat(name)
+        .isNotBlank()
+        .matches(expected);
 
     return this;
   }

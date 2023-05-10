@@ -19,23 +19,8 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static com.coffeebeans.springnativeawslambda.infra.assertion.QueueAssert.assertThat;
-import static com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement.PolicyStatementEffect.ALLOW;
-import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
+import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionArn;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyPrincipal;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatementCondition;
-import com.coffeebeans.springnativeawslambda.infra.resource.Queue;
-import com.coffeebeans.springnativeawslambda.infra.resource.Queue.QueueProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.Queue.QueueRedrivePolicy;
-import com.coffeebeans.springnativeawslambda.infra.resource.QueuePolicy;
-import com.coffeebeans.springnativeawslambda.infra.resource.QueuePolicy.QueuePolicyProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
-import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class QueueTest extends TemplateSupport {
@@ -45,182 +30,78 @@ class QueueTest extends TemplateSupport {
   @Test
   void should_have_success_queue() {
 
-    final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueuedlq(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final QueueRedrivePolicy queueRedrivePolicy = QueueRedrivePolicy.builder()
-        .deadLetterTargetArn(deadLetterTargetArn)
-        .maxReceiveCount(3)
-        .build();
-
-    final QueueProperties queueProperties = QueueProperties.builder()
-        .queueName("spring-native-aws-lambda-function-success-queue")
-        .redrivePolicy(queueRedrivePolicy)
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .build();
-
-    final Queue expected = Queue.builder()
-        .properties(queueProperties)
-        .updateReplacePolicy("Delete")
-        .deletionPolicy("Delete")
-        .build();
-
     assertThat(template)
-        .hasQueue(expected);
-  }
-
-  @Test
-  void should_have_success_dead_letter_queue() {
-
-    final QueueProperties queueProperties = QueueProperties.builder()
-        .queueName("spring-native-aws-lambda-function-success-queue-dlq")
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .build();
-
-    final Queue expected = Queue.builder()
-        .properties(queueProperties)
-        .updateReplacePolicy("Delete")
-        .deletionPolicy("Delete")
-        .build();
-
-    assertThat(template)
-        .hasQueue(expected);
-  }
-
-  @Test
-  void should_have_success_queue_policy() {
-    final ResourceReference queue = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionsuccessqueue(.*)"))
-        .build();
-
-    final IntrinsicFunctionArn resource = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionsuccessqueue(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final PolicyStatementCondition policyStatementCondition = PolicyStatementCondition.builder()
-        .arnEquals(Map.of("aws:SourceArn", ResourceReference.builder()
-            .reference(stringLikeRegexp("springnativeawslambdafunctionsuccesstopic(.*)"))
-            .build()))
-        .build();
-
-    final PolicyStatement policyStatement = PolicyStatement.builder()
-        .effect(ALLOW)
-        .principal(PolicyPrincipal.builder().service("sns.amazonaws.com").build())
-        .resource(resource)
-        .action("sqs:SendMessage")
-        .condition(policyStatementCondition)
-        .build();
-
-    final PolicyDocument policyDocument = PolicyDocument.builder()
-        .statement(policyStatement)
-        .build();
-
-    final QueuePolicyProperties queuePolicyProperties = QueuePolicyProperties.builder()
-        .queue(queue)
-        .policyDocument(policyDocument)
-        .build();
-
-    final QueuePolicy expected = QueuePolicy.builder()
-        .properties(queuePolicyProperties)
-        .build();
-
-    assertThat(template)
-        .hasQueuePolicy(expected);
+        .containsQueue("spring-native-aws-lambda-function-success-queue")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST)
+        .hasDeadLetterQueue("springnativeawslambdafunctionsuccessqueuedlq(.*)")
+        .hasMaxRetrialCount(3)
+        .hasUpdateReplacePolicy("Delete")
+        .hasDeletionPolicy("Delete");
   }
 
   @Test
   void should_have_failure_queue() {
 
-    final IntrinsicFunctionArn deadLetterTargetArn = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionfailurequeuedlq(.*)"))
-        .attributesArn("Arn")
-        .build();
+    assertThat(template)
+        .containsQueue("spring-native-aws-lambda-function-failure-queue")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST)
+        .hasDeadLetterQueue("springnativeawslambdafunctionfailurequeuedlq(.*)")
+        .hasMaxRetrialCount(3)
+        .hasUpdateReplacePolicy("Delete")
+        .hasDeletionPolicy("Delete");
+  }
 
-    final QueueRedrivePolicy queueRedrivePolicy = QueueRedrivePolicy.builder()
-        .deadLetterTargetArn(deadLetterTargetArn)
-        .maxReceiveCount(3)
-        .build();
-
-    final QueueProperties queueProperties = QueueProperties.builder()
-        .queueName("spring-native-aws-lambda-function-failure-queue")
-        .redrivePolicy(queueRedrivePolicy)
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .build();
-
-    final Queue expected = Queue.builder()
-        .properties(queueProperties)
-        .updateReplacePolicy("Delete")
-        .deletionPolicy("Delete")
-        .build();
+  @Test
+  void should_have_success_dead_letter_queue() {
 
     assertThat(template)
-        .hasQueue(expected);
+        .containsQueue("spring-native-aws-lambda-function-success-queue-dlq")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST)
+        .hasUpdateReplacePolicy("Delete")
+        .hasDeletionPolicy("Delete");
   }
 
   @Test
   void should_have_failure_dead_letter_queue() {
 
-    final QueueProperties queueProperties = QueueProperties.builder()
-        .queueName("spring-native-aws-lambda-function-failure-queue-dlq")
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .build();
-
-    final Queue expected = Queue.builder()
-        .properties(queueProperties)
-        .updateReplacePolicy("Delete")
-        .deletionPolicy("Delete")
-        .build();
-
     assertThat(template)
-        .hasQueue(expected);
+        .containsQueue("spring-native-aws-lambda-function-failure-queue-dlq")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST)
+        .hasUpdateReplacePolicy("Delete")
+        .hasDeletionPolicy("Delete");
+  }
+
+  @Test
+  void should_have_success_queue_policy() {
+    assertThat(template)
+        .containsQueuePolicy(
+            "springnativeawslambdafunctionsuccessqueue(.*)",
+            "sqs:SendMessage",
+            "springnativeawslambdafunctionsuccessqueue(.*)",
+            "sns.amazonaws.com"
+        )
+        .hasEffect("Allow")
+        .hasCondition("ArnEquals",
+            "aws:SourceArn",
+            "springnativeawslambdafunctionsuccesstopic(.*)");
   }
 
   @Test
   void should_have_failure_queue_policy() {
-    final ResourceReference queue = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionfailurequeue(.*)"))
-        .build();
-
-    final IntrinsicFunctionArn resource = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionfailurequeue(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final PolicyStatementCondition policyStatementCondition = PolicyStatementCondition.builder()
-        .arnEquals(Map.of("aws:SourceArn", ResourceReference.builder()
-            .reference(stringLikeRegexp("springnativeawslambdafunctionfailuretopic(.*)"))
-            .build()))
-        .build();
-
-    final PolicyStatement policyStatement = PolicyStatement.builder()
-        .effect(ALLOW)
-        .principal(PolicyPrincipal.builder().service("sns.amazonaws.com").build())
-        .resource(resource)
-        .action("sqs:SendMessage")
-        .condition(policyStatementCondition)
-        .build();
-
-    final PolicyDocument policyDocument = PolicyDocument.builder()
-        .statement(policyStatement)
-        .build();
-
-    final QueuePolicyProperties queuePolicyProperties = QueuePolicyProperties.builder()
-        .queue(queue)
-        .policyDocument(policyDocument)
-        .build();
-
-    final QueuePolicy expected = QueuePolicy.builder()
-        .properties(queuePolicyProperties)
-        .build();
-
     assertThat(template)
-        .hasQueuePolicy(expected);
+        .containsQueuePolicy(
+            "springnativeawslambdafunctionfailurequeue(.*)",
+            "sqs:SendMessage",
+            "springnativeawslambdafunctionfailurequeue(.*)",
+            "sns.amazonaws.com"
+        )
+        .hasEffect("Allow")
+        .hasCondition("ArnEquals",
+            "aws:SourceArn",
+            "springnativeawslambdafunctionfailuretopic(.*)");
   }
 }

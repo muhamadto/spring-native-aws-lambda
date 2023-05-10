@@ -19,36 +19,15 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static com.coffeebeans.springnativeawslambda.infra.assertion.LambdaAssert.assertThat;
-import static com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement.PolicyStatementEffect.ALLOW;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.assertion.IamAssert;
-import com.coffeebeans.springnativeawslambda.infra.resource.IntrinsicFunctionArn;
-import com.coffeebeans.springnativeawslambda.infra.resource.Lambda;
-import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaCode;
-import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaDestinationReference;
-import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaEnvironment;
-import com.coffeebeans.springnativeawslambda.infra.resource.Lambda.LambdaProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.LambdaEventInvokeConfig;
-import com.coffeebeans.springnativeawslambda.infra.resource.LambdaEventInvokeConfig.LambdaDestinationConfig;
-import com.coffeebeans.springnativeawslambda.infra.resource.LambdaEventInvokeConfig.LambdaEventInvokeConfigProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.LambdaPermission;
-import com.coffeebeans.springnativeawslambda.infra.resource.LambdaPermission.LambdaPermissionProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyDocument;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyPrincipal;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.Policy.PolicyStatement;
-import com.coffeebeans.springnativeawslambda.infra.resource.ResourceReference;
-import com.coffeebeans.springnativeawslambda.infra.resource.Role;
-import com.coffeebeans.springnativeawslambda.infra.resource.Role.RoleProperties;
-import com.coffeebeans.springnativeawslambda.infra.resource.Tag;
+import com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
-import software.amazon.awscdk.assertions.Matcher;
 
 class LambdaTest extends TemplateSupport {
 
@@ -56,389 +35,220 @@ class LambdaTest extends TemplateSupport {
 
   @Test
   void should_have_lambda_function() {
-    final LambdaCode lambdaCode = LambdaCode.builder()
-        .s3Bucket("test-cdk-bucket")
-        .s3Key(stringLikeRegexp("(.*).zip"))
-        .build();
 
-    final IntrinsicFunctionArn roleArn = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
-        .attributesArn("Arn")
-        .build();
+    CDKStackAssert.assertThat(template)
+        .containsFunction("spring-native-aws-lambda-function")
+        .hasHandler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
+        .hasCode("test-cdk-bucket", "(.*).zip")
+        .hasRole("springnativeawslambdafunctionrole(.*)")
+        .hasDependency("springnativeawslambdafunctionrole(.*)")
+        .hasDependency("springnativeawslambdafunctionroleDefaultPolicy(.*)")
+        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+        .hasTag("ENV", TEST)
+        .hasEnvironmentVariable("ENV", TEST)
+        .hasEnvironmentVariable("SPRING_PROFILES_ACTIVE", TEST)
+        .hasDescription("Lambda example with spring native")
+        .hasMemorySize(512)
+        .hasRuntime("provided.al2")
+        .hasTimeout(3);
+  }
 
-    final LambdaEnvironment lambdaEnvironment = LambdaEnvironment.builder()
-        .variable("ENV", TEST)
-        .variable("SPRING_PROFILES_ACTIVE", TEST)
-        .build();
-
-    final LambdaProperties lambdaProperties = LambdaProperties.builder()
-        .functionName("spring-native-aws-lambda-function")
-        .handler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
-        .memorySize(512)
-        .runtime("provided.al2")
-        .timeout(3)
-        .description("Lambda example with spring native")
-        .code(lambdaCode)
-        .roleArn(roleArn)
-        .tag(Tag.builder().key("COST_CENTRE").value(TAG_VALUE_COST_CENTRE).build())
-        .tag(Tag.builder().key("ENV").value(TEST).build())
-        .environment(lambdaEnvironment)
-        .build();
-
-    final Lambda expected = Lambda.builder()
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionroleDefaultPolicy(.*)"))
-        .dependency(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
-        .properties(lambdaProperties)
-        .build();
+  @Test
+  void should_have_role_with_AWSLambdaBasicExecutionRole_policy_to_assume_by_lambda() {
+    final String principal = "lambda.amazonaws.com";
+    final String effect = "Allow";
+    final String policyDocumentVersion = "2012-10-17";
+    final String managedPolicyArn = ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole";
 
     assertThat(template)
-        .hasFunction(expected);
+        .containsRoleWithManagedPolicyArn(managedPolicyArn)
+        .hasAssumeRolePolicyDocument(principal, null, effect, policyDocumentVersion, "sts:AssumeRole");
   }
 
   @Test
-  void should_have_role_with_AWSLambdaBasicExecutionRole_policy_for_lambda_to_assume() {
-    final PolicyStatement policyStatement = PolicyStatement.builder()
-        .principal(PolicyPrincipal.builder().service("lambda.amazonaws.com").build())
-        .effect(ALLOW)
-        .action("sts:AssumeRole")
-        .build();
+  void should_have_default_policy_to_allow_lambda_publish_to_sns() throws JsonProcessingException {
 
-    final PolicyDocument assumeRolePolicyDocument = PolicyDocument.builder()
-        .statement(policyStatement)
-        .build();
+    final String policyName = "springnativeawslambdafunctionroleDefaultPolicy(.*)";
+    final String failureTopic = "springnativeawslambdafunctionfailuretopic(.*)";
+    final String successTopic = "springnativeawslambdafunctionsuccesstopic(.*)";
+    final String action = "sns:Publish";
+    final String effect = "Allow";
+    final String policyDocumentVersion = "2012-10-17";
 
-    final List<Object> arn = List.of(
-        "arn:",
-        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole");
-
-    final IntrinsicFunctionArn managedPolicyArn = IntrinsicFunctionArn.builder()
-        .joinArn(EMPTY)
-        .joinArn(arn)
-        .build();
-
-    final RoleProperties roleProperties = RoleProperties.builder()
-        .managedPolicyArn(managedPolicyArn)
-        .assumeRolePolicyDocument(assumeRolePolicyDocument)
-        .build();
-
-    final Role expected = Role.builder()
-        .properties(roleProperties)
-        .build();
-
-    IamAssert.assertThat(template)
-        .hasRole(expected);
-  }
-
-  @Test
-  void should_have_default_policy_to_allow_lambda_publish_to_sns() {
-
-    final Matcher policyName = stringLikeRegexp("springnativeawslambdafunctionroleDefaultPolicy(.*)");
-
-    final ResourceReference role = ResourceReference.builder()
-        .reference(stringLikeRegexp("springnativeawslambdafunctionrole(.*)"))
-        .build();
-
-    final PolicyStatement successSNSPublishPolicyStatement = getAllowSnsPublishPolicyStatement("springnativeawslambdafunctionsuccesstopic(.*)");
-
-    final PolicyStatement failureSNSPublishPolicyStatement = getAllowSnsPublishPolicyStatement("springnativeawslambdafunctionfailuretopic(.*)");
-
-    final PolicyDocument policyDocument = PolicyDocument.builder()
-        .statement(failureSNSPublishPolicyStatement)
-        .statement(successSNSPublishPolicyStatement)
-        .build();
-
-    final PolicyProperties policyProperties = PolicyProperties.builder()
-        .policyName(policyName)
-        .role(role)
-        .policyDocument(policyDocument)
-        .build();
-
-    final Policy policy = Policy.builder()
-        .properties(policyProperties)
-        .build();
-
-    IamAssert.assertThat(template)
-        .hasPolicy(policy);
+    assertThat(template)
+        .containsPolicy(policyName)
+        .isAssociatedWithRole("springnativeawslambdafunctionrole(.*)")
+        .hasPolicyDocumentVersion(policyDocumentVersion)
+        .hasPolicyDocumentStatement(null,
+            failureTopic,
+            action,
+            effect,
+            policyDocumentVersion)
+        .hasPolicyDocumentStatement(null,
+            successTopic,
+            action,
+            effect,
+            policyDocumentVersion);
   }
 
   @Test
   void should_have_event_invoke_config_for_success_and_failure() {
 
-    final LambdaDestinationReference onFailure = createDestinationReference("springnativeawslambdafunctionfailuretopic(.*)");
-    final LambdaDestinationReference onSuccess = createDestinationReference("springnativeawslambdafunctionsuccesstopic(.*)");
-
-    final LambdaEventInvokeConfigProperties lambdaEventInvokeConfigProperties = LambdaEventInvokeConfigProperties.builder()
-        .functionName(ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunction(.*)")).build())
-        .maximumRetryAttempts(2)
-        .qualifier(exact("$LATEST"))
-        .lambdaDestinationConfig(LambdaDestinationConfig.builder()
-            .onFailure(onFailure)
-            .onSuccess(onSuccess)
-            .build())
-        .build();
-
-    final LambdaEventInvokeConfig expected = LambdaEventInvokeConfig.builder()
-        .properties(lambdaEventInvokeConfigProperties)
-        .build();
+    final String functionName = "springnativeawslambdafunction(.*)";
+    final String successEventDestination = "springnativeawslambdafunctionsuccesstopic(.*)";
+    final String failureEventDestination = "springnativeawslambdafunctionfailuretopic(.*)";
 
     assertThat(template)
-        .hasLambdaEventInvokeConfig(expected);
+        .containsLambdaEventInvokeConfig(functionName,
+            successEventDestination,
+            failureEventDestination)
+        .hasLambdaEventInvokeConfigQualifier("$LATEST")
+        .hasLambdaEventInvokeConfigMaximumRetryAttempts(2);
   }
 
   @Test
   void should_have_permission_to_allow_rest_api_root_call_lambda() {
 
-    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final List<Object> joinArn = List.of(
+    final List<Object> sourceArn = List.of(
         "arn:",
-        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        Map.of("Ref", exact("AWS::Partition")),
         ":execute-api:",
-        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        Map.of("Ref", exact("AWS::Region")),
         ":",
-        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        Map.of("Ref", exact("AWS::AccountId")),
         ":",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        Map.of("Ref", stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")),
         "/",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        Map.of("Ref", stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")),
         "/*/"
     );
 
-    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
-        .joinArns(List.of(EMPTY, joinArn))
-        .build();
-
-    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
-        .action("lambda:InvokeFunction")
-        .principal("apigateway.amazonaws.com")
-        .functionName(functionName)
-        .sourceArn(sourceArn)
-        .build();
-
-    final LambdaPermission expected = LambdaPermission.builder()
-        .properties(lambdaPermissionProperties)
-        .build();
+    final String action = "lambda:InvokeFunction";
+    final String principal = "apigateway.amazonaws.com";
+    final String functionName = "springnativeawslambdafunction(.*)";
 
     assertThat(template)
-        .hasLambdaPermission(expected);
+        .containsLambdaPermission(functionName, action, principal, sourceArn);
   }
 
   @Test
   void should_have_permission_to_allow_rest_api_root_test_call_lambda() {
 
-    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final List<Object> joinArn = List.of(
+    final List<Object> sourceArn = List.of(
         "arn:",
-        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        Map.of("Ref", exact("AWS::Partition")),
         ":execute-api:",
-        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        Map.of("Ref", exact("AWS::Region")),
         ":",
-        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        Map.of("Ref", exact("AWS::AccountId")),
         ":",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        Map.of("Ref", stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")),
         "/test-invoke-stage/*/*"
     );
 
-    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
-        .joinArns(List.of(EMPTY, joinArn))
-        .build();
-
-    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
-        .action("lambda:InvokeFunction")
-        .principal("apigateway.amazonaws.com")
-        .functionName(functionName)
-        .sourceArn(sourceArn)
-        .build();
-
-    final LambdaPermission expected = LambdaPermission.builder()
-        .properties(lambdaPermissionProperties)
-        .build();
+    final String action = "lambda:InvokeFunction";
+    final String principal = "apigateway.amazonaws.com";
+    final String functionName = "springnativeawslambdafunction(.*)";
 
     assertThat(template)
-        .hasLambdaPermission(expected);
+        .containsLambdaPermission(functionName, action, principal, sourceArn);
   }
 
   @Test
   void should_have_permission_to_allow_rest_api_proxy_to_call_lambda() {
 
-    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final List<Object> joinArn = List.of(
+    final List<Object> sourceArn = List.of(
         "arn:",
-        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        Map.of("Ref", exact("AWS::Partition")),
         ":execute-api:",
-        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        Map.of("Ref", exact("AWS::Region")),
         ":",
-        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        Map.of("Ref", exact("AWS::AccountId")),
         ":",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        Map.of("Ref", stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")),
         "/",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiDeploymentStagetest(.*)")).build(),
+        Map.of("Ref",
+            stringLikeRegexp("springnativeawslambdafunctionrestapiDeploymentStagetest(.*)")),
         "/*/*"
     );
 
-    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
-        .joinArns(List.of(EMPTY, joinArn))
-        .build();
-
-    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
-        .action("lambda:InvokeFunction")
-        .principal("apigateway.amazonaws.com")
-        .functionName(functionName)
-        .sourceArn(sourceArn)
-        .build();
-
-    final LambdaPermission expected = LambdaPermission.builder()
-        .properties(lambdaPermissionProperties)
-        .build();
+    final String action = "lambda:InvokeFunction";
+    final String principal = "apigateway.amazonaws.com";
+    final String functionName = "springnativeawslambdafunction(.*)";
 
     assertThat(template)
-        .hasLambdaPermission(expected);
+        .containsLambdaPermission(functionName, action, principal, sourceArn);
   }
 
   @Test
   void should_have_permission_to_allow_rest_api_proxy_test_to_call_lambda() {
 
-    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final List<Object> joinArn = List.of(
+    final List<Object> sourceArn = List.of(
         "arn:",
-        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        Map.of("Ref", exact("AWS::Partition")),
         ":execute-api:",
-        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        Map.of("Ref", exact("AWS::Region")),
         ":",
-        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        Map.of("Ref", exact("AWS::AccountId")),
         ":",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        Map.of("Ref", stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")),
         "/test-invoke-stage/*/*"
     );
 
-    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
-        .joinArns(List.of(EMPTY, joinArn))
-        .build();
-
-    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
-        .action("lambda:InvokeFunction")
-        .principal("apigateway.amazonaws.com")
-        .functionName(functionName)
-        .sourceArn(sourceArn)
-        .build();
-
-    final LambdaPermission expected = LambdaPermission.builder()
-        .properties(lambdaPermissionProperties)
-        .build();
+    final String action = "lambda:InvokeFunction";
+    final String principal = "apigateway.amazonaws.com";
+    final String functionName = "springnativeawslambdafunction(.*)";
 
     assertThat(template)
-        .hasLambdaPermission(expected);
+        .containsLambdaPermission(functionName, action, principal, sourceArn);
   }
 
   @Test
   void should_have_permission_to_allow_post_rest_api_method_to_call_lambda() {
 
-    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final List<Object> joinArn = List.of(
+    final List<Object> sourceArn = List.of(
         "arn:",
-        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        Map.of("Ref", exact("AWS::Partition")),
         ":execute-api:",
-        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        Map.of("Ref", exact("AWS::Region")),
         ":",
-        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        Map.of("Ref", exact("AWS::AccountId")),
         ":",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        Map.of("Ref", stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")),
         "/",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapiDeploymentStagetest(.*)")).build(),
+        Map.of("Ref",
+            stringLikeRegexp("springnativeawslambdafunctionrestapiDeploymentStagetest(.*)")),
         "/POST/name"
     );
 
-    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
-        .joinArns(List.of(EMPTY, joinArn))
-        .build();
-
-    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
-        .action("lambda:InvokeFunction")
-        .principal("apigateway.amazonaws.com")
-        .functionName(functionName)
-        .sourceArn(sourceArn)
-        .build();
-
-    final LambdaPermission expected = LambdaPermission.builder()
-        .properties(lambdaPermissionProperties)
-        .build();
+    final String action = "lambda:InvokeFunction";
+    final String principal = "apigateway.amazonaws.com";
+    final String functionName = "springnativeawslambdafunction(.*)";
 
     assertThat(template)
-        .hasLambdaPermission(expected);
+        .containsLambdaPermission(functionName, action, principal, sourceArn);
   }
 
   @Test
   void should_have_permission_to_allow_post_rest_api_method_test_to_call_lambda() {
 
-    final IntrinsicFunctionArn functionName = IntrinsicFunctionArn.builder()
-        .attributesArn(stringLikeRegexp("springnativeawslambdafunction(.*)"))
-        .attributesArn("Arn")
-        .build();
-
-    final List<Object> joinArn = List.of(
+    final List<Object> sourceArn = List.of(
         "arn:",
-        ResourceReference.builder().reference(exact("AWS::Partition")).build(),
+        Map.of("Ref", exact("AWS::Partition")),
         ":execute-api:",
-        ResourceReference.builder().reference(exact("AWS::Region")).build(),
+        Map.of("Ref", exact("AWS::Region")),
         ":",
-        ResourceReference.builder().reference(exact("AWS::AccountId")).build(),
+        Map.of("Ref", exact("AWS::AccountId")),
         ":",
-        ResourceReference.builder().reference(stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")).build(),
+        Map.of("Ref", stringLikeRegexp("springnativeawslambdafunctionrestapi(.*)")),
         "/test-invoke-stage/POST/name"
     );
 
-    final IntrinsicFunctionArn sourceArn = IntrinsicFunctionArn.builder()
-        .joinArns(List.of(EMPTY, joinArn))
-        .build();
-
-    final LambdaPermissionProperties lambdaPermissionProperties = LambdaPermissionProperties.builder()
-        .action("lambda:InvokeFunction")
-        .principal("apigateway.amazonaws.com")
-        .functionName(functionName)
-        .sourceArn(sourceArn)
-        .build();
-
-    final LambdaPermission expected = LambdaPermission.builder()
-        .properties(lambdaPermissionProperties)
-        .build();
+    final String action = "lambda:InvokeFunction";
+    final String principal = "apigateway.amazonaws.com";
+    final String functionName = "springnativeawslambdafunction(.*)";
 
     assertThat(template)
-        .hasLambdaPermission(expected);
-  }
-
-  private static PolicyStatement getAllowSnsPublishPolicyStatement(final String pattern) {
-    final ResourceReference resourceReference = ResourceReference.builder().reference(stringLikeRegexp(pattern)).build();
-
-    return PolicyStatement.builder()
-        .effect(ALLOW)
-        .action("sns:Publish")
-        .resource(resourceReference)
-        .build();
-  }
-
-  private static LambdaDestinationReference createDestinationReference(String pattern) {
-    return LambdaDestinationReference.builder()
-        .destination(ResourceReference.builder().reference(stringLikeRegexp(pattern)).build())
-        .build();
+        .containsLambdaPermission(functionName, action, principal, sourceArn);
   }
 }
