@@ -72,7 +72,7 @@
     <sonar.organization>muhamadto</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <revision>1.0.0-SNAPSHOT</revision>
-    <jackson.version>2.13.0</jackson.version>
+    <jackson.version>2.13.4.2</jackson.version>
   </properties>
 
   <modules>
