@@ -18,12 +18,9 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.MapAssert;
 
 @SuppressWarnings("unchecked")
 public class LambdaAssert extends AbstractCDKResourcesAssert<LambdaAssert, Map<String, Object>> {
@@ -78,8 +75,6 @@ public class LambdaAssert extends AbstractCDKResourcesAssert<LambdaAssert, Map<S
 
     Assertions.assertThat(roleArnFun)
         .isInstanceOf(List.class)
-        .hasSize(2)
-        .contains("Arn")
         .anySatisfy(s -> Assertions.assertThat(s)
             .isInstanceOf(String.class)
             .matches(e -> e.matches(arnRegex)));

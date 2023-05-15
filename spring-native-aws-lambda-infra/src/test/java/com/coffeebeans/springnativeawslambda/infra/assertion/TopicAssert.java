@@ -18,11 +18,10 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
-import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 
+@SuppressWarnings("unchecked")
 public class TopicAssert extends AbstractCDKResourcesAssert<TopicAssert, Map<String, Object>> {
 
   private TopicAssert(final Map<String, Object> actual) {

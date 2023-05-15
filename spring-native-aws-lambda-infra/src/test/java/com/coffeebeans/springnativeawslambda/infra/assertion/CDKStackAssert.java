@@ -272,6 +272,24 @@ public class CDKStackAssert extends AbstractAssert<CDKStackAssert, Template> {
         .hasLambdaEventInvokeConfig(functionName, successEventDestination, failureEventDestination);
   }
 
+  public LambdaEventInvokeConfigAssert containsLambdaEventInvokeConfig(final String functionName) {
+
+    final Map<String, Map<String, Object>> properties = Map.of("Properties",
+        Map.of("FunctionName", Map.of("Ref", stringLikeRegexp(functionName))
+        )
+    );
+
+    final Map<String, Map<String, Object>> resources =
+        actual.findResources(LAMBDA_EVENT_INVOKE_CONFIG.getValue(), properties);
+
+    Assertions.assertThat(resources)
+        .isNotEmpty()
+        .hasSize(1);
+
+    return LambdaEventInvokeConfigAssert.assertThat(resources.values().stream().findFirst().get())
+        .hasLambdaEventInvokeConfig(functionName, null, null);
+  }
+
   public LambdaPermissionAssert containsLambdaPermission(
       final String functionName,
       final String action,
@@ -347,9 +365,10 @@ public class CDKStackAssert extends AbstractAssert<CDKStackAssert, Template> {
   }
 
   public TopicAssert containsTopic(final String name) {
-
+    final Map<String, Map<String, String>> properties =
+        Map.of("Properties", Map.of("TopicName", name));
     final Map<String, Map<String, Object>> resources =
-        actual.findResources(TOPIC.getValue(), Map.of("Properties", Map.of("TopicName", name)));
+        actual.findResources(TOPIC.getValue());
 
     Assertions.assertThat(resources)
         .isNotEmpty()

@@ -35,7 +35,6 @@ import software.amazon.awscdk.services.iam.IRole;
 import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.destinations.SnsDestination;
 import software.amazon.awscdk.services.sns.ITopic;
 import software.amazon.awscdk.services.sns.Topic;
 import software.amazon.awscdk.services.sns.subscriptions.SqsSubscription;
@@ -61,7 +60,8 @@ public class ApiBaseStack extends Stack {
 
   @NotNull
   protected Queue createQueue(@NotBlank final String queueId) {
-    final DeadLetterQueue deadLetterQueue = createDeadLetterQueue(queueId + DEAD_LETTER_QUEUE_SUFFIX);
+    final DeadLetterQueue deadLetterQueue = createDeadLetterQueue(
+        queueId + DEAD_LETTER_QUEUE_SUFFIX);
 
     return Queue.Builder.create(this, queueId)
         .queueName(queueId)
@@ -153,16 +153,14 @@ public class ApiBaseStack extends Stack {
       @NotBlank final String lambdaId,
       @NotBlank final String handler,
       @NotNull final Code code,
-      @NotNull final Topic successTopic,
-      @NotNull final Topic failureTopic,
+      @NotNull final Topic deadLetterTopic,
       @NotNull Role role,
       @NotEmpty final Map<String, String> environment) {
     return this.createFunction(null,
         lambdaId,
         handler,
         code,
-        successTopic,
-        failureTopic,
+        deadLetterTopic,
         role,
         environment);
   }
@@ -173,8 +171,7 @@ public class ApiBaseStack extends Stack {
       @NotBlank final String lambdaId,
       @NotBlank final String handler,
       @NotNull final Code code,
-      @NotNull final ITopic successTopic,
-      @NotNull final ITopic failureTopic,
+      @NotNull final ITopic deadLetterTopic,
       @NotNull IRole role,
       @NotEmpty final Map<String, String> environment) {
     return CustomRuntime2Function.Builder.create(this, lambdaId)
@@ -185,8 +182,7 @@ public class ApiBaseStack extends Stack {
         .role(role)
         .vpc(vpc)
         .environment(environment)
-        .onSuccess(new SnsDestination(successTopic))
-        .onFailure(new SnsDestination(failureTopic))
+        .deadLetterTopic(deadLetterTopic)
         .timeout(Duration.seconds(LAMBDA_FUNCTION_TIMEOUT_IN_SECONDS))
         .memorySize(LAMBDA_FUNCTION_MEMORY_SIZE)
         .retryAttempts(LAMBDA_FUNCTION_RETRY_ATTEMPTS)

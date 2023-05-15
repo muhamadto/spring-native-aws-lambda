@@ -48,7 +48,8 @@ public abstract class TemplateSupport {
 
     final Map<String, String> tags = createTags(ENV, TAG_VALUE_COST_CENTRE);
     final App app = new App();
-    final SpringNativeAwsLambdaStack stack = StackUtils.createStack(app, STACK_NAME, lambdaCodePath.toString(), QUALIFIER, TEST_CDK_BUCKET, ENV);
+    final SpringNativeAwsLambdaStack stack = StackUtils.createStack(app, STACK_NAME,
+        lambdaCodePath.toString(), QUALIFIER, TEST_CDK_BUCKET, ENV);
 
     tags.entrySet().stream()
         .filter(tag -> Objects.nonNull(tag.getValue()))

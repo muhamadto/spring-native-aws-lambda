@@ -6,7 +6,8 @@ import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unchecked")
-public class RestApiResourceAssert extends AbstractCDKResourcesAssert<RestApiResourceAssert, Map<String, Object>> {
+public class RestApiResourceAssert extends
+    AbstractCDKResourcesAssert<RestApiResourceAssert, Map<String, Object>> {
 
   private RestApiResourceAssert(final Map<String, Object> actual) {
     super(actual, RestApiResourceAssert.class);
@@ -42,7 +43,8 @@ public class RestApiResourceAssert extends AbstractCDKResourcesAssert<RestApiRes
   public RestApiResourceAssert hasParentId(final String expected) {
 
     final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
-    final Map<String, List<String>> parentId = (Map<String, List<String>>) properties.get("ParentId");
+    final Map<String, List<String>> parentId = (Map<String, List<String>>) properties.get(
+        "ParentId");
 
     Assertions.assertThat(parentId)
         .isNotEmpty()

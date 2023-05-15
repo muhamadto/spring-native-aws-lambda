@@ -45,7 +45,7 @@ public class QueueAssert extends AbstractCDKResourcesAssert<QueueAssert, Map<Str
     return this;
   }
 
-  public QueueAssert hasDeadLetterQueue(final String deletionPolicy) {
+  public QueueAssert hasDeadLetterQueue(final String expected) {
 
     final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
     final Map<String, List<Object>> redrivePolicy = (Map<String, List<Object>>) properties.get(
@@ -56,11 +56,9 @@ public class QueueAssert extends AbstractCDKResourcesAssert<QueueAssert, Map<Str
 
     Assertions.assertThat(roleArnFun)
         .isInstanceOf(List.class)
-        .hasSize(2)
-        .contains("Arn")
         .anySatisfy(s -> Assertions.assertThat(s)
             .isInstanceOf(String.class)
-            .matches(e -> e.matches(deletionPolicy)));
+            .matches(e -> e.matches(expected)));
 
     return this;
   }

@@ -21,7 +21,6 @@ package com.coffeebeans.springnativeawslambda.infra;
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
 import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
 
-import com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert;
 import org.junit.jupiter.api.Test;
 
 class TopicTest extends TemplateSupport {
@@ -29,39 +28,10 @@ class TopicTest extends TemplateSupport {
   public static final String TEST = "test";
 
   @Test
-  void should_have_success_topic() {
+  void should_have_dead_letter_topic() {
     assertThat(template)
-        .containsTopic("spring-native-aws-lambda-function-success-topic")
+        .containsTopic("spring-native-aws-lambda-function-topic.dlq")
         .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
         .hasTag("ENV", TEST);
-  }
-
-  @Test
-  void should_have_failure_topic() {
-
-    assertThat(template)
-        .containsTopic("spring-native-aws-lambda-function-failure-topic")
-        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
-        .hasTag("ENV", TEST);
-  }
-
-  @Test
-  void should_have_subscription_to_success_topic() {
-    final String protocol = "sqs";
-    final String topicArn = "springnativeawslambdafunctionsuccesstopic(.*)";
-    final String endpoint = "springnativeawslambdafunctionsuccessqueue(.*)";
-
-    assertThat(template)
-        .containsTopicSubscription(topicArn, protocol, endpoint);
-  }
-
-  @Test
-  void should_have_subscription_to_failure_topic() {
-    final String protocol = "sqs";
-    final String topicArn = "springnativeawslambdafunctionfailuretopic(.*)";
-    final String endpoint = "springnativeawslambdafunctionfailurequeue(.*)";
-
-    assertThat(template)
-        .containsTopicSubscription(topicArn, protocol, endpoint);
   }
 }

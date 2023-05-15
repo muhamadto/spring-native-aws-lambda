@@ -24,7 +24,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     container:
-      image:  ghcr.io/muhamadto/spring-native-amazonlinux2-base:17-amazonlinux2
+      image: ghcr.io/muhamadto/spring-native-amazonlinux2-base:17-amazonlinux2
       options: --user=worker:ci
     permissions:
       id-token: write

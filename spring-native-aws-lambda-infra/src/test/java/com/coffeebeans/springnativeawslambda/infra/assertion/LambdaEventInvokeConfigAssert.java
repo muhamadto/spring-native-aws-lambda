@@ -20,13 +20,12 @@ package com.coffeebeans.springnativeawslambda.infra.assertion;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.MapAssert;
 
 @SuppressWarnings("unchecked")
-public class LambdaEventInvokeConfigAssert extends AbstractCDKResourcesAssert<LambdaEventInvokeConfigAssert, Map<String, Object>> {
+public class LambdaEventInvokeConfigAssert extends
+    AbstractCDKResourcesAssert<LambdaEventInvokeConfigAssert, Map<String, Object>> {
 
   private LambdaEventInvokeConfigAssert(final Map<String, Object> actual) {
     super(actual, LambdaEventInvokeConfigAssert.class);
@@ -40,29 +39,37 @@ public class LambdaEventInvokeConfigAssert extends AbstractCDKResourcesAssert<La
       final String expectedSuccessEventDestination,
       final String expectedFailureEventDestination) {
     final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
-    final Map<String, Object> destinationConfig =
-        (Map<String, Object>) properties.get("DestinationConfig");
+
     final String actualFunctionName =
         ((Map<String, String>) properties.get("FunctionName")).get("Ref");
-    final String actualFailureDestinationConfig = getEventFailureDestination(destinationConfig);
-    final String actualSuccessDestinationConfig = getEventSuccessDestination(destinationConfig);
 
     Assertions.assertThat(actualFunctionName)
         .isInstanceOf(String.class)
         .matches(actual -> actual.matches(expectedFunctionName));
 
-    Assertions.assertThat(actualFailureDestinationConfig)
-        .isInstanceOf(String.class)
-        .matches(expectedFailureEventDestination);
+    final Map<String, Object> destinationConfig =
+        (Map<String, Object>) properties.get("DestinationConfig");
 
-    Assertions.assertThat(actualSuccessDestinationConfig)
-        .isInstanceOf(String.class)
-        .matches(expectedSuccessEventDestination);
+    if (isNotBlank(expectedSuccessEventDestination)) {
+      final String actualSuccessDestinationConfig = getEventSuccessDestination(destinationConfig);
+
+      Assertions.assertThat(actualSuccessDestinationConfig)
+          .isInstanceOf(String.class)
+          .matches(expectedSuccessEventDestination);
+    }
+
+    if (isNotBlank(expectedFailureEventDestination)) {
+      final String actualFailureDestinationConfig = getEventFailureDestination(destinationConfig);
+      Assertions.assertThat(actualFailureDestinationConfig)
+          .isInstanceOf(String.class)
+          .matches(expectedFailureEventDestination);
+    }
 
     return this;
   }
 
-  public LambdaEventInvokeConfigAssert hasLambdaEventInvokeConfigMaximumRetryAttempts(final Integer expected) {
+  public LambdaEventInvokeConfigAssert hasLambdaEventInvokeConfigMaximumRetryAttempts(
+      final Integer expected) {
     final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
 
     Assertions.assertThat((Integer) properties.get("MaximumRetryAttempts"))

@@ -39,7 +39,8 @@ public final class Application {
   private static final String ENVIRONMENT_NAME_DEV = "dev";
   private static final String ENVIRONMENT_NAME_PRD = "prd";
   private static final String LAMBDA_CODE_PATH =
-      SpringNativeAwsLambdaStack.LAMBDA_FUNCTION_ID + "/target/spring-native-aws-lambda-function-native-zip.zip";
+      SpringNativeAwsLambdaStack.LAMBDA_FUNCTION_ID
+          + "/target/spring-native-aws-lambda-function-native-zip.zip";
   private static final String QUALIFIER = "cbcore";
   private static final String FILE_ASSETS_BUCKET_NAME = "cbcore-cdk-bucket";
 
@@ -51,9 +52,14 @@ public final class Application {
     final Map<String, String> tags = createTags(env, TAG_VALUE_COST_CENTRE);
 
     switch (env) {
-      case ENVIRONMENT_NAME_DEV -> createStack(app, DEV_STACK_NAME, LAMBDA_CODE_PATH, QUALIFIER, FILE_ASSETS_BUCKET_NAME, env);
-      case ENVIRONMENT_NAME_PRD -> createStack(app, PRD_STACK_NAME, LAMBDA_CODE_PATH, QUALIFIER, FILE_ASSETS_BUCKET_NAME, env);
-      default -> throw new IllegalArgumentException("Environment variable " + TAG_KEY_ENV + " is not set to a valid value. Set it to '[dev|prd]'");
+      case ENVIRONMENT_NAME_DEV ->
+          createStack(app, DEV_STACK_NAME, LAMBDA_CODE_PATH, QUALIFIER, FILE_ASSETS_BUCKET_NAME,
+              env);
+      case ENVIRONMENT_NAME_PRD ->
+          createStack(app, PRD_STACK_NAME, LAMBDA_CODE_PATH, QUALIFIER, FILE_ASSETS_BUCKET_NAME,
+              env);
+      default -> throw new IllegalArgumentException("Environment variable " + TAG_KEY_ENV
+          + " is not set to a valid value. Set it to '[dev|prd]'");
     }
 
     tags.entrySet().stream()

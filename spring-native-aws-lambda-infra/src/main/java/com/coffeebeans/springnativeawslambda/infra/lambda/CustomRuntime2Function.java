@@ -55,7 +55,8 @@ import software.amazon.awscdk.services.sqs.IQueue;
 import software.constructs.Construct;
 
 /**
- * A lambda function with runtime provided.al2 (custom runtime 2). Creating function with any other runtime, will result in unexpected behaviour.
+ * A lambda function with runtime provided.al2 (custom runtime 2). Creating function with any other
+ * runtime, will result in unexpected behaviour.
  */
 
 public class CustomRuntime2Function extends Function {
@@ -69,7 +70,8 @@ public class CustomRuntime2Function extends Function {
    * @param id    This parameter is required.
    * @param props This parameter is required.
    */
-  private CustomRuntime2Function(@NotNull final Construct scope, @NotNull final String id, @NotNull final FunctionProps props) {
+  private CustomRuntime2Function(@NotNull final Construct scope, @NotNull final String id,
+      @NotNull final FunctionProps props) {
     super(scope, id, props);
   }
 
@@ -81,7 +83,8 @@ public class CustomRuntime2Function extends Function {
     return PROVIDED_AL2;
   }
 
-  public static final class Builder implements software.amazon.jsii.Builder<CustomRuntime2Function> {
+  public static final class Builder implements
+      software.amazon.jsii.Builder<CustomRuntime2Function> {
 
     /**
      * @param scope This parameter is required.
@@ -112,7 +115,8 @@ public class CustomRuntime2Function extends Function {
      * Default: Duration.hours(6)
      * <p>
      *
-     * @param maxEventAge The maximum age of a request that Lambda sends to a function for processing. This parameter is required.
+     * @param maxEventAge The maximum age of a request that Lambda sends to a function for
+     *                    processing. This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder maxEventAge(final Duration maxEventAge) {
@@ -156,23 +160,27 @@ public class CustomRuntime2Function extends Function {
      * Default: 2
      * <p>
      *
-     * @param retryAttempts The maximum number of times to retry when the function returns an error. This parameter is required.
+     * @param retryAttempts The maximum number of times to retry when the function returns an error.
+     *                      This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder retryAttempts(final Number retryAttempts) {
-      this.props.retryAttempts(retryAttempts == null ? FUNCTION_DEFAULT_RETRY_ATTEMPTS : retryAttempts);
+      this.props.retryAttempts(
+          retryAttempts == null ? FUNCTION_DEFAULT_RETRY_ATTEMPTS : retryAttempts);
       return this;
     }
 
     /**
      * Whether to allow the Lambda to send all network traffic.
      * <p>
-     * If set to false, you must individually add traffic rules to allow the Lambda to connect to network targets.
+     * If set to false, you must individually add traffic rules to allow the Lambda to connect to
+     * network targets.
      * <p>
      * Default: true
      * <p>
      *
-     * @param allowAllOutbound Whether to allow the Lambda to send all network traffic. This parameter is required.
+     * @param allowAllOutbound Whether to allow the Lambda to send all network traffic. This
+     *                         parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder allowAllOutbound(final Boolean allowAllOutbound) {
@@ -183,12 +191,14 @@ public class CustomRuntime2Function extends Function {
     /**
      * Lambda Functions in a public subnet can NOT access the internet.
      * <p>
-     * Use this property to acknowledge this limitation and still place the function in a public subnet.
+     * Use this property to acknowledge this limitation and still place the function in a public
+     * subnet.
      * <p>
      * Default: false
      * <p>
      *
-     * @param allowPublicSubnet Lambda Functions in a public subnet can NOT access the internet. This parameter is required.
+     * @param allowPublicSubnet Lambda Functions in a public subnet can NOT access the internet.
+     *                          This parameter is required.
      * @return {@code this}
      * @see <a
      * href="https://stackoverflow.com/questions/52992085/why-cant-an-aws-lambda-function-inside-a-public-subnet-in-a-vpc-connect-to-the/52994841#52994841">https://stackoverflow.com/questions/52992085/why-cant-an-aws-lambda-function-inside-a-public-subnet-in-a-vpc-connect-to-the/52994841#52994841</a>
@@ -204,7 +214,8 @@ public class CustomRuntime2Function extends Function {
      * Default: Architecture.X86_64
      * <p>
      *
-     * @param architecture The system architectures compatible with this lambda function. This parameter is required.
+     * @param architecture The system architectures compatible with this lambda function. This
+     *                     parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder architecture(final Architecture architecture) {
@@ -218,25 +229,29 @@ public class CustomRuntime2Function extends Function {
      * Default: - Not Sign the Code
      * <p>
      *
-     * @param codeSigningConfig Code signing config associated with this function. This parameter is required.
+     * @param codeSigningConfig Code signing config associated with this function. This parameter is
+     *                          required.
      * @return {@code this}
      */
-    public CustomRuntime2Function.Builder codeSigningConfig(final ICodeSigningConfig codeSigningConfig) {
+    public CustomRuntime2Function.Builder codeSigningConfig(
+        final ICodeSigningConfig codeSigningConfig) {
       this.props.codeSigningConfig(codeSigningConfig);
       return this;
     }
 
     /**
-     * Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method.
+     * Options for the `lambda.Version` resource automatically created by the `fn.currentVersion`
+     * method.
      * <p>
      * Default: - default options as described in `VersionOptions`
      * <p>
      *
-     * @param currentVersionOptions Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method. This parameter
-     *                              is required.
+     * @param currentVersionOptions Options for the `lambda.Version` resource automatically created
+     *                              by the `fn.currentVersion` method. This parameter is required.
      * @return {@code this}
      */
-    public CustomRuntime2Function.Builder currentVersionOptions(final VersionOptions currentVersionOptions) {
+    public CustomRuntime2Function.Builder currentVersionOptions(
+        final VersionOptions currentVersionOptions) {
       this.props.currentVersionOptions(currentVersionOptions);
       return this;
     }
@@ -260,7 +275,8 @@ public class CustomRuntime2Function extends Function {
     /**
      * Enabled DLQ.
      * <p>
-     * If <code>deadLetterQueue</code> is undefined, an SQS queue with default options will be defined for your Function.
+     * If <code>deadLetterQueue</code> is undefined, an SQS queue with default options will be
+     * defined for your Function.
      * <p>
      * Default: - false unless `deadLetterQueue` is set, which implies DLQ is enabled.
      * <p>
@@ -268,7 +284,8 @@ public class CustomRuntime2Function extends Function {
      * @param deadLetterQueueEnabled Enabled DLQ. This parameter is required.
      * @return {@code this}
      */
-    public CustomRuntime2Function.Builder deadLetterQueueEnabled(final Boolean deadLetterQueueEnabled) {
+    public CustomRuntime2Function.Builder deadLetterQueueEnabled(
+        final Boolean deadLetterQueueEnabled) {
       this.props.deadLetterQueueEnabled(deadLetterQueueEnabled);
       return this;
     }
@@ -276,8 +293,9 @@ public class CustomRuntime2Function extends Function {
     /**
      * The SNS topic to use as a DLQ.
      * <p>
-     * Note that if <code>deadLetterQueueEnabled</code> is set to <code>true</code>, an SQS queue will be created rather than an SNS topic. Using an
-     * SNS topic as a DLQ requires this property to be set explicitly.
+     * Note that if <code>deadLetterQueueEnabled</code> is set to <code>true</code>, an SQS queue
+     * will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property
+     * to be set explicitly.
      * <p>
      * Default: - no SNS topic
      * <p>
@@ -319,13 +337,14 @@ public class CustomRuntime2Function extends Function {
     /**
      * Key-value pairs that Lambda caches and makes available for your Lambda functions.
      * <p>
-     * Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda
-     * function source code.
+     * Use environment variables to apply configuration changes, such as test and production
+     * environment configurations, without changing your Lambda function source code.
      * <p>
      * Default: - No environment variables.
      * <p>
      *
-     * @param environment Key-value pairs that Lambda caches and makes available for your Lambda functions. This parameter is required.
+     * @param environment Key-value pairs that Lambda caches and makes available for your Lambda
+     *                    functions. This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder environment(final Map<String, String> environment) {
@@ -339,7 +358,8 @@ public class CustomRuntime2Function extends Function {
      * Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
      * <p>
      *
-     * @param environmentEncryption The AWS KMS key that's used to encrypt your function's environment variables. This parameter is required.
+     * @param environmentEncryption The AWS KMS key that's used to encrypt your function's
+     *                              environment variables. This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder environmentEncryption(final IKey environmentEncryption) {
@@ -353,7 +373,8 @@ public class CustomRuntime2Function extends Function {
      * Default: 512 MiB
      * <p>
      *
-     * @param ephemeralStorageSize The size of the function’s /tmp directory in MiB. This parameter is required.
+     * @param ephemeralStorageSize The size of the function’s /tmp directory in MiB. This parameter
+     *                             is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder ephemeralStorageSize(final Size ephemeralStorageSize) {
@@ -383,7 +404,8 @@ public class CustomRuntime2Function extends Function {
      * Default: - will not mount any filesystem
      * <p>
      *
-     * @param filesystem The filesystem configuration for the lambda function. This parameter is required.
+     * @param filesystem The filesystem configuration for the lambda function. This parameter is
+     *                   required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder filesystem(final FileSystem filesystem) {
@@ -394,7 +416,8 @@ public class CustomRuntime2Function extends Function {
     /**
      * A name for the function.
      * <p>
-     * Default: - AWS CloudFormation generates a unique physical ID and uses that ID for the function's name. For more information, see Name Type.
+     * Default: - AWS CloudFormation generates a unique physical ID and uses that ID for the
+     * function's name. For more information, see Name Type.
      * <p>
      *
      * @param functionName A name for the function. This parameter is required.
@@ -408,15 +431,18 @@ public class CustomRuntime2Function extends Function {
     /**
      * Initial policy statements to add to the created Lambda Role.
      * <p>
-     * You can call <code>addToRolePolicy</code> to the created lambda to add statements post creation.
+     * You can call <code>addToRolePolicy</code> to the created lambda to add statements post
+     * creation.
      * <p>
      * Default: - No policy statements are added to the created Lambda role.
      * <p>
      *
-     * @param initialPolicy Initial policy statements to add to the created Lambda Role. This parameter is required.
+     * @param initialPolicy Initial policy statements to add to the created Lambda Role. This
+     *                      parameter is required.
      * @return {@code this}
      */
-    public CustomRuntime2Function.Builder initialPolicy(final List<? extends PolicyStatement> initialPolicy) {
+    public CustomRuntime2Function.Builder initialPolicy(
+        final List<? extends PolicyStatement> initialPolicy) {
       this.props.initialPolicy(initialPolicy);
       return this;
     }
@@ -427,12 +453,14 @@ public class CustomRuntime2Function extends Function {
      * Default: - No Lambda Insights
      * <p>
      *
-     * @param insightsVersion Specify the version of CloudWatch Lambda insights to use for monitoring. This parameter is required.
+     * @param insightsVersion Specify the version of CloudWatch Lambda insights to use for
+     *                        monitoring. This parameter is required.
      * @return {@code this}
      * @see <a
      * href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-Getting-Started-docker.html">https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-Getting-Started-docker.html</a>
      */
-    public CustomRuntime2Function.Builder insightsVersion(final LambdaInsightsVersion insightsVersion) {
+    public CustomRuntime2Function.Builder insightsVersion(
+        final LambdaInsightsVersion insightsVersion) {
       this.props.insightsVersion(insightsVersion);
       return this;
     }
@@ -440,13 +468,15 @@ public class CustomRuntime2Function extends Function {
     /**
      * A list of layers to add to the function's execution environment.
      * <p>
-     * You can configure your Lambda function to pull in additional code during initialization in the form of layers. Layers are packages of libraries
-     * or other dependencies that can be used by multiple functions.
+     * You can configure your Lambda function to pull in additional code during initialization in
+     * the form of layers. Layers are packages of libraries or other dependencies that can be used
+     * by multiple functions.
      * <p>
      * Default: - No layers.
      * <p>
      *
-     * @param layers A list of layers to add to the function's execution environment. This parameter is required.
+     * @param layers A list of layers to add to the function's execution environment. This parameter
+     *               is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder layers(final List<? extends ILayerVersion> layers) {
@@ -457,13 +487,15 @@ public class CustomRuntime2Function extends Function {
     /**
      * The number of days log events are kept in CloudWatch Logs.
      * <p>
-     * When updating this property, unsetting it doesn't remove the log retention policy. To remove the retention policy, set the value to
+     * When updating this property, unsetting it doesn't remove the log retention policy. To remove
+     * the retention policy, set the value to
      * <code>INFINITE</code>.
      * <p>
      * Default: logs.RetentionDays.INFINITE
      * <p>
      *
-     * @param logRetention The number of days log events are kept in CloudWatch Logs. This parameter is required.
+     * @param logRetention The number of days log events are kept in CloudWatch Logs. This parameter
+     *                     is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder logRetention(final RetentionDays logRetention) {
@@ -472,7 +504,8 @@ public class CustomRuntime2Function extends Function {
     }
 
     /**
-     * When log retention is specified, a custom resource attempts to create the CloudWatch log group.
+     * When log retention is specified, a custom resource attempts to create the CloudWatch log
+     * group.
      * <p>
      * These options control the retry policy when interacting with CloudWatch APIs.
      * <p>
@@ -486,30 +519,34 @@ public class CustomRuntime2Function extends Function {
     }
 
     /**
-     * When log retention is specified, a custom resource attempts to create the CloudWatch log group.
+     * When log retention is specified, a custom resource attempts to create the CloudWatch log
+     * group.
      * <p>
      * These options control the retry policy when interacting with CloudWatch APIs.
      * <p>
      * Default: - Default AWS SDK retry options.
      * <p>
      *
-     * @param logRetentionRetryOptions When log retention is specified, a custom resource attempts to create the CloudWatch log group. This parameter
-     *                                 is required.
+     * @param logRetentionRetryOptions When log retention is specified, a custom resource attempts
+     *                                 to create the CloudWatch log group. This parameter is
+     *                                 required.
      * @return {@code this}
      */
-    public CustomRuntime2Function.Builder logRetentionRetryOptions(final LogRetentionRetryOptions logRetentionRetryOptions) {
+    public CustomRuntime2Function.Builder logRetentionRetryOptions(
+        final LogRetentionRetryOptions logRetentionRetryOptions) {
       this.props.logRetentionRetryOptions(logRetentionRetryOptions);
       return this;
     }
 
     /**
-     * The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
+     * The IAM role for the Lambda function associated with the custom resource that sets the
+     * retention policy.
      * <p>
      * Default: - A new role is created.
      * <p>
      *
-     * @param logRetentionRole The IAM role for the Lambda function associated with the custom resource that sets the retention policy. This parameter
-     *                         is required.
+     * @param logRetentionRole The IAM role for the Lambda function associated with the custom
+     *                         resource that sets the retention policy. This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder logRetentionRole(final IRole logRetentionRole) {
@@ -520,13 +557,14 @@ public class CustomRuntime2Function extends Function {
     /**
      * The amount of memory, in MB, that is allocated to your Lambda function.
      * <p>
-     * Lambda uses this value to proportionally allocate the amount of CPU power. For more information, see Resource Model in the AWS Lambda Developer
-     * Guide.
+     * Lambda uses this value to proportionally allocate the amount of CPU power. For more
+     * information, see Resource Model in the AWS Lambda Developer Guide.
      * <p>
      * Default: 128
      * <p>
      *
-     * @param memorySize The amount of memory, in MB, that is allocated to your Lambda function. This parameter is required.
+     * @param memorySize The amount of memory, in MB, that is allocated to your Lambda function.
+     *                   This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder memorySize(final Number memorySize) {
@@ -572,12 +610,14 @@ public class CustomRuntime2Function extends Function {
      * Default: - No specific limit - account limit.
      * <p>
      *
-     * @param reservedConcurrentExecutions The maximum of concurrent executions you want to reserve for the function. This parameter is required.
+     * @param reservedConcurrentExecutions The maximum of concurrent executions you want to reserve
+     *                                     for the function. This parameter is required.
      * @return {@code this}
      * @see <a
      * href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html</a>
      */
-    public CustomRuntime2Function.Builder reservedConcurrentExecutions(final Number reservedConcurrentExecutions) {
+    public CustomRuntime2Function.Builder reservedConcurrentExecutions(
+        final Number reservedConcurrentExecutions) {
       this.props.reservedConcurrentExecutions(reservedConcurrentExecutions);
       return this;
     }
@@ -585,16 +625,18 @@ public class CustomRuntime2Function extends Function {
     /**
      * Lambda execution role.
      * <p>
-     * This is the role that will be assumed by the function upon execution. It controls the permissions that the function will have. The Role must be
-     * assumable by the 'lambda.amazonaws.com' service principal.
+     * This is the role that will be assumed by the function upon execution. It controls the
+     * permissions that the function will have. The Role must be assumable by the
+     * 'lambda.amazonaws.com' service principal.
      * <p>
-     * The default Role automatically has permissions granted for Lambda execution. If you provide a Role, you must add the relevant AWS managed
-     * policies yourself.
+     * The default Role automatically has permissions granted for Lambda execution. If you provide a
+     * Role, you must add the relevant AWS managed policies yourself.
      * <p>
-     * The relevant managed policies are "service-role/AWSLambdaBasicExecutionRole" and "service-role/AWSLambdaVPCAccessExecutionRole".
+     * The relevant managed policies are "service-role/AWSLambdaBasicExecutionRole" and
+     * "service-role/AWSLambdaVPCAccessExecutionRole".
      * <p>
-     * Default: - A unique role will be generated for this lambda function. Both supplied and generated roles can always be changed by calling
-     * `addToRolePolicy`.
+     * Default: - A unique role will be generated for this lambda function. Both supplied and
+     * generated roles can always be changed by calling `addToRolePolicy`.
      * <p>
      *
      * @param role Lambda execution role. This parameter is required.
@@ -610,14 +652,17 @@ public class CustomRuntime2Function extends Function {
      * <p>
      * Only used if 'vpc' is supplied.
      * <p>
-     * Default: - If the function is placed within a VPC and a security group is not specified, either by this or securityGroup prop, a dedicated
-     * security group will be created for this function.
+     * Default: - If the function is placed within a VPC and a security group is not specified,
+     * either by this or securityGroup prop, a dedicated security group will be created for this
+     * function.
      * <p>
      *
-     * @param securityGroups The list of security groups to associate with the Lambda's network interfaces. This parameter is required.
+     * @param securityGroups The list of security groups to associate with the Lambda's network
+     *                       interfaces. This parameter is required.
      * @return {@code this}
      */
-    public CustomRuntime2Function.Builder securityGroups(final List<? extends ISecurityGroup> securityGroups) {
+    public CustomRuntime2Function.Builder securityGroups(
+        final List<? extends ISecurityGroup> securityGroups) {
       this.props.securityGroups(securityGroups);
       return this;
     }
@@ -625,16 +670,19 @@ public class CustomRuntime2Function extends Function {
     /**
      * The function execution time (in seconds) after which Lambda terminates the function.
      * <p>
-     * Because the execution time affects cost, set this value based on the function's expected execution time.
+     * Because the execution time affects cost, set this value based on the function's expected
+     * execution time.
      * <p>
      * Default: Duration.seconds(3)
      * <p>
      *
-     * @param timeout The function execution time (in seconds) after which Lambda terminates the function. This parameter is required.
+     * @param timeout The function execution time (in seconds) after which Lambda terminates the
+     *                function. This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder timeout(final Duration timeout) {
-      this.props.timeout(timeout == null ? Duration.seconds(FUNCTION_DEFAULT_TIMEOUT_IN_SECONDS) : timeout);
+      this.props.timeout(
+          timeout == null ? Duration.seconds(FUNCTION_DEFAULT_TIMEOUT_IN_SECONDS) : timeout);
       return this;
     }
 
@@ -655,7 +703,8 @@ public class CustomRuntime2Function extends Function {
     /**
      * VPC network to place Lambda network interfaces.
      * <p>
-     * Specify this if the Lambda function needs to access resources in a VPC. This is required when <code>vpcSubnets</code> is specified.
+     * Specify this if the Lambda function needs to access resources in a VPC. This is required when
+     * <code>vpcSubnets</code> is specified.
      * <p>
      * Default: - Function is not placed within a VPC.
      * <p>
@@ -671,16 +720,18 @@ public class CustomRuntime2Function extends Function {
     /**
      * Where to place the network interfaces within the VPC.
      * <p>
-     * This requires <code>vpc</code> to be specified in order for interfaces to actually be placed in the subnets. If <code>vpc</code> is not
-     * specify, this will raise an error.
+     * This requires <code>vpc</code> to be specified in order for interfaces to actually be placed
+     * in the subnets. If <code>vpc</code> is not specify, this will raise an error.
      * <p>
-     * Note: Internet access for Lambda Functions requires a NAT Gateway, so picking public subnets is not allowed (unless
+     * Note: Internet access for Lambda Functions requires a NAT Gateway, so picking public subnets
+     * is not allowed (unless
      * <code>allowPublicSubnet</code> is set to <code>true</code>).
      * <p>
      * Default: - the Vpc default strategy if not specified
      * <p>
      *
-     * @param vpcSubnets Where to place the network interfaces within the VPC. This parameter is required.
+     * @param vpcSubnets Where to place the network interfaces within the VPC. This parameter is
+     *                   required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder vpcSubnets(final SubnetSelection vpcSubnets) {
@@ -691,7 +742,8 @@ public class CustomRuntime2Function extends Function {
     /**
      * The source code of your Lambda function.
      * <p>
-     * You can point to a file in an Amazon Simple Storage Service (Amazon S3) bucket or specify your source code as inline text.
+     * You can point to a file in an Amazon Simple Storage Service (Amazon S3) bucket or specify
+     * your source code as inline text.
      * <p>
      *
      * @param code The source code of your Lambda function. This parameter is required.
@@ -705,16 +757,18 @@ public class CustomRuntime2Function extends Function {
     /**
      * The name of the method within your code that Lambda calls to execute your function.
      * <p>
-     * The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see
-     * https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html.
+     * The format includes the file name. It can also include namespaces and other qualifiers,
+     * depending on the runtime. For more information, see
+     * <a href="https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html">foundation-progmodel</a>.
      * <p>
      * Use <code>Handler.FROM_IMAGE</code> when defining a function from a Docker image.
      * <p>
-     * NOTE: If you specify your source code as inline text by specifying the ZipFile property within the Code property, specify index.function_name
-     * as the handler.
+     * NOTE: If you specify your source code as inline text by specifying the ZipFile property
+     * within the Code property, specify index.function_name as the handler.
      * <p>
      *
-     * @param handler The name of the method within your code that Lambda calls to execute your function. This parameter is required.
+     * @param handler The name of the method within your code that Lambda calls to execute your
+     *                function. This parameter is required.
      * @return {@code this}
      */
     public CustomRuntime2Function.Builder handler(final String handler) {
@@ -737,15 +791,14 @@ public class CustomRuntime2Function extends Function {
       checkArgument(isNotEmpty(functionProps.getEnvironment()), "'environment' is required");
 
       checkArgument(functionProps.getMemorySize() != null, "'memorySize' is required");
-      checkArgument(functionProps.getMemorySize().intValue() >= 128 && functionProps.getMemorySize().intValue() <= 3008,
+      checkArgument(functionProps.getMemorySize().intValue() >= 128
+              && functionProps.getMemorySize().intValue() <= 3008,
           "'memorySize' must be between 128 and 3008 (inclusive)");
 
       checkArgument(functionProps.getRetryAttempts() != null, "'retryAttempts' is required");
-      checkArgument(functionProps.getRetryAttempts().intValue() >= 0 && functionProps.getRetryAttempts().intValue() <= 2,
+      checkArgument(functionProps.getRetryAttempts().intValue() >= 0
+              && functionProps.getRetryAttempts().intValue() <= 2,
           "'retryAttempts' must be between 0 and 2 (inclusive)");
-
-      checkArgument(functionProps.getOnFailure() != null, "'onFailure' is required");
-      checkArgument(functionProps.getOnSuccess() != null, "'onSuccess' is required");
 
       return new CustomRuntime2Function(this.scope, this.id, functionProps);
     }

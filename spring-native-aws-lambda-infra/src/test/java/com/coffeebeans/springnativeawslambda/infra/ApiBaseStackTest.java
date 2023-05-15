@@ -58,7 +58,8 @@ class ApiBaseStackTest {
 
     lambdaCodePath = TestLambdaUtils.getTestLambdaCodePath(TEMP_DIR);
 
-    this.apiBaseStack = StackUtils.createStack(app, "test-stack", lambdaCodePath.toString(), ENV, "test-cdk-bucket", ENV);
+    this.apiBaseStack = StackUtils.createStack(app, "test-stack", lambdaCodePath.toString(), ENV,
+        "test-cdk-bucket", ENV);
   }
 
   @Test
@@ -120,7 +121,8 @@ class ApiBaseStackTest {
   void should_create_and_return_fifo_dead_letter_queue() {
     final String deadLetterQueueId = "test-fifo-dead-letter-queue";
 
-    final DeadLetterQueue actual = this.apiBaseStack.createFifoDeadLetterQueue(deadLetterQueueId, true, MESSAGE_GROUP);
+    final DeadLetterQueue actual = this.apiBaseStack.createFifoDeadLetterQueue(deadLetterQueueId,
+        true, MESSAGE_GROUP);
 
     assertThat(actual)
         .isNotNull()
@@ -176,7 +178,6 @@ class ApiBaseStackTest {
         "com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function::handleRequest",
         Code.fromAsset(this.lambdaCodePath.toString()),
         fromTopicArn(this.apiBaseStack, "success-topic", "arn:aws:sns:us-east-1:***:success-topic"),
-        fromTopicArn(this.apiBaseStack, "failure-topic", "arn:aws:sns:us-east-1:***:failure-topic"),
         fromRoleArn(this.apiBaseStack, "test-role", "arn:aws:iam::***:role/test-role"),
         Map.of("Account", "***"));
 
@@ -204,11 +205,11 @@ class ApiBaseStackTest {
         "com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function::handleRequest",
         Code.fromAsset(this.lambdaCodePath.toString()),
         fromTopicArn(this.apiBaseStack, "success-topic", "arn:aws:sns:us-east-1:***:success-topic"),
-        fromTopicArn(this.apiBaseStack, "failure-topic", "arn:aws:sns:us-east-1:***:failure-topic"),
         fromRoleArn(this.apiBaseStack, "test-role", "arn:aws:iam::***:role/test-role"),
         Map.of("Account", "***"));
 
-    final LambdaRestApi actual = this.apiBaseStack.createLambdaRestApi("test", "rest-api", "name", "POST", function, false);
+    final LambdaRestApi actual = this.apiBaseStack.createLambdaRestApi("test", "rest-api", "name",
+        "POST", function, false);
 
     assertThat(actual)
         .isNotNull()

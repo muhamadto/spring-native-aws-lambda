@@ -62,15 +62,15 @@ class LambdaTest extends TemplateSupport {
 
     assertThat(template)
         .containsRoleWithManagedPolicyArn(managedPolicyArn)
-        .hasAssumeRolePolicyDocument(principal, null, effect, policyDocumentVersion, "sts:AssumeRole");
+        .hasAssumeRolePolicyDocument(principal, null, effect, policyDocumentVersion,
+            "sts:AssumeRole");
   }
 
   @Test
   void should_have_default_policy_to_allow_lambda_publish_to_sns() throws JsonProcessingException {
 
     final String policyName = "springnativeawslambdafunctionroleDefaultPolicy(.*)";
-    final String failureTopic = "springnativeawslambdafunctionfailuretopic(.*)";
-    final String successTopic = "springnativeawslambdafunctionsuccesstopic(.*)";
+    final String deadLetterTopic = "springnativeawslambdafunctiontopicdlq(.*)";
     final String action = "sns:Publish";
     final String effect = "Allow";
     final String policyDocumentVersion = "2012-10-17";
@@ -80,12 +80,7 @@ class LambdaTest extends TemplateSupport {
         .isAssociatedWithRole("springnativeawslambdafunctionrole(.*)")
         .hasPolicyDocumentVersion(policyDocumentVersion)
         .hasPolicyDocumentStatement(null,
-            failureTopic,
-            action,
-            effect,
-            policyDocumentVersion)
-        .hasPolicyDocumentStatement(null,
-            successTopic,
+            deadLetterTopic,
             action,
             effect,
             policyDocumentVersion);
@@ -95,13 +90,9 @@ class LambdaTest extends TemplateSupport {
   void should_have_event_invoke_config_for_success_and_failure() {
 
     final String functionName = "springnativeawslambdafunction(.*)";
-    final String successEventDestination = "springnativeawslambdafunctionsuccesstopic(.*)";
-    final String failureEventDestination = "springnativeawslambdafunctionfailuretopic(.*)";
 
     assertThat(template)
-        .containsLambdaEventInvokeConfig(functionName,
-            successEventDestination,
-            failureEventDestination)
+        .containsLambdaEventInvokeConfig(functionName)
         .hasLambdaEventInvokeConfigQualifier("$LATEST")
         .hasLambdaEventInvokeConfigMaximumRetryAttempts(2);
   }

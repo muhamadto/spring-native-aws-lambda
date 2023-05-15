@@ -118,10 +118,10 @@ public abstract class AbstractCDKResourcesAssert<SELF extends AbstractCDKResourc
   }
 
   public SELF hasPolicy(final String principal,
-     final String resource, String effect,
-     final String policyDocumentVersion,
-     final String action,
-     final Map<String, Object> policyDocument) {
+      final String resource, String effect,
+      final String policyDocumentVersion,
+      final String action,
+      final Map<String, Object> policyDocument) {
     final var policyDocumentAssertMap = Assertions.assertThat(policyDocument)
         .isNotNull()
         .isNotEmpty()
@@ -138,14 +138,14 @@ public abstract class AbstractCDKResourcesAssert<SELF extends AbstractCDKResourc
         .containsEntry("Effect", effect)
         .containsEntry("Action", action));
 
-    if(isNotBlank(principal)) {
+    if (isNotBlank(principal)) {
       policyDocumentAssertMap.anySatisfy(s -> Assertions.assertThat(s)
           .extracting("Principal")
           .extracting("Service")
           .matches(e -> e.toString().matches(principal)));
     }
 
-    if(isNotBlank(resource)) {
+    if (isNotBlank(resource)) {
       policyDocumentAssertMap.anySatisfy(s -> Assertions.assertThat(s)
           .extracting("Resource")
           .extracting("Ref")

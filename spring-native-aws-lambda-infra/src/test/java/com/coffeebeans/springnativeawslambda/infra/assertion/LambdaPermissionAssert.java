@@ -25,7 +25,8 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.MapAssert;
 
 @SuppressWarnings("unchecked")
-public class LambdaPermissionAssert extends AbstractCDKResourcesAssert<LambdaPermissionAssert, Map<String, Object>> {
+public class LambdaPermissionAssert extends
+    AbstractCDKResourcesAssert<LambdaPermissionAssert, Map<String, Object>> {
 
   private LambdaPermissionAssert(final Map<String, Object> actual) {
     super(actual, LambdaPermissionAssert.class);
@@ -53,7 +54,7 @@ public class LambdaPermissionAssert extends AbstractCDKResourcesAssert<LambdaPer
         .asList()
         .map(e -> (String) e)
         .anySatisfy(e -> Assertions.assertThat(e)
-            .matches(func-> func.matches(functionName))));
+            .matches(func -> func.matches(functionName))));
 
     if (isNotBlank(principal)) {
       mapAssert.satisfies(s -> Assertions.assertThat(s)

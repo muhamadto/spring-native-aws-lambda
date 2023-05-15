@@ -21,7 +21,6 @@ package com.coffeebeans.springnativeawslambda.infra;
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
 import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
 
-import com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -156,6 +155,10 @@ class RestApiTest extends TemplateSupport {
 
     assertThat(template)
         .containsRoleWithManagedPolicyArn(managedPolicyArn)
-        .hasAssumeRolePolicyDocument(principal, null, effect, policyDocumentVersion, "sts:AssumeRole");
+        .hasAssumeRolePolicyDocument(principal,
+            null,
+            effect,
+            policyDocumentVersion,
+            "sts:AssumeRole");
   }
 }

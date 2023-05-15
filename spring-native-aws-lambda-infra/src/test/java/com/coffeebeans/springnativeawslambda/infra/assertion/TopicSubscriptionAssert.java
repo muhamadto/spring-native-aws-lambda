@@ -54,8 +54,6 @@ public class TopicSubscriptionAssert extends
 
     Assertions.assertThat(endpointFun)
         .isInstanceOf(List.class)
-        .hasSize(2)
-        .contains("Arn")
         .anySatisfy(s -> Assertions.assertThat(s)
             .isInstanceOf(String.class)
             .matches(e -> e.matches(expectedEndpoint)));

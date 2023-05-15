@@ -133,8 +133,8 @@ public class QueuePolicyAssert extends
       final Map<String, Object> conditionSourceType =
           (Map<String, Object>) conditionType.get(policyStatementConditionSourceType);
 
-       conditionMatch =
-           ((String) conditionSourceType.get("Ref")).matches(policyStatementConditionSourceArn);
+      conditionMatch =
+          ((String) conditionSourceType.get("Ref")).matches(policyStatementConditionSourceArn);
     }
 
     Assertions.assertThat(conditionMatch)
