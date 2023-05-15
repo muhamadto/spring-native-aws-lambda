@@ -86,6 +86,16 @@
     </dependency>
     <!-- UTILS ENDS -->
 
+    <!-- JACKSON -->
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-parameter-names</artifactId>
+    </dependency>
+
+    <!-- JACKSON ENDS-->
+
+
     <!-- TEST -->
 
     <dependency>

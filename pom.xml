@@ -72,6 +72,7 @@
     <sonar.organization>muhamadto</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <revision>1.0.0-SNAPSHOT</revision>
+    <jackson.version>2.13.0</jackson.version>
   </properties>
 
   <modules>
@@ -125,6 +126,33 @@
         <version>31.1-jre</version>
       </dependency>
       <!-- UTILS ENDS -->
+
+      <!-- JACKSON -->
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-parameter-names</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jdk8</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <!-- JACKSON ENDS -->
 
       <!-- TEST -->
       <dependency>

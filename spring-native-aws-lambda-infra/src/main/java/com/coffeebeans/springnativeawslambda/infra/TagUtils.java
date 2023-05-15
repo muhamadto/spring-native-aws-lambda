@@ -30,7 +30,8 @@ public final class TagUtils {
   public static final String TAG_KEY_COST_CENTRE = "COST_CENTRE";
   public static final String TAG_VALUE_COST_CENTRE = "coffeeBeans-core";
 
-  public static Map<String, String> createTags(@NotBlank final String env, @NotBlank final String costCentre) {
+  public static Map<String, String> createTags(@NotBlank final String env,
+      @NotBlank final String costCentre) {
     return Map.of(TAG_KEY_ENV, env, TAG_KEY_COST_CENTRE, costCentre);
   }
 }

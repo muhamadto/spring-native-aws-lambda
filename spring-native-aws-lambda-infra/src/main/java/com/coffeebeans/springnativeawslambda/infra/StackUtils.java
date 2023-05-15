@@ -53,7 +53,8 @@ public final class StackUtils {
   }
 
   @NotNull
-  private static DefaultStackSynthesizer createDefaultStackSynthesizer(@NotBlank final String qualifier,
+  private static DefaultStackSynthesizer createDefaultStackSynthesizer(
+      @NotBlank final String qualifier,
       @NotBlank final String fileAssetsBucketName) {
     return DefaultStackSynthesizer.Builder.create()
         .qualifier(qualifier)

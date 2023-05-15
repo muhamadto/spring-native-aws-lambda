@@ -18,32 +18,60 @@
 
 package com.coffeebeans.springnativeawslambda.infra.assertion;
 
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.QUEUE;
-import static com.coffeebeans.springnativeawslambda.infra.resource.CdkResourceType.QUEUE_POLICY;
+import java.util.List;
+import java.util.Map;
+import org.assertj.core.api.Assertions;
 
-import com.coffeebeans.springnativeawslambda.infra.resource.Queue;
-import com.coffeebeans.springnativeawslambda.infra.resource.QueuePolicy;
-import org.assertj.core.api.AbstractAssert;
-import software.amazon.awscdk.assertions.Template;
+@SuppressWarnings("unchecked")
+public class QueueAssert extends AbstractCDKResourcesAssert<QueueAssert, Map<String, Object>> {
 
-public class QueueAssert extends AbstractAssert<QueueAssert, Template> {
-
-  private QueueAssert(final Template actual) {
+  private QueueAssert(final Map<String, Object> actual) {
     super(actual, QueueAssert.class);
   }
 
-  public static QueueAssert assertThat(final Template actual) {
+  public static QueueAssert assertThat(final Map<String, Object> actual) {
     return new QueueAssert(actual);
   }
 
-  public QueueAssert hasQueue(final Queue expected) {
-    actual.hasResource(QUEUE.getValue(), expected);
+  public QueueAssert hasQueue(final String expected) {
+    final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
+
+    final String topicName = (String) properties.get("QueueName");
+
+    Assertions.assertThat(topicName)
+        .isInstanceOf(String.class)
+        .isEqualTo(expected);
 
     return this;
   }
 
-  public QueueAssert hasQueuePolicy(final QueuePolicy expected) {
-    actual.hasResource(QUEUE_POLICY.getValue(), expected);
+  public QueueAssert hasDeadLetterQueue(final String expected) {
+
+    final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
+    final Map<String, List<Object>> redrivePolicy = (Map<String, List<Object>>) properties.get(
+        "RedrivePolicy");
+    final Map<String, Object> deadLetterTargetArn = (Map<String, Object>) redrivePolicy.get(
+        "deadLetterTargetArn");
+    final List<String> roleArnFun = (List<String>) deadLetterTargetArn.get("Fn::GetAtt");
+
+    Assertions.assertThat(roleArnFun)
+        .isInstanceOf(List.class)
+        .anySatisfy(s -> Assertions.assertThat(s)
+            .isInstanceOf(String.class)
+            .matches(e -> e.matches(expected)));
+
+    return this;
+  }
+
+  public QueueAssert hasMaxRetrialCount(final Integer deletionPolicy) {
+
+    final Map<String, Object> properties = (Map<String, Object>) actual.get("Properties");
+    final Map<String, Integer> redrivePolicy = (Map<String, Integer>) properties.get(
+        "RedrivePolicy");
+    final Integer maxReceiveCount = redrivePolicy.get("maxReceiveCount");
+
+    Assertions.assertThat(maxReceiveCount)
+        .isEqualTo(deletionPolicy);
 
     return this;
   }

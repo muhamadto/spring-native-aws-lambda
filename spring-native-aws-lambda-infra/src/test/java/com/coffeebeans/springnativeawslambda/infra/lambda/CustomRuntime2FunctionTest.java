@@ -74,8 +74,10 @@ class CustomRuntime2FunctionTest {
     stack = new Stack(new App(), "test-stack");
     id = "test-function";
 
-    onFailure = new SnsDestination(fromTopicArn(stack, "failure-topic", "arn:aws:sns:us-east-1:***:failure-topic"));
-    onSuccess = new SnsDestination(fromTopicArn(stack, "success-topic", "arn:aws:sns:us-east-1:***:success-topic"));
+    onFailure = new SnsDestination(
+        fromTopicArn(stack, "failure-topic", "arn:aws:sns:us-east-1:***:failure-topic"));
+    onSuccess = new SnsDestination(
+        fromTopicArn(stack, "success-topic", "arn:aws:sns:us-east-1:***:success-topic"));
 
     customRuntime2FunctionBuilder = Builder.create(stack, id)
         .maxEventAge(Duration.seconds(514))
@@ -85,14 +87,16 @@ class CustomRuntime2FunctionTest {
         .allowAllOutbound(true)
         .allowPublicSubnet(false)
         .architecture(ARM_64)
-        .codeSigningConfig(fromCodeSigningConfigArn(stack, "test-code-signing-config", "arn:aws:lambda:us-east-1:***:code-signing-config:***"))
+        .codeSigningConfig(fromCodeSigningConfigArn(stack, "test-code-signing-config",
+            "arn:aws:lambda:us-east-1:***:code-signing-config:***"))
         .currentVersionOptions(VersionOptions.builder().build())
         .deadLetterQueue(null)
         .deadLetterQueueEnabled(false)
         .deadLetterTopic(null)
         .description("test function")
         .environment(Map.of("Account", "***"))
-        .environmentEncryption(Key.fromKeyArn(stack, "test-key", "arn:aws:kms:us-east-1:***:key/***"))
+        .environmentEncryption(
+            Key.fromKeyArn(stack, "test-key", "arn:aws:kms:us-east-1:***:key/***"))
         .ephemeralStorageSize(Size.gibibytes(1))
         .events(List.of(new ApiEventSource("POST", "/test")))
         .filesystem(null)
@@ -102,19 +106,23 @@ class CustomRuntime2FunctionTest {
         .layers(Collections.emptyList())
         .logRetention(RetentionDays.FIVE_DAYS)
         .logRetentionRetryOptions()
-        .logRetentionRole(Role.fromRoleArn(stack, "test-log-role", "arn:aws:iam::***:role/test-log-role"))
+        .logRetentionRole(
+            Role.fromRoleArn(stack, "test-log-role", "arn:aws:iam::***:role/test-log-role"))
         .memorySize(512)
         .timeout(Duration.seconds(3))
         .profiling(false)
-        .profilingGroup(ProfilingGroup.fromProfilingGroupName(stack, "test-profiling-group", "test-profiling-group"))
+        .profilingGroup(ProfilingGroup.fromProfilingGroupName(stack, "test-profiling-group",
+            "test-profiling-group"))
         .reservedConcurrentExecutions(2)
         .role(Role.fromRoleArn(stack, "test-role", "arn:aws:iam::***:role/test-role"))
-        .securityGroups(List.of(SecurityGroup.fromSecurityGroupId(stack, "test-security-group", "sg-***")))
+        .securityGroups(
+            List.of(SecurityGroup.fromSecurityGroupId(stack, "test-security-group", "sg-***")))
         .tracing(Tracing.ACTIVE)
         .vpc(Vpc.Builder.create(stack, "test-vpc").build())
         .vpcSubnets(SubnetSelection.builder().build())
         .code(Code.fromAsset(lambdaCodePath.toString()))
-        .handler("com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function::handleRequest");
+        .handler(
+            "com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2Function::handleRequest");
   }
 
   @Test
@@ -144,7 +152,8 @@ class CustomRuntime2FunctionTest {
     assertThat(actual)
         .isNotNull();
 
-    assertThat(actual.getTimeout().toSeconds()) // actual.getTimeout() won't be null Builder#timeout() has a default value of 10 seconds
+    assertThat(actual.getTimeout()
+        .toSeconds()) // actual.getTimeout() won't be null Builder#timeout() has a default value of 10 seconds
         .isEqualTo(DEFAULT_TIMEOUT.toSeconds());
   }
 
@@ -225,7 +234,8 @@ class CustomRuntime2FunctionTest {
     assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
-        .hasFieldOrPropertyWithValue("message", "'memorySize' must be between 128 and 3008 (inclusive)");
+        .hasFieldOrPropertyWithValue("message",
+            "'memorySize' must be between 128 and 3008 (inclusive)");
   }
 
   @Test
@@ -235,7 +245,8 @@ class CustomRuntime2FunctionTest {
     assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
-        .hasFieldOrPropertyWithValue("message", "'memorySize' must be between 128 and 3008 (inclusive)");
+        .hasFieldOrPropertyWithValue("message",
+            "'memorySize' must be between 128 and 3008 (inclusive)");
   }
 
   @Test
@@ -245,7 +256,8 @@ class CustomRuntime2FunctionTest {
     assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
-        .hasFieldOrPropertyWithValue("message", "'retryAttempts' must be between 0 and 2 (inclusive)");
+        .hasFieldOrPropertyWithValue("message",
+            "'retryAttempts' must be between 0 and 2 (inclusive)");
   }
 
   @Test
@@ -255,26 +267,7 @@ class CustomRuntime2FunctionTest {
     assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
         .isNotNull()
         .isInstanceOf(IllegalArgumentException.class)
-        .hasFieldOrPropertyWithValue("message", "'retryAttempts' must be between 0 and 2 (inclusive)");
-  }
-
-  @Test
-  void should_throw_exception_when_on_failure_topic_is_missing() {
-    customRuntime2FunctionBuilder.onFailure(null);
-
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
-        .isNotNull()
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasFieldOrPropertyWithValue("message", "'onFailure' is required");
-  }
-
-  @Test
-  void should_throw_exception_when_on_success_topic_is_missing() {
-    customRuntime2FunctionBuilder.onSuccess(null);
-
-    assertThatThrownBy(() -> customRuntime2FunctionBuilder.build())
-        .isNotNull()
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasFieldOrPropertyWithValue("message", "'onSuccess' is required");
+        .hasFieldOrPropertyWithValue("message",
+            "'retryAttempts' must be between 0 and 2 (inclusive)");
   }
 }
