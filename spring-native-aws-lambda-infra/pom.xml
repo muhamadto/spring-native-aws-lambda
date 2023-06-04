@@ -97,6 +97,11 @@
 
 
     <!-- TEST -->
+    <dependency>
+      <groupId>com.coffeebeans</groupId>
+      <artifactId>cdk-fluent-assertions</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.assertj</groupId>
