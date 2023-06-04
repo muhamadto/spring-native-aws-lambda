@@ -156,9 +156,9 @@
 
       <!-- TEST -->
       <dependency>
-        <groupId>com.coffeebeans</groupId>
+        <groupId>cloud.pianola</groupId>
         <artifactId>cdk-fluent-assertions</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <scope>test</scope>
       </dependency>
 

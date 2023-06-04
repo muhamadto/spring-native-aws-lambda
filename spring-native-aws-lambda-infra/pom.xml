@@ -98,7 +98,7 @@
 
     <!-- TEST -->
     <dependency>
-      <groupId>com.coffeebeans</groupId>
+      <groupId>cloud.pianola</groupId>
       <artifactId>cdk-fluent-assertions</artifactId>
       <scope>test</scope>
     </dependency>

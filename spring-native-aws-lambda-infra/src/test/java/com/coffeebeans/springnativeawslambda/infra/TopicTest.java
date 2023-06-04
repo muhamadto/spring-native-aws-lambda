@@ -19,7 +19,7 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
+import static cloud.pianola.cdk.fluent.assertion.CDKStackAssert.*;
 
 import org.junit.jupiter.api.Test;
 
