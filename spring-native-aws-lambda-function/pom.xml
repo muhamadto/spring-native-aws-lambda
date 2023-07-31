@@ -51,6 +51,7 @@
     <native.build.args>
       --enable-url-protocols=http
       -H:+AddAllCharsets
+      -H:+ReportExceptionStackTraces
     </native.build.args>
     <lsl-bom.version>23.0326.344</lsl-bom.version>
   </properties>
@@ -161,7 +162,6 @@
         <groupId>org.graalvm.buildtools</groupId>
         <artifactId>native-maven-plugin</artifactId>
         <configuration>
-          <imageName>${project.artifactId}</imageName>
           <mainClass>com.coffeebeans.springnativeawslambda.function.SpringNativeAwsLambdaApplication</mainClass>
           <buildArgs>
             --no-fallback

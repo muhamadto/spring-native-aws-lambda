@@ -33,8 +33,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '17'
+          distribution: 'temurin'
+          java-version: '20'
           cache: 'maven'
       - name: Cache Sonar packages
         uses: actions/cache@v3
@@ -52,4 +52,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn --no-transfer-progress clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=muhamadto_spring-native-aws-lambda --settings settings-spring.xml
+        run: mvn --no-transfer-progress clean verify -Pnative org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=muhamadto_spring-native-aws-lambda --settings settings-spring.xml

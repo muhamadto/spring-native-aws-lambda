@@ -40,8 +40,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '17'
+          distribution: 'temurin'
+          java-version: '20'
           cache: 'maven'
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2

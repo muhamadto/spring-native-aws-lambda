@@ -44,6 +44,8 @@
   </developers>
 
   <properties>
+    <java.version>20</java.version>
+
     <cdk.version>2.89.0</cdk.version>
   </properties>
 
@@ -92,7 +94,6 @@
     </dependency>
 
     <!-- JACKSON ENDS-->
-
 
     <!-- TEST -->
 
