@@ -26,15 +26,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
+      matrix:
+        java-version: [ '20' ]
+        graalvm-version: [ '20.0.2' ]
+        distribution: [ 'graalvm' ]
       fail-fast: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: graalvm/setup-graalvm@v1
         with:
-          distribution: 'temurin'
-          java-version: '20'
+          distribution: '${{ matrix.distribution }}'
+          version: '${{ matrix.graalvm-version }}'
+          java-version: '${{ matrix.java-version }}'
           cache: 'maven'
       - name: Cache Sonar packages
         uses: actions/cache@v3

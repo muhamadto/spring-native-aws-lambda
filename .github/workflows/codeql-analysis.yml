@@ -31,17 +31,20 @@ jobs:
       contents: read
       security-events: write
     strategy:
-      fail-fast: false
       matrix:
-        language: [ 'java' ]
+        java-version: [ '20' ]
+        graalvm-version: [ '20.0.2' ]
+        distribution: [ 'graalvm' ]
+      fail-fast: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: graalvm/setup-graalvm@v1
         with:
-          distribution: 'temurin'
-          java-version: '20'
+          distribution: '${{ matrix.distribution }}'
+          version: '${{ matrix.graalvm-version }}'
+          java-version: '${{ matrix.java-version }}'
           cache: 'maven'
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
@@ -66,7 +69,9 @@ jobs:
                 "url": "https://repo.spring.io/release"
               }
             ]
-      - name: Autobuild
+          profiles: '[{ "id": "native"}]'
+
+      - name: Build
         uses: github/codeql-action/autobuild@v2
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
