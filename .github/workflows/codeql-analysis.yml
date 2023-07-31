@@ -19,7 +19,7 @@ on:
   push:
     branches: [ "*" ]
   pull_request:
-    branches: [ "java17", "java11" ]
+    branches: [ "main" ]
     types: [ opened, synchronize, reopened ]
 
 jobs:

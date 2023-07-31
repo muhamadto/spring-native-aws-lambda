@@ -34,8 +34,9 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"spring.main.web-application-type=servlet"})
 @ContextConfiguration(classes = {AWSCustomRuntime.class, SpringNativeAwsLambdaApplication.class})
-@TestPropertySource(properties = {"_HANDLER=exampleFunction"})
-class SpringNativeAwsLambdaApplicationTest {
+@TestPropertySource(properties = {"_HANDLER=exampleFunction","spring.cloud.function.definition=exampleFunction"
+})
+class SpringNativeAwsLambdaApplicationIT {
 
   @Autowired
   private AWSCustomRuntime aws;
@@ -45,6 +46,7 @@ class SpringNativeAwsLambdaApplicationTest {
 
   @Test
   void should_return_200() throws JsonProcessingException {
+
     final APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent()
         .withBody("{\"name\":\"Coffeebeans\"}");
 

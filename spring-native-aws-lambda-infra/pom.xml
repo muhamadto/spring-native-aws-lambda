@@ -44,9 +44,7 @@
   </developers>
 
   <properties>
-    <cdk.version>2.43.1</cdk.version>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <cdk.version>2.89.0</cdk.version>
   </properties>
 
   <dependencies>
