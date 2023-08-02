@@ -33,45 +33,23 @@ jobs:
     strategy:
       matrix:
         java-version: [ '20' ]
-        graalvm-version: [ '20.0.2' ]
-        distribution: [ 'graalvm' ]
+        distribution: [ 'temurin' ]
+        language: [ 'java' ]
       fail-fast: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup Java
-        uses: graalvm/setup-graalvm@v1
+        uses: actions/setup-java@v3
         with:
           distribution: '${{ matrix.distribution }}'
-          version: '${{ matrix.graalvm-version }}'
           java-version: '${{ matrix.java-version }}'
           cache: 'maven'
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
-      - name: maven-settings-xml-action
-        uses: whelk-io/maven-settings-xml-action@v18
-        with:
-          repositories: >
-            [
-              {
-                "id": "spring-releases",
-                "name": "Spring Releases",
-                "url": "https://repo.spring.io/release"
-              }
-            ]
-          plugin_repositories: >
-            [
-              {
-                "id": "spring-releases",
-                "name": "Spring Releases",
-                "url": "https://repo.spring.io/release"
-              }
-            ]
-          profiles: '[{ "id": "native"}]'
-
-      - name: Build
+      - name: Autobuild
         uses: github/codeql-action/autobuild@v2
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
