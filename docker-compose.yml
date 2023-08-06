@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   spring-native-aws-lambda-function:
-    image: ghcr.io/muhamadto/spring-native-amazonlinux2-base:17-amazonlinux2
+    image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:20-amazonlinux2
     ports:
       - 8080:8080
     networks:

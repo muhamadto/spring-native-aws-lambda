@@ -13,12 +13,9 @@
 
 | Component     | Version  |
 |---------------|----------|
-| JDK           | 17       |
-| GraalVM       | 22.2     |
-| Spring Native | 0.12.1   |
-| Spring Cloud  | 2021.0.3 |
-| Spring Boot   | 2.7.5    |
-| AWS CDK   | 2.40.0   |
+| JDK           | 20       |
+| Spring Cloud  | 2022.0.1 |
+| Spring Boot   | 3.1.2    |
 
 ## Test
 

@@ -19,7 +19,7 @@ on:
   push:
     branches: [ "*" ]
   pull_request:
-    branches: [ "java17", "java11" ]
+    branches: [ "main" ]
     types: [ opened, synchronize, reopened ]
 
 jobs:
@@ -31,41 +31,24 @@ jobs:
       contents: read
       security-events: write
     strategy:
-      fail-fast: false
       matrix:
+        java-version: [ '20' ]
+        distribution: [ 'temurin' ]
         language: [ 'java' ]
+      fail-fast: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '17'
+          distribution: '${{ matrix.distribution }}'
+          java-version: '${{ matrix.java-version }}'
           cache: 'maven'
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
-      - name: maven-settings-xml-action
-        uses: whelk-io/maven-settings-xml-action@v18
-        with:
-          repositories: >
-            [
-              {
-                "id": "spring-releases",
-                "name": "Spring Releases",
-                "url": "https://repo.spring.io/release"
-              }
-            ]
-          plugin_repositories: >
-            [
-              {
-                "id": "spring-releases",
-                "name": "Spring Releases",
-                "url": "https://repo.spring.io/release"
-              }
-            ]
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
       - name: Perform CodeQL Analysis
