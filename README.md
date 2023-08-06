@@ -28,10 +28,17 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
 
 ### Locally
 
+#### Using `docker-compose`
+1. Run the following commands
+   ```shell
+   $ docker-compose up
+   ```
+
+#### Using `mvnw`
 1. Set `spring.main.web-application-type` to `servlet` for local development
 2. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean package -U -Pnative --settings ./settings-spring.xml
+    $ ./mvnw -ntp clean package -U -Pnative -pl spring-native-aws-lambda-function  --settings ./settings-spring.xml
     $ ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
     ```
    The service starts in less than 100 ms

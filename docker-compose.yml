@@ -1,25 +1,36 @@
+# Licensed to Muhammad Hamadto
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#   See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
 version: '3.9'
 services:
   spring-native-aws-lambda-function:
-    image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:20-amazonlinux2
+    image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:20-amazonlinux2-awscliv2
     ports:
-      - 8080:8080
-    networks:
-      default:
-        aliases:
-          - spring-native-aws-lambda-function
+      - "8080:8080"
+      - "5005:5005"
     volumes:
-      - ./:/opt/build
-      - ${M2_REPO}:/home/ci/.m2
-    working_dir: /opt/build
+      - ./:/app
+      - ${M2_REPO}:/home/worker/.m2
+    working_dir: /app
+    user: worker
     environment:
       SPRING_MAIN_WEBAPPLICATIONTYPE: servlet
-      SPRING_PROFILES_ACTIVE: compose
-      AWS_HOST: localstack
-      AWS_ACCESS_KEY_ID: local
-      AWS_SECRET_ACCESS_KEY: local
       AWS_DEFAULT_REGION: ap-southeast-2
       AWS_REGION: ap-southeast-2
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
       MAVEN_OPTS: |
         -DskipTests=true
         -Dcheckstyle.skip=true
@@ -28,39 +39,48 @@ services:
         -Dskip.it=true
         -Dmaven.javadoc.skip=true
         -Dmaven.source.skip=true
-        -Dspring-boot.run.profiles=compose
+        -Dspring-boot.run.profiles=local
     entrypoint:
       - bash
       - -c
-    command: >
-      "
-      ./mvnw -pl spring-native-aws-lambda-function clean package -Pnative -DskipTests --settings ./settings-spring.xml  &&
-      spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
-      "
+    command: |
+      '
+      aws --version &&
+
+      source /usr/local/bin/awscliv2-util/aws &&
+
+      print_info_message "block" "Creating 'spring-native-aws-lambda-function'" &&
+
+      print_info_message "divider" "Package GraalVM function" &&
+      
+      ./mvnw -ntp clean package -U -Pnative -pl spring-native-aws-lambda-function  --settings ./settings-spring.xml &&
+      
+      lambda_create_function lambda-FUNCTION provided.al2 512 ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function-native-zip.zip spring-native-aws-lambda-function &&
+      lambda_wait_for_function lambda-FUNCTION &&
+      lambda_list_functions &&
+
+      print_info_message "block" "Successfully creating 'spring-native-aws-lambda-function'" &&
+
+      exit 0
+      '
     depends_on:
       - localstack
 
   localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
     image: localstack/localstack:latest
-    logging:
-      driver: none
     ports:
-      - 4576:4576
-      - ${EDGE_PORT-4566}:${EDGE_PORT-4566}
-      - ${PORT_WEB_UI-8088}:${PORT_WEB_UI-8088}
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
     environment:
-      AWS_DEFAULT_REGION: ap-southeast-2
-      AWS_ACCESS_KEY_ID: local
-      AWS_SECRET_ACCESS_KEY: local
-      SERVICES: sns,sqs,lambda, apigateway
-      DEBUG: 1
-      LS_LOG: debug # seems to give more logs than DEBUG: 1
-      DATA_DIR: ${DATA_DIR- }
-      PORT_WEB_UI: ${PORT_WEB_UI-8088}
-      EDGE_PORT: ${EDGE_PORT-4566}
-      DOCKER_HOST: unix:///var/run/docker.sock
-      HOSTNAME_EXTERNAL: localstack
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_HOST=localstack
     volumes:
-      # If you have access issues on Mac, consider using an alias docker-compose="TMPDIR=/private$TMPDIR /usr/local/bin/docker-compose"
-      - /${TMPDIR:-/tmp/localstack}:/tmp/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+
+
+
+
