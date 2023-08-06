@@ -56,7 +56,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ENV: ${{ env.ENV }}
           COST_CENTRE: ${{ env.COST_CENTRE }}
-        run: ./mvnw -ntp -Pnative clean package -DskipTests
+        run: ./mvnw -ntp -Pnative clean package -DskipTests=true
       - name: cdk diff
         uses: noverant/aws-cdk-github-actions@v1
         with:
