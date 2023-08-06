@@ -39,7 +39,10 @@
   </developers>
 
   <properties>
-    <java.version>17</java.version>
+    <maven.compiler.source>20</maven.compiler.source>
+    <maven.compiler.target>20</maven.compiler.target>
+    <maven.compiler.release>20</maven.compiler.release>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <sonar.organization>muhamadto</sonar.organization>
@@ -61,11 +64,9 @@
       ${project.basedir}/target/site/jacoco-it/jacoco.xml
     </sonar.coverage.jacoco.xmlReportPaths>
     <sonar.coverage.exclusions>**/model/*.java, **/Application.java,
-      **/SpringNativeAwsLambdaApplication.java
+      **/SpringNativeAwsLambdaApplication.java,**/*Hints.java,
+      **/*Application.java
     </sonar.coverage.exclusions>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <maven.compiler.release>17</maven.compiler.release>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <assertj-core.version>3.23.1</assertj-core.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
@@ -73,7 +74,14 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <revision>1.0.0-SNAPSHOT</revision>
     <jackson.version>2.13.0</jackson.version>
+    <spring-boot-dependencies.version>3.1.2</spring-boot-dependencies.version>
   </properties>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.1.2</version>
+  </parent>
 
   <modules>
     <module>spring-native-aws-lambda-function</module>
@@ -198,12 +206,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.11.0</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.8</version>
+        <version>0.8.10</version>
         <executions>
           <execution>
             <id>pre-unit-test</id>

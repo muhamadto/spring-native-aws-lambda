@@ -1,7 +1,7 @@
 spring:
   main:
     banner-mode: off
-    web-application-type: none # change to 'servlet' for development
+    web-application-type: servlet # change to 'servlet' for development
   cloud:
     function:
       web:

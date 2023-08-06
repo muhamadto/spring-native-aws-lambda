@@ -16,21 +16,20 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function.model;
+package com.coffeebeans.springnativeawslambda.function;
 
-import jakarta.validation.constraints.NotBlank;
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.coffeebeans.springnativeawslambda.function.model.Request;
+import com.coffeebeans.springnativeawslambda.function.model.Response;
+import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Request implements Serializable {
+public class AppRuntimeHints implements RuntimeHintsRegistrar {
 
-  @NotBlank
-  private String name;
+  @Override
+  public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+    hints.serialization().registerType(Request.class);
+    hints.serialization().registerType(Response.class);
+    hints.resources().registerPattern("org/joda/time/tz/*");
+  }
+
 }
