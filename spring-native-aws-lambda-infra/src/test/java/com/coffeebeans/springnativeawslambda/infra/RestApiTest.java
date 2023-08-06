@@ -19,7 +19,7 @@
 package com.coffeebeans.springnativeawslambda.infra;
 
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
+import static cloud.pianola.cdk.fluent.assertion.CDKStackAssert.*;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ class RestApiTest extends TemplateSupport {
   void should_have_rest_api_deployment() {
 
     assertThat(template)
-        .containsRestApiDeploymentWithRestApiId("springnativeawslambdafunctionrestapi(.*)")
+        .containsRestApiDeployment("springnativeawslambdafunctionrestapi(.*)")
         .hasDependency("springnativeawslambdafunctionrestapiproxyANY(.*)")
         .hasDependency("springnativeawslambdafunctionrestapiproxy(.*)")
         .hasDependency("springnativeawslambdafunctionrestapiANY(.*)")
