@@ -18,12 +18,11 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
+import static cloud.pianola.cdk.fluent.assertion.CDKStackAssert.*;
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert.assertThat;
 import static software.amazon.awscdk.assertions.Match.exact;
 import static software.amazon.awscdk.assertions.Match.stringLikeRegexp;
 
-import com.coffeebeans.springnativeawslambda.infra.assertion.CDKStackAssert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ class LambdaTest extends TemplateSupport {
   @Test
   void should_have_lambda_function() {
 
-    CDKStackAssert.assertThat(template)
+    assertThat(template)
         .containsFunction("spring-native-aws-lambda-function")
         .hasHandler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
         .hasCode("test-cdk-bucket", "(.*).zip")
