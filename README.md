@@ -234,8 +234,7 @@ and the following trust relationship
             "SNS:UntagResource"
          ],
          "Resource": [
-            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-topic",
-            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-topic"
+            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-dead-letter-topic"
          ]
       },
       {

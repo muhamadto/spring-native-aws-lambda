@@ -39,7 +39,7 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
 
   static final String LAMBDA_FUNCTION_ID = "spring-native-aws-lambda-function";
   private static final String REST_API_ID = LAMBDA_FUNCTION_ID + "-rest-api";
-  private static final String DEAD_LETTER_TOPIC_ID = LAMBDA_FUNCTION_ID + "-topic";
+  private static final String DEAD_LETTER_TOPIC_ID = LAMBDA_FUNCTION_ID + "-dead-letter-topic";
   private static final String LAMBDA_HANDLER = "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest";
   private static final String ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE = "SPRING_PROFILES_ACTIVE";
 
