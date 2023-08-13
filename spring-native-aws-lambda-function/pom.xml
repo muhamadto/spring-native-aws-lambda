@@ -45,6 +45,7 @@
     <lombok.version>1.18.26</lombok.version>
     <aws-lambda-events.version>3.11.1</aws-lambda-events.version>
     <aws-lambda-java-core.version>1.2.2</aws-lambda-java-core.version>
+    <aws-lambda-java-serialization.version>1.1.2</aws-lambda-java-serialization.version>
     <spring-cloud.version>2022.0.1</spring-cloud.version>
     <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
     <repackage.classifier/>
@@ -82,6 +83,13 @@
       <version>${aws-lambda-java-core.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-serialization</artifactId>
+      <version>${aws-lambda-java-serialization.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- AWS LAMBDA ENDS -->
 
     <!-- SPRING CLOUD -->

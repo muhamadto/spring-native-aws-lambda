@@ -3,12 +3,13 @@ package com.coffeebeans.springnativeawslambda.function;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Slf4j
+@Log4j2
 @RestControllerAdvice
 public class LambdaExceptionHandler {
 
@@ -23,6 +24,20 @@ public class LambdaExceptionHandler {
         .withBody("{\n"
             + "          \"message\": \"Internal Server Error\",\n"
             + "          \"errorCode\": \"SERVER_ERROR\n"
+            + "        }");
+  }
+
+  @ExceptionHandler(InvalidDefinitionException.class)
+  public APIGatewayProxyResponseEvent handleException(
+      final InvalidDefinitionException e,
+      final APIGatewayProxyRequestEvent request) {
+    log.error("Error processing request: {}", e.getMessage());
+    return new APIGatewayProxyResponseEvent()
+        .withStatusCode(400)
+        .withHeaders(Map.of("X-Requested-Id", request.getRequestContext().getRequestId()))
+        .withBody("{\n"
+            + "          \"message\": \"Request body is Invalid\",\n"
+            + "          \"errorCode\": \"INVALID_INPUT\n"
             + "        }");
   }
 

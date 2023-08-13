@@ -45,8 +45,6 @@
 
   <properties>
     <java.version>20</java.version>
-
-    <cdk.version>2.89.0</cdk.version>
   </properties>
 
   <dependencies>
@@ -54,7 +52,6 @@
     <dependency>
       <groupId>software.amazon.awscdk</groupId>
       <artifactId>aws-cdk-lib</artifactId>
-      <version>${cdk.version}</version>
     </dependency>
     <!-- AWS CDK ENDS -->
 
