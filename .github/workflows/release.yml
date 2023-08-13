@@ -58,12 +58,12 @@ jobs:
           COST_CENTRE: ${{ env.COST_CENTRE }}
         run: ./mvnw -ntp -Pnative clean package -DskipTests=true
       - name: cdk diff
-        uses: noverant/aws-cdk-github-actions@v1
+        uses: muhamadto/aws-cdk-github-actions@v3
         with:
           cdk_subcommand: 'diff'
           actions_comment: false
       - name: cdk deploy
-        uses: noverant/aws-cdk-github-actions@v1
+        uses: muhamadto/aws-cdk-github-actions@v3
         with:
           cdk_subcommand: 'deploy'
           cdk_args: '--require-approval never'
