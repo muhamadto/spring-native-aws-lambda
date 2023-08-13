@@ -87,6 +87,7 @@
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-lambda-java-serialization</artifactId>
       <version>${aws-lambda-java-serialization.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- AWS LAMBDA ENDS -->
