@@ -238,24 +238,6 @@ and the following trust relationship
          ]
       },
       {
-         "Sid": "SQSPermissions",
-         "Effect": "Allow",
-         "Action": [
-            "sqs:GetQueueAttributes",
-            "sqs:CreateQueue",
-            "sqs:DeleteQueue",
-            "sqs:GetQueueUrl",
-            "sqs:SetQueueAttributes",
-            "sqs:ListQueues"
-         ],
-         "Resource": [
-            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-queue-dlq",
-            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-queue-dlq",
-            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-failure-queue",
-            "arn:aws:sqs:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-success-queue"
-         ]
-      },
-      {
          "Sid": "LambdaPermissions",
          "Effect": "Allow",
          "Action": [
@@ -332,13 +314,6 @@ cdk bootstrap aws://{aws-account-number}/{aws-region} --profile cdk \
 **NOTE**: notice that the policy passed to `--cloudformation-execution-policies` option is the one
 we created
 in step 4
-
-**NOTE 2**: I added queues to receive messages from the functions `onSuccess` and `onFailure`
-topics, so I had to add the SQS permissions to the policy. However, in production scenario I would
-stop at the topics and let the processor applications create and subscribe the queues to the topics.
-This way, the processor applications can be deployed independently from the function and the
-function can be deployed independently from the processor applications. This is a good practice to
-follow in order to have a loosely coupled architecture.
 
 #### Building AWS Lambda Function from Zip
 
