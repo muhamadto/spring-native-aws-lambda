@@ -69,7 +69,7 @@ class LambdaTest extends TemplateSupport {
   void should_have_default_policy_to_allow_lambda_publish_to_sns() throws JsonProcessingException {
 
     final String policyName = "springnativeawslambdafunctionroleDefaultPolicy(.*)";
-    final String deadLetterTopic = "springnativeawslambdafunctiontopicdlq(.*)";
+    final String deadLetterTopic = "springnativeawslambdafunctiondeadlettertopic(.*)";
     final String action = "sns:Publish";
     final String effect = "Allow";
     final String policyDocumentVersion = "2012-10-17";

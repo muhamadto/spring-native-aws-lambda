@@ -34,7 +34,7 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"spring.main.web-application-type=servlet"})
 @ContextConfiguration(classes = {AWSCustomRuntime.class, SpringNativeAwsLambdaApplication.class})
-@TestPropertySource(properties = {"_HANDLER=exampleFunction","spring.cloud.function.definition=exampleFunction"
+@TestPropertySource(properties = {"_HANDLER=exampleFunction"
 })
 class SpringNativeAwsLambdaApplicationIT {
 
@@ -53,6 +53,21 @@ class SpringNativeAwsLambdaApplicationIT {
     final APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
         .withStatusCode(200)
         .withBody("{\"name\":\"Coffeebeans\",\"saved\":true}");
+
+    assertThat(aws.exchange(objectMapper.writeValueAsString(request)).getPayload())
+        .isEqualTo(objectMapper.writeValueAsString(response));
+
+  }
+
+  @Test
+  void should_return_400() throws JsonProcessingException {
+
+    final APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent()
+        .withBody("\"name\":\"Coffeebeans\"}");
+
+    final APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
+        .withStatusCode(400)
+        .withBody("{\"message\": \"Request body is Invalid\",\"errorCode\": \"INVALID_INPUT\"}");
 
     assertThat(aws.exchange(objectMapper.writeValueAsString(request)).getPayload())
         .isEqualTo(objectMapper.writeValueAsString(response));
