@@ -49,7 +49,7 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
    ```
 3. Make a call
     ```shell
-   $ curl --location --request POST 'http://localhost:8080/exampleFunction' \
+   $ curl --location --request POST 'https://ffwtdrvhmg.execute-api.ap-southeast-2.amazonaws.com/dev' \
    --header 'Content-Type: application/json' \
    --data-raw '{
         "name": "CoffeeBeans"
@@ -250,6 +250,7 @@ and the following trust relationship
             "lambda:RemovePermission",
             "lambda:PutFunctionEventInvokeConfig",
             "lambda:DeleteFunctionEventInvokeConfig",
+            "lambda:UpdateFunctionEventInvokeConfig",
             "lambda:UpdateFunctionCode",
             "lambda:ListTags",
             "lambda:UpdateFunctionConfiguration"
