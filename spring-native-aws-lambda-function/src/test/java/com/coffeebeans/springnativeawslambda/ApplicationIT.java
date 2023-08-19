@@ -16,7 +16,7 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function;
+package com.coffeebeans.springnativeawslambda;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,10 +33,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"spring.main.web-application-type=servlet"})
-@ContextConfiguration(classes = {AWSCustomRuntime.class, SpringNativeAwsLambdaApplication.class})
+@ContextConfiguration(classes = {AWSCustomRuntime.class, Application.class})
 @TestPropertySource(properties = {"_HANDLER=exampleFunction"
 })
-class SpringNativeAwsLambdaApplicationIT {
+class ApplicationIT {
 
   @Autowired
   private AWSCustomRuntime aws;

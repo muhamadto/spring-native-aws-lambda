@@ -16,29 +16,19 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function.model;
+package com.coffeebeans.springnativeawslambda;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.coffeebeans.springnativeawslambda.model.Request;
+import com.coffeebeans.springnativeawslambda.model.Response;
+import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Response implements Serializable {
+public class AppRuntimeHints implements RuntimeHintsRegistrar {
 
-  @NotBlank
-  @JsonProperty(access = Access.READ_ONLY)
-  private String name;
-
-  @NotNull
-  @JsonProperty(access = Access.READ_ONLY)
-  private boolean saved;
+  @Override
+  public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+    hints.serialization().registerType(Request.class);
+    hints.serialization().registerType(Response.class);
+    hints.resources().registerPattern("org/joda/time/tz/*");
+  }
 }

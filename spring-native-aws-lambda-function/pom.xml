@@ -42,12 +42,7 @@
   </developers>
 
   <properties>
-    <lombok.version>1.18.26</lombok.version>
-    <aws-lambda-events.version>3.11.1</aws-lambda-events.version>
-    <aws-lambda-java-core.version>1.2.2</aws-lambda-java-core.version>
-    <aws-lambda-java-serialization.version>1.1.2</aws-lambda-java-serialization.version>
     <spring-cloud.version>2022.0.1</spring-cloud.version>
-    <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
     <repackage.classifier/>
     <native.build.args>
       --enable-url-protocols=http
@@ -75,19 +70,20 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-lambda-java-events</artifactId>
-      <version>${aws-lambda-events.version}</version>
     </dependency>
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-lambda-java-core</artifactId>
-      <version>${aws-lambda-java-core.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-lambda-java-serialization</artifactId>
-      <version>${aws-lambda-java-serialization.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.lambda</groupId>
+      <artifactId>powertools-logging</artifactId>
     </dependency>
 
     <!-- AWS LAMBDA ENDS -->
@@ -96,6 +92,12 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-function-adapter-aws</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -119,7 +121,6 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
     </dependency>
     <!-- UTILITIES ENDS -->
 
@@ -175,7 +176,7 @@
             <groupId>org.graalvm.buildtools</groupId>
             <artifactId>native-maven-plugin</artifactId>
             <configuration>
-              <mainClass>com.coffeebeans.springnativeawslambda.function.SpringNativeAwsLambdaApplication</mainClass>
+              <mainClass>com.coffeebeans.springnativeawslambda.Application</mainClass>
               <buildArgs>
                 --no-fallback
               </buildArgs>

@@ -16,7 +16,7 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function;
+package com.coffeebeans.springnativeawslambda;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,9 +24,9 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 
 @SpringBootApplication
 @ImportRuntimeHints(AppRuntimeHints.class)
-public class SpringNativeAwsLambdaApplication {
+public class Application {
 
   public static void main(String[] args) {
-    SpringApplication.run(SpringNativeAwsLambdaApplication.class, args);
+    SpringApplication.run(Application.class, args);
   }
 }

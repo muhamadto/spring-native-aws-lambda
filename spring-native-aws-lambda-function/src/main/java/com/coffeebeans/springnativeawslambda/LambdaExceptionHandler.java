@@ -1,4 +1,4 @@
-package com.coffeebeans.springnativeawslambda.function;
+package com.coffeebeans.springnativeawslambda;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;

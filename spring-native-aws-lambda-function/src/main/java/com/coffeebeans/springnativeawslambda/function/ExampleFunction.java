@@ -16,26 +16,28 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function.functions;
+package com.coffeebeans.springnativeawslambda.function;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.coffeebeans.springnativeawslambda.function.model.Request;
-import com.coffeebeans.springnativeawslambda.function.model.Response;
+import com.coffeebeans.springnativeawslambda.model.Request;
+import com.coffeebeans.springnativeawslambda.model.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import java.util.function.Function;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import software.amazon.lambda.powertools.logging.CorrelationIdPathConstants;
+import software.amazon.lambda.powertools.logging.Logging;
 
 @Component
 @Log4j2
 @Validated
-public class ExampleFunction implements Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class ExampleFunction implements
+    Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   private final ObjectMapper objectMapper;
 
@@ -51,6 +53,7 @@ public class ExampleFunction implements Function<APIGatewayProxyRequestEvent, AP
    * @throws JsonProcessingException
    */
   @Override
+  @Logging(correlationIdPath = CorrelationIdPathConstants.API_GATEWAY_REST)
   @SneakyThrows(value = JsonProcessingException.class)
   public APIGatewayProxyResponseEvent apply(final APIGatewayProxyRequestEvent proxyRequestEvent) {
     log.info("Converting request into a response...'");
