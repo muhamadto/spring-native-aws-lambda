@@ -16,7 +16,7 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function;
+package com.coffeebeans.springnativeawslambda;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

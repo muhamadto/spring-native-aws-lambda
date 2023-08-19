@@ -92,6 +92,12 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-function-adapter-aws</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -170,7 +176,7 @@
             <groupId>org.graalvm.buildtools</groupId>
             <artifactId>native-maven-plugin</artifactId>
             <configuration>
-              <mainClass>com.coffeebeans.springnativeawslambda.function.Application</mainClass>
+              <mainClass>com.coffeebeans.springnativeawslambda.Application</mainClass>
               <buildArgs>
                 --no-fallback
               </buildArgs>

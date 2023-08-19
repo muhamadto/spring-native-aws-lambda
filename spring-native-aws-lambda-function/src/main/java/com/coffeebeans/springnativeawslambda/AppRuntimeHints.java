@@ -16,17 +16,19 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function;
+package com.coffeebeans.springnativeawslambda;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportRuntimeHints;
+import com.coffeebeans.springnativeawslambda.model.Request;
+import com.coffeebeans.springnativeawslambda.model.Response;
+import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
-@SpringBootApplication
-@ImportRuntimeHints(AppRuntimeHints.class)
-public class Application {
+public class AppRuntimeHints implements RuntimeHintsRegistrar {
 
-  public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
+  @Override
+  public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+    hints.serialization().registerType(Request.class);
+    hints.serialization().registerType(Response.class);
+    hints.resources().registerPattern("org/joda/time/tz/*");
   }
 }

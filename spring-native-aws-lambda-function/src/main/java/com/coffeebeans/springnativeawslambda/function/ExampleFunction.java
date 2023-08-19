@@ -16,12 +16,12 @@
  *
  */
 
-package com.coffeebeans.springnativeawslambda.function.functions;
+package com.coffeebeans.springnativeawslambda.function;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.coffeebeans.springnativeawslambda.function.model.Request;
-import com.coffeebeans.springnativeawslambda.function.model.Response;
+import com.coffeebeans.springnativeawslambda.model.Request;
+import com.coffeebeans.springnativeawslambda.model.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
