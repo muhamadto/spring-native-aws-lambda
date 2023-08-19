@@ -81,7 +81,10 @@
       <artifactId>aws-lambda-java-serialization</artifactId>
       <scope>provided</scope>
     </dependency>
-
+    <dependency>
+      <groupId>software.amazon.lambda</groupId>
+      <artifactId>powertools-logging</artifactId>
+    </dependency>
 
     <!-- AWS LAMBDA ENDS -->
 
