@@ -56,7 +56,7 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
    ```
 3. Make a call
     ```shell
-   $ curl --location --request POST 'https://ffwtdrvhmg.execute-api.ap-southeast-2.amazonaws.com/dev' \
+   $ curl --location --request POST 'http://localhost:8080' \
    --header 'Content-Type: application/json' \
    --data-raw '{
         "name": "CoffeeBeans"

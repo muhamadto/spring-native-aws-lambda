@@ -30,8 +30,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import software.amazon.lambda.powertools.logging.CorrelationIdPathConstants;
-import software.amazon.lambda.powertools.logging.Logging;
 
 @Component
 @Slf4j
@@ -53,7 +51,6 @@ public class ExampleFunction implements
    * @throws JsonProcessingException
    */
   @Override
-  @Logging(correlationIdPath = CorrelationIdPathConstants.API_GATEWAY_REST)
   @SneakyThrows(value = JsonProcessingException.class)
   public APIGatewayProxyResponseEvent apply(final APIGatewayProxyRequestEvent proxyRequestEvent) {
     log.info("Converting request into a response...'");
