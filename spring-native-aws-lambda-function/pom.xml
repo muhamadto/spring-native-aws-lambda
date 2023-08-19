@@ -43,13 +43,14 @@
 
   <properties>
     <spring-cloud.version>2022.0.1</spring-cloud.version>
+    <aspectj.version>1.9.20</aspectj.version>
+
     <repackage.classifier/>
     <native.build.args>
       --enable-url-protocols=http
       -H:+AddAllCharsets
       -H:+ReportExceptionStackTraces
     </native.build.args>
-    <lsl-bom.version>23.0326.344</lsl-bom.version>
   </properties>
 
   <dependencyManagement>
@@ -85,6 +86,13 @@
       <groupId>software.amazon.lambda</groupId>
       <artifactId>powertools-logging</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.20.0</version>
+    </dependency>
+
 
     <!-- AWS LAMBDA ENDS -->
 
@@ -122,6 +130,13 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
+
     <!-- UTILITIES ENDS -->
 
     <!-- TEST -->
@@ -142,10 +157,34 @@
       <scope>test</scope>
     </dependency>
     <!-- TEST ENDS -->
+
   </dependencies>
 
   <build>
     <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>dev.aspectj</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>1.13.1</version>
+        <configuration>
+          <complianceLevel>20</complianceLevel>
+          <aspectLibraries>
+            <aspectLibrary>
+              <groupId>software.amazon.lambda</groupId>
+              <artifactId>powertools-logging</artifactId>
+            </aspectLibrary>
+          </aspectLibraries>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <profiles>

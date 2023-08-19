@@ -26,7 +26,7 @@ import org.springframework.aot.hint.RuntimeHintsRegistrar;
 public class AppRuntimeHints implements RuntimeHintsRegistrar {
 
   @Override
-  public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+  public void registerHints(final RuntimeHints hints, final ClassLoader classLoader) {
     hints.serialization().registerType(Request.class);
     hints.serialization().registerType(Response.class);
     hints.resources().registerPattern("org/joda/time/tz/*");
