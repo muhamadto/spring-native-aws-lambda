@@ -39,42 +39,33 @@
   </developers>
 
   <properties>
-    <maven.compiler.source>20</maven.compiler.source>
-    <maven.compiler.target>20</maven.compiler.target>
-    <maven.compiler.release>20</maven.compiler.release>
+    <revision>1.0.0-SNAPSHOT</revision>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <maven.compiler.source>20</maven.compiler.source>
+    <maven.compiler.target>20</maven.compiler.target>
+    <maven.compiler.release>20</maven.compiler.release>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
+
+    <jackson.version>2.13.0</jackson.version>
+
     <sonar.organization>muhamadto</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
 
-    <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S107
-    </sonar.issue.ignore.multicriteria.e1.ruleKey>
-    <sonar.issue.ignore.multicriteria.e1.resourceKey>**/cdk/*.java
-    </sonar.issue.ignore.multicriteria.e1.resourceKey>
+    <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S107</sonar.issue.ignore.multicriteria.e1.ruleKey>
+    <sonar.issue.ignore.multicriteria.e1.resourceKey>**/cdk/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
 
     <!-- This class has 6 parents which is greater than 5 authorized,
         suspended as we are using CDK and the original code has 5 levels of inheritance already-->
-    <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S110
-    </sonar.issue.ignore.multicriteria.e2.ruleKey>
-    <sonar.issue.ignore.multicriteria.e2.resourceKey>**/cdk/*.java
-    </sonar.issue.ignore.multicriteria.e2.resourceKey>
-    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
-      ${project.basedir}/target/site/jacoco-it/jacoco.xml
-    </sonar.coverage.jacoco.xmlReportPaths>
-    <sonar.coverage.exclusions>**/model/*.java, **/Application.java,
-      **/SpringNativeAwsLambdaApplication.java,**/*Hints.java,
-      **/*Application.java
-    </sonar.coverage.exclusions>
-    <maven.compiler.parameters>true</maven.compiler.parameters>
-    <assertj-core.version>3.23.1</assertj-core.version>
-    <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-    <sonar.organization>muhamadto</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <revision>1.0.0-SNAPSHOT</revision>
-    <jackson.version>2.13.0</jackson.version>
-    <spring-boot-dependencies.version>3.1.2</spring-boot-dependencies.version>
+    <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S110</sonar.issue.ignore.multicriteria.e2.ruleKey>
+    <sonar.issue.ignore.multicriteria.e2.resourceKey>**/cdk/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
+
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml, ${project.basedir}/target/site/jacoco-it/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+
+    <sonar.coverage.exclusions>**/model/*.java, **/Application.java,**/*Hints.java</sonar.coverage.exclusions>
   </properties>
 
   <parent>
@@ -101,7 +92,33 @@
         <artifactId>spring-native-aws-lambda-infra</artifactId>
         <version>${project.version}</version>
       </dependency>
+
       <!-- SPRING-NATIVE-AWS-LAMBDA ENDS -->
+
+      <!-- AWS -->
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-lambda-java-events</artifactId>
+        <version>3.11.1</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-lambda-java-core</artifactId>
+        <version>1.2.2</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-lambda-java-serialization</artifactId>
+        <version>1.1.2</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>software.amazon.lambda</groupId>
+        <artifactId>powertools-logging</artifactId>
+        <version>1.16.1</version>
+      </dependency>
+      <!-- AWS END -->
 
       <!-- UTILS -->
       <dependency>
@@ -117,12 +134,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.24</version>
-      </dependency>
-
-      <dependency>
         <groupId>javax.validation</groupId>
         <artifactId>validation-api</artifactId>
         <version>2.0.1.Final</version>
@@ -132,6 +143,12 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>32.0.0-jre</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.28</version>
       </dependency>
       <!-- UTILS ENDS -->
 
@@ -181,7 +198,7 @@
       <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
-        <version>${assertj-core.version}</version>
+        <version>3.23.1</version>
         <scope>test</scope>
       </dependency>
 
@@ -209,7 +226,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-surefire-plugin.version}</version>
+        <version>3.1.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

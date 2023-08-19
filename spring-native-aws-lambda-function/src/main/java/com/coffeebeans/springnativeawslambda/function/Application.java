@@ -24,9 +24,9 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 
 @SpringBootApplication
 @ImportRuntimeHints(AppRuntimeHints.class)
-public class SpringNativeAwsLambdaApplication {
+public class Application {
 
   public static void main(String[] args) {
-    SpringApplication.run(SpringNativeAwsLambdaApplication.class, args);
+    SpringApplication.run(Application.class, args);
   }
 }

@@ -31,5 +31,4 @@ public class AppRuntimeHints implements RuntimeHintsRegistrar {
     hints.serialization().registerType(Response.class);
     hints.resources().registerPattern("org/joda/time/tz/*");
   }
-
 }
