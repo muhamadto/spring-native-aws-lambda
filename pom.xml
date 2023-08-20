@@ -55,17 +55,24 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
     <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
-    <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S107</sonar.issue.ignore.multicriteria.e1.ruleKey>
-    <sonar.issue.ignore.multicriteria.e1.resourceKey>**/cdk/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+    <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S107
+    </sonar.issue.ignore.multicriteria.e1.ruleKey>
+    <sonar.issue.ignore.multicriteria.e1.resourceKey>**/cdk/*.java
+    </sonar.issue.ignore.multicriteria.e1.resourceKey>
 
     <!-- This class has 6 parents which is greater than 5 authorized,
         suspended as we are using CDK and the original code has 5 levels of inheritance already-->
-    <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S110</sonar.issue.ignore.multicriteria.e2.ruleKey>
-    <sonar.issue.ignore.multicriteria.e2.resourceKey>**/cdk/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
+    <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S110
+    </sonar.issue.ignore.multicriteria.e2.ruleKey>
+    <sonar.issue.ignore.multicriteria.e2.resourceKey>**/cdk/*.java
+    </sonar.issue.ignore.multicriteria.e2.resourceKey>
 
-    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml, ${project.basedir}/target/site/jacoco-it/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
+      ${project.basedir}/target/site/jacoco-it/jacoco.xml
+    </sonar.coverage.jacoco.xmlReportPaths>
 
-    <sonar.coverage.exclusions>**/model/*.java, **/Application.java,**/*Hints.java</sonar.coverage.exclusions>
+    <sonar.coverage.exclusions>**/model/*.java, **/Application.java, **/*Hints.java
+    </sonar.coverage.exclusions>
     <lombok.version>1.18.28</lombok.version>
   </properties>
 
@@ -106,13 +113,16 @@
         <groupId>com.amazonaws</groupId>
         <artifactId>aws-lambda-java-core</artifactId>
         <version>1.2.2</version>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>com.amazonaws</groupId>
         <artifactId>aws-lambda-java-serialization</artifactId>
         <version>1.1.2</version>
-        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-lambda-java-log4j2</artifactId>
+        <version>1.5.1</version>
       </dependency>
       <dependency>
         <groupId>software.amazon.lambda</groupId>

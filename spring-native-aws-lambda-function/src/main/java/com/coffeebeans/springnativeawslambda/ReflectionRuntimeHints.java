@@ -18,19 +18,22 @@
 
 package com.coffeebeans.springnativeawslambda;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportRuntimeHints;
+import java.util.List;
+import org.joda.time.DateTime;
+import org.springframework.aot.hint.MemberCategory;
+import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.aot.hint.RuntimeHintsRegistrar;
+import org.springframework.aot.hint.TypeReference;
 
-@SpringBootApplication
-@ImportRuntimeHints({
-    ReflectionRuntimeHints.class,
-    ResourcesRuntimeHints.class,
-    SerializationRuntimeHints.class
-})
-public class Application {
+public class ReflectionRuntimeHints implements RuntimeHintsRegistrar {
 
-  public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
+  @Override
+  public void registerHints(final RuntimeHints hints, final ClassLoader classLoader) {
+    final List<TypeReference> typeReferences = List.of(
+        TypeReference.of(DateTime.class)
+    );
+
+    hints.reflection().registerTypes(typeReferences,
+        builder -> builder.withMembers(MemberCategory.values()));
   }
 }
