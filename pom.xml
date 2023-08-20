@@ -66,6 +66,7 @@
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml, ${project.basedir}/target/site/jacoco-it/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
     <sonar.coverage.exclusions>**/model/*.java, **/Application.java,**/*Hints.java</sonar.coverage.exclusions>
+    <lombok.version>1.18.28</lombok.version>
   </properties>
 
   <parent>
@@ -148,7 +149,7 @@
       <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
-        <version>1.18.28</version>
+        <version>${lombok.version}</version>
       </dependency>
       <!-- UTILS ENDS -->
 
@@ -227,11 +228,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.1.0</version>
-        <configuration>
-          <classpathDependencyExcludes>
-            <classpathDependencyExclude>org.apache.logging.log4j:log4j-slf4j-impl</classpathDependencyExclude>
-          </classpathDependencyExcludes>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

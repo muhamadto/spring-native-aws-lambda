@@ -20,15 +20,27 @@ package com.coffeebeans.springnativeawslambda;
 
 import com.coffeebeans.springnativeawslambda.model.Request;
 import com.coffeebeans.springnativeawslambda.model.Response;
+import java.util.List;
+import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
+import org.springframework.aot.hint.TypeReference;
 
 public class AppRuntimeHints implements RuntimeHintsRegistrar {
 
   @Override
-  public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+  public void registerHints(final RuntimeHints hints, final ClassLoader classLoader) {
     hints.serialization().registerType(Request.class);
     hints.serialization().registerType(Response.class);
     hints.resources().registerPattern("org/joda/time/tz/*");
+
+    final List<TypeReference> typeReferences = List.of(
+        TypeReference.of("org.apache.logging.log4j.message.DefaultFlowMessageFactory"),
+        TypeReference.of("org.apache.logging.log4j.message.ParameterizedMessageFactory"),
+        TypeReference.of("java.util.ServiceLoader")
+    );
+
+        hints.reflection().registerTypes(typeReferences,
+            builder -> builder.withMembers(MemberCategory.values()));
   }
 }

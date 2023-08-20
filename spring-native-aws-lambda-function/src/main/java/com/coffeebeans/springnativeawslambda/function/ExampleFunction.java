@@ -27,14 +27,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import java.util.function.Function;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import software.amazon.lambda.powertools.logging.CorrelationIdPathConstants;
-import software.amazon.lambda.powertools.logging.Logging;
 
 @Component
-@Log4j2
+@Slf4j
 @Validated
 public class ExampleFunction implements
     Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
@@ -53,7 +51,6 @@ public class ExampleFunction implements
    * @throws JsonProcessingException
    */
   @Override
-  @Logging(correlationIdPath = CorrelationIdPathConstants.API_GATEWAY_REST)
   @SneakyThrows(value = JsonProcessingException.class)
   public APIGatewayProxyResponseEvent apply(final APIGatewayProxyRequestEvent proxyRequestEvent) {
     log.info("Converting request into a response...'");
