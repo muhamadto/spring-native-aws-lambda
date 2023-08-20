@@ -20,7 +20,6 @@ package com.coffeebeans.springnativeawslambda;
 
 import com.coffeebeans.springnativeawslambda.model.Request;
 import com.coffeebeans.springnativeawslambda.model.Response;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;

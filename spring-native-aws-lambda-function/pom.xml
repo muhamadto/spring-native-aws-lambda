@@ -169,39 +169,6 @@
     <finalName>${project.artifactId}</finalName>
     <directory>${project.basedir}/target</directory>
     <plugins>
-<!--      <plugin>-->
-<!--        <groupId>dev.aspectj</groupId>-->
-<!--        <artifactId>aspectj-maven-plugin</artifactId>-->
-<!--        <version>1.13.1</version>-->
-<!--        <dependencies>-->
-<!--          <dependency>-->
-<!--            <groupId>org.aspectj</groupId>-->
-<!--            <artifactId>aspectjtools</artifactId>-->
-<!--            <version>${aspectj.version}</version>-->
-<!--          </dependency>-->
-<!--        </dependencies>-->
-<!--        <configuration>-->
-<!--          <complianceLevel>20</complianceLevel>-->
-<!--          <forceAjcCompile>true</forceAjcCompile>-->
-<!--          <sources/>-->
-<!--          <weaveDirectories>-->
-<!--            <weaveDirectory>${project.build.directory}/classes</weaveDirectory>-->
-<!--          </weaveDirectories>-->
-<!--          <aspectLibraries>-->
-<!--            <aspectLibrary>-->
-<!--              <groupId>software.amazon.lambda</groupId>-->
-<!--              <artifactId>powertools-logging</artifactId>-->
-<!--            </aspectLibrary>-->
-<!--          </aspectLibraries>-->
-<!--        </configuration>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <goals>-->
-<!--              <goal>compile</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
     </plugins>
   </build>
 
