@@ -32,7 +32,7 @@ jobs:
       security-events: write
     strategy:
       matrix:
-        java-version: [ '20' ]
+        java-version: [ '21' ]
         distribution: [ 'temurin' ]
         language: [ 'java' ]
       fail-fast: true
