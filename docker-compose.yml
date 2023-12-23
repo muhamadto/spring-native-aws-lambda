@@ -13,7 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-version: '3.9'
+version: "3.9"
 services:
   spring-native-aws-lambda-function:
     image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:20-amazonlinux2-awscliv2
@@ -31,6 +31,7 @@ services:
       AWS_REGION: ap-southeast-2
       AWS_ACCESS_KEY_ID: local
       AWS_SECRET_ACCESS_KEY: local
+      AWS_ENDPOINT_URL: http://localstack:4566
       MAVEN_OPTS: |
         -DskipTests=true
         -Dcheckstyle.skip=true
@@ -52,10 +53,10 @@ services:
       print_info_message "block" "Creating 'spring-native-aws-lambda-function'" &&
 
       print_info_message "divider" "Package GraalVM function" &&
-      
+
       ./mvnw -ntp clean package -U -Pnative -pl spring-native-aws-lambda-function  --settings ./settings-spring.xml &&
-      
-      lambda_create_function lambda-FUNCTION provided.al2 512 ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function-native-zip.zip spring-native-aws-lambda-function &&
+
+      lambda_create_function lambda-FUNCTION provided.al2023 512 ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function-native-zip.zip spring-native-aws-lambda-function &&
       lambda_wait_for_function lambda-FUNCTION &&
       lambda_list_functions &&
 
@@ -67,20 +68,14 @@ services:
       - localstack
 
   localstack:
-    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
-    image: localstack/localstack:latest
+    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+    image: localstack/localstack
     ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+      - "127.0.0.1:4566:4566" # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559" # external services port range
     environment:
-      - DEBUG=${DEBUG-}
-      - DOCKER_HOST=unix:///var/run/docker.sock
-      - LOCALSTACK_HOST=localstack
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - DEBUG=${DEBUG:-0}
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-
-
-
-
-

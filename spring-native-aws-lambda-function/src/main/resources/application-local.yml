@@ -15,21 +15,4 @@
 
 spring:
   main:
-    banner-mode: off
-    web-application-type: none
-  jackson:
-    default-property-inclusion: NON_EMPTY
-    deserialization:
-      fail-on-unknown-properties: false
-    serialization:
-      write-dates-as-timestamps: false
-    mapper:
-      accept-case-insensitive-properties: true
-  cloud:
-    function:
-      web:
-        export:
-          enabled: false
-          debug: false
-      definition: exampleFunction
-debug: false
+    web-application-type: servlet
