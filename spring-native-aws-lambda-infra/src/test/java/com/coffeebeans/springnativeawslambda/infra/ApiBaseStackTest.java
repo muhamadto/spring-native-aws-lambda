@@ -21,7 +21,7 @@ package com.coffeebeans.springnativeawslambda.infra;
 import static org.assertj.core.api.Assertions.assertThat;
 import static software.amazon.awscdk.services.ec2.Vpc.Builder.create;
 import static software.amazon.awscdk.services.iam.Role.fromRoleArn;
-import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
+import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2023;
 import static software.amazon.awscdk.services.sns.Topic.fromTopicArn;
 import static software.amazon.awscdk.services.sqs.DeduplicationScope.MESSAGE_GROUP;
 
@@ -193,7 +193,7 @@ class ApiBaseStackTest {
         .hasFieldOrProperty("timeout");
 
     assertThat(actual.getRuntime())
-        .isEqualTo(PROVIDED_AL2);
+        .isEqualTo(PROVIDED_AL2023);
   }
 
   @Test
