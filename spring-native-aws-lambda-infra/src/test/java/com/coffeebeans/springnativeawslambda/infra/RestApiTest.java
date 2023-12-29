@@ -18,13 +18,14 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static cloud.pianola.cdk.fluent.assertion.CDKStackAssert.*;
+import org.junit.jupiter.api.Test;
+import software.amazon.awscdk.assertions.Match;
 
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
-import software.amazon.awscdk.assertions.Match;
+
+import static cloud.pianola.cdk.fluent.assertion.CDKStackAssert.assertThat;
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_COST_CENTRE;
 
 class RestApiTest extends TemplateSupport {
 
@@ -35,7 +36,7 @@ class RestApiTest extends TemplateSupport {
 
     assertThat(template)
         .containsRestApi("spring-native-aws-lambda-function-rest-api")
-        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+            .hasTag("COST_CENTRE", KEY_COST_CENTRE)
         .hasTag("ENV", TEST);
   }
 
@@ -72,7 +73,7 @@ class RestApiTest extends TemplateSupport {
         .hasRestApiId(("springnativeawslambdafunctionrestapi(.*)"))
         .hasDeploymentId(("springnativeawslambdafunctionrestapiDeployment(.*)"))
         .hasDependency("springnativeawslambdafunctionrestapiAccount(.*)")
-        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
+            .hasTag("COST_CENTRE", KEY_COST_CENTRE)
         .hasTag("ENV", TEST);
   }
 

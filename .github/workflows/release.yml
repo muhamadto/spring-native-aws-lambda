@@ -24,7 +24,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:20-amazonlinux2
+      image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:21-amazonlinux2
       options: --user=worker:ci
     permissions:
       id-token: write
@@ -42,6 +42,7 @@ jobs:
           duration_seconds: 3600
           role-session-name: github-actions-example-lambda
           aws-region: ap-southeast-2
+          mask-aws-account-id: 'true'
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Cache Maven packages
@@ -56,14 +57,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           ENV: ${{ env.ENV }}
           COST_CENTRE: ${{ env.COST_CENTRE }}
-        run: ./mvnw -ntp -Pnative clean package -DskipTests=true
+        run: ./mvnw -ntp -Pnative clean package -DskipTests
       - name: cdk diff
-        uses: muhamadto/aws-cdk-github-actions@v3
+        uses: muhamadto/aws-cdk-github-actions@v5
         with:
           cdk_subcommand: 'diff'
           actions_comment: false
       - name: cdk deploy
-        uses: muhamadto/aws-cdk-github-actions@v3
+        uses: muhamadto/aws-cdk-github-actions@v5
         with:
           cdk_subcommand: 'deploy'
           cdk_args: '--require-approval never'

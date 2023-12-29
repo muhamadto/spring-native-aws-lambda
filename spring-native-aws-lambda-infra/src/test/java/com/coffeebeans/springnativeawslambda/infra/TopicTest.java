@@ -18,20 +18,20 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_VALUE_COST_CENTRE;
-import static cloud.pianola.cdk.fluent.assertion.CDKStackAssert.*;
-
 import org.junit.jupiter.api.Test;
+
+import static cloud.pianola.cdk.fluent.assertion.CDKStackAssert.assertThat;
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_COST_CENTRE;
 
 class TopicTest extends TemplateSupport {
 
-  public static final String TEST = "test";
+    public static final String TEST = "test";
 
-  @Test
-  void should_have_dead_letter_topic() {
-    assertThat(template)
-        .containsTopic("spring-native-aws-lambda-function-dead-letter-topic")
-        .hasTag("COST_CENTRE", TAG_VALUE_COST_CENTRE)
-        .hasTag("ENV", TEST);
-  }
+    @Test
+    void should_have_dead_letter_topic() {
+        assertThat(template)
+                .containsTopic("spring-native-aws-lambda-function-dead-letter-topic")
+                .hasTag("COST_CENTRE", KEY_COST_CENTRE)
+                .hasTag("ENV", TEST);
+    }
 }

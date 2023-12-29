@@ -15,11 +15,8 @@
 
 version: "3.9"
 services:
-  spring-native-aws-lambda-function:
-    image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:20-amazonlinux2-awscliv2
-    ports:
-      - "8080:8080"
-      - "5005:5005"
+  spring-native-aws-lambda-function-infra:
+    image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:21-amazonlinux2-awscliv2
     volumes:
       - ./:/app
       - ${M2_REPO}:/home/worker/.m2
@@ -54,15 +51,24 @@ services:
 
       print_info_message "divider" "Package GraalVM function" &&
 
-      ./mvnw -ntp clean package -U -Pnative -pl spring-native-aws-lambda-function  --settings ./settings-spring.xml &&
+      ./mvnw -ntp  clean package -U -Pnative -DskipTests -pl spring-native-aws-lambda-function &&
 
+      print_info_message "divider" "Creating LAMBDA function" &&
       lambda_create_function lambda-FUNCTION provided.al2023 512 ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function-native-zip.zip spring-native-aws-lambda-function &&
       lambda_wait_for_function lambda-FUNCTION &&
       lambda_list_functions &&
-
-      print_info_message "block" "Successfully creating 'spring-native-aws-lambda-function'" &&
-
-      exit 0
+      
+      print_info_message "divider" "Creating API Gateway" &&
+      REST_API_ID="$(apigateway_create_restApi "somerestapiname")" &&
+      RESOURCE_ID="$(apigateway_create_resource "$$REST_API_ID" "somePathId")"      
+      apigateway_create_method "$$REST_API_ID" "$$RESOURCE_ID" "POST" &&
+      apigateway_create_lambda_integration "$$REST_API_ID" "$$RESOURCE_ID" "POST" "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:000000000000:function:lambda-FUNCTION/invocations" &&
+      apigateway_create_deployment "$$REST_API_ID" "test" &&
+      --rest-api-id &&
+      
+      print_info_message "plain" "Endpoint available at: http://localhost:4566/restapis/$$REST_API_ID/test/_user_request_/test" &&
+      
+      print_info_message "block" "Successfully creating 'spring-native-aws-lambda-function'"
       '
     depends_on:
       - localstack

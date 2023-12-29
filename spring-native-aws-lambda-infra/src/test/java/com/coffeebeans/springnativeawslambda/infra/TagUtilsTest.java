@@ -18,10 +18,13 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_COST_CENTRE;
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class TagUtilsTest {
 
@@ -35,7 +38,7 @@ class TagUtilsTest {
     final Map<String, String> tags = TagUtils.createTags(env, costCentre);
 
     assertThat(tags)
-        .containsEntry(TagUtils.TAG_KEY_ENV, env)
-        .containsEntry(TagUtils.TAG_KEY_COST_CENTRE, costCentre);
+            .containsEntry(KEY_ENV, env)
+            .containsEntry(KEY_COST_CENTRE, costCentre);
   }
 }

@@ -18,20 +18,20 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import java.util.Map;
-import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
+import java.util.Map;
+
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_COST_CENTRE;
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TagUtils {
 
-  public static final String TAG_KEY_ENV = "ENV";
-  public static final String TAG_KEY_COST_CENTRE = "COST_CENTRE";
-  public static final String TAG_VALUE_COST_CENTRE = "coffeeBeans-core";
-
   public static Map<String, String> createTags(@NotBlank final String env,
       @NotBlank final String costCentre) {
-    return Map.of(TAG_KEY_ENV, env, TAG_KEY_COST_CENTRE, costCentre);
+      return Map.of(KEY_ENV, env, KEY_COST_CENTRE, costCentre);
   }
 }

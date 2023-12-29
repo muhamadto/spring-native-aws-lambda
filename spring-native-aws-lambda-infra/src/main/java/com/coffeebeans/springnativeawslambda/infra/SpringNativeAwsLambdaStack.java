@@ -18,14 +18,6 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import static com.coffeebeans.springnativeawslambda.infra.TagUtils.TAG_KEY_ENV;
-import static software.amazon.awscdk.services.iam.ManagedPolicy.fromAwsManagedPolicyName;
-import static software.amazon.awscdk.services.lambda.Code.fromAsset;
-
-import java.util.List;
-import java.util.Map;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.iam.IManagedPolicy;
 import software.amazon.awscdk.services.iam.Role;
@@ -34,6 +26,15 @@ import software.amazon.awscdk.services.lambda.AssetCode;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.sns.Topic;
 import software.constructs.Construct;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Map;
+
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
+import static software.amazon.awscdk.services.iam.ManagedPolicy.fromAwsManagedPolicyName;
+import static software.amazon.awscdk.services.lambda.Code.fromAsset;
 
 public class SpringNativeAwsLambdaStack extends ApiBaseStack {
 
@@ -65,7 +66,7 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
     final AssetCode assetCode = fromAsset(lambdaCodePath);
 
     final Map<String, String> environment =
-        Map.of(ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE, stage, TAG_KEY_ENV, stage);
+            Map.of(ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE, stage, KEY_ENV, stage);
 
     final Function function = createFunction(
         LAMBDA_FUNCTION_ID,
