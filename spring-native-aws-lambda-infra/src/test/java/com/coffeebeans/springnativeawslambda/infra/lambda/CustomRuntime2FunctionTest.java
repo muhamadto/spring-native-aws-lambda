@@ -80,7 +80,6 @@ class CustomRuntime2FunctionTest {
         .onFailure(onFailure)
         .onSuccess(onSuccess)
         .retryAttempts(2)
-        // .allowAllOutbound(true)
         .allowPublicSubnet(false)
         .architecture(ARM_64)
         .codeSigningConfig(fromCodeSigningConfigArn(stack, "test-code-signing-config",
