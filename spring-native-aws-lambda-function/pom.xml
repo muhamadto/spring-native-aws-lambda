@@ -167,11 +167,7 @@
                 <buildArg>--verbose</buildArg>
                 <buildArg>--no-fallback</buildArg>
                 <buildArg>--enable-preview</buildArg>
-                <buildArg>--gc=G1</buildArg>
-                <buildArg>-march=native</buildArg>
                 <buildArg>--strict-image-heap</buildArg>
-                <buildArg>--enable-url-protocols=http</buildArg>
-                <buildArg>-H:+AddAllCharsets</buildArg>
                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
               </buildArgs>
             </configuration>
