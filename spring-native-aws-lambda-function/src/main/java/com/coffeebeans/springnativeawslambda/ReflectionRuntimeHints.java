@@ -19,21 +19,30 @@
 package com.coffeebeans.springnativeawslambda;
 
 import java.util.List;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.coffeebeans.springnativeawslambda.model.Request;
+import com.coffeebeans.springnativeawslambda.model.Response;
 import org.joda.time.DateTime;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.aot.hint.TypeReference;
+import org.springframework.lang.Nullable;
 
 public class ReflectionRuntimeHints implements RuntimeHintsRegistrar {
 
   @Override
-  public void registerHints(final RuntimeHints hints, final ClassLoader classLoader) {
+  public void registerHints(RuntimeHints hints, @Nullable ClassLoader classLoader) {
     final List<TypeReference> typeReferences = List.of(
-        TypeReference.of(DateTime.class)
-    );
+        TypeReference.of(DateTime.class),
+        TypeReference.of(Response.class),
+        TypeReference.of(Request.class),
+        TypeReference.of(APIGatewayProxyResponseEvent.class),
+        TypeReference.of(APIGatewayProxyRequestEvent.class),
+        TypeReference.of(APIGatewayProxyRequestEvent.ProxyRequestContext.class),
+        TypeReference.of(APIGatewayProxyRequestEvent.RequestIdentity.class));
 
-    hints.reflection().registerTypes(typeReferences,
-        builder -> builder.withMembers(MemberCategory.values()));
+    hints.reflection().registerTypes(typeReferences, builder -> builder.withMembers(MemberCategory.values()));
   }
 }

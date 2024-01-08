@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static software.amazon.awscdk.services.lambda.Architecture.ARM_64;
 import static software.amazon.awscdk.services.lambda.CodeSigningConfig.fromCodeSigningConfigArn;
-import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
+import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2023;
 import static software.amazon.awscdk.services.sns.Topic.fromTopicArn;
 
 import com.coffeebeans.springnativeawslambda.infra.TestLambdaUtils;
@@ -84,7 +84,6 @@ class CustomRuntime2FunctionTest {
         .onFailure(onFailure)
         .onSuccess(onSuccess)
         .retryAttempts(2)
-        .allowAllOutbound(true)
         .allowPublicSubnet(false)
         .architecture(ARM_64)
         .codeSigningConfig(fromCodeSigningConfigArn(stack, "test-code-signing-config",
@@ -137,7 +136,7 @@ class CustomRuntime2FunctionTest {
         .isNotNull();
 
     assertThat(actual.getRuntime())
-        .isEqualTo(PROVIDED_AL2);
+        .isEqualTo(PROVIDED_AL2023);
 
     assertThat(actual.getTimeout())
         .isEqualTo(timeout);
@@ -154,7 +153,7 @@ class CustomRuntime2FunctionTest {
 
     assertThat(actual.getTimeout()
         .toSeconds()) // actual.getTimeout() won't be null Builder#timeout() has a default value of 10 seconds
-        .isEqualTo(DEFAULT_TIMEOUT.toSeconds());
+            .isEqualTo(DEFAULT_TIMEOUT.toSeconds());
   }
 
   @Test

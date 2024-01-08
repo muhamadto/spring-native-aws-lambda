@@ -21,7 +21,7 @@ package com.coffeebeans.springnativeawslambda.infra.lambda;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.collections4.MapUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
-import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2;
+import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2023;
 
 import java.util.List;
 import java.util.Map;
@@ -80,7 +80,7 @@ public class CustomRuntime2Function extends Function {
    */
   @Override
   public @NotNull Runtime getRuntime() {
-    return PROVIDED_AL2;
+    return PROVIDED_AL2023;
   }
 
   public static final class Builder implements
@@ -104,7 +104,7 @@ public class CustomRuntime2Function extends Function {
       this.id = id;
       this.props = new FunctionProps.Builder();
 
-      this.props.runtime(PROVIDED_AL2);
+      this.props.runtime(PROVIDED_AL2023);
     }
 
     /**

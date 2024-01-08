@@ -27,8 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: [ '20' ]
-        graalvm-version: [ '20.0.2' ]
+        java-version: [ '21' ]
+        graalvm-version: [ '21.0.1' ]
         distribution: [ 'graalvm' ]
       fail-fast: true
     steps:

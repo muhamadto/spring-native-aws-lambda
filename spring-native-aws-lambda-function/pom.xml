@@ -42,14 +42,8 @@
   </developers>
 
   <properties>
-    <spring-cloud.version>2022.0.3</spring-cloud.version>
-
-    <repackage.classifier/>
-    <native.build.args>
-      --enable-url-protocols=http
-      -H:+AddAllCharsets
-      -H:+ReportExceptionStackTraces
-    </native.build.args>
+    <spring-cloud.version>2023.0.0</spring-cloud.version>
+    <repackage.classifier />
   </properties>
 
   <dependencyManagement>
@@ -169,19 +163,14 @@
             <artifactId>native-maven-plugin</artifactId>
             <configuration>
               <mainClass>com.coffeebeans.springnativeawslambda.Application</mainClass>
-              <buildArgs>
-                --no-fallback
+              <buildArgs combine.children="append">
+                <buildArg>--verbose</buildArg>
+                <buildArg>--no-fallback</buildArg>
+                <buildArg>--enable-preview</buildArg>
+                <buildArg>--strict-image-heap</buildArg>
+                <buildArg>-H:+ReportExceptionStackTraces</buildArg>
               </buildArgs>
             </configuration>
-            <executions>
-              <execution>
-                <id>build-native</id>
-                <goals>
-                  <goal>compile-no-fork</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
           </plugin>
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>

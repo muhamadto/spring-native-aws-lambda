@@ -25,8 +25,7 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 @SpringBootApplication
 @ImportRuntimeHints({
     ReflectionRuntimeHints.class,
-    ResourcesRuntimeHints.class,
-    SerializationRuntimeHints.class
+    ResourcesRuntimeHints.class
 })
 public class Application {
 

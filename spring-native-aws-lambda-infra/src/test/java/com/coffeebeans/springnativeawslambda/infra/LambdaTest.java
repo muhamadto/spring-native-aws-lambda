@@ -48,7 +48,7 @@ class LambdaTest extends TemplateSupport {
         .hasEnvironmentVariable("SPRING_PROFILES_ACTIVE", TEST)
         .hasDescription("Lambda example with spring native")
         .hasMemorySize(512)
-        .hasRuntime("provided.al2")
+        .hasRuntime("provided.al2023")
         .hasTimeout(3);
   }
 
