@@ -20,7 +20,7 @@
 ## Test
 
 ```bash
-$ sdk use java 22.2.r17-grl
+$ sdk use java 21.0.1-graal
 $ ./mvnw -ntp clean verify -U
 ```
 
