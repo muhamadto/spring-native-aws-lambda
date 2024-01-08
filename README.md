@@ -56,7 +56,7 @@ $ ./mvnw -ntp clean verify -U
 1. Run the following commands
     ```shell
     $ export SPRING_PROFILES_ACTIVE=local
-    $ ./mvnw -ntp  clean package -U -Pnative -DskipTests -pl spring-native-aws-lambda-function
+    $ ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function
     $ ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
     ```
    The service starts in less than 100 ms

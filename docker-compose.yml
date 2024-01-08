@@ -51,7 +51,7 @@ services:
 
       print_info_message "divider" "Package GraalVM function" &&
 
-      ./mvnw -ntp  clean package -U -Pnative -DskipTests -pl spring-native-aws-lambda-function &&
+      ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function &&
 
       print_info_message "divider" "Creating LAMBDA function" &&
       lambda_create_function lambda-FUNCTION provided.al2023 512 ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function-native-zip.zip spring-native-aws-lambda-function &&
