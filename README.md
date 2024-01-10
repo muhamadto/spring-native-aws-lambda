@@ -35,7 +35,7 @@ $ ./mvnw -ntp clean verify -U
    ```
 2. Make a call
     ```shell
-   $ curl --location --request POST 'http://localhost:4566/restapis/<restApiId>/test/_user_request_/test' \
+   $ curl --location --request POST 'http://localhost:4566/restapis/<restApiId>/compose/_user_request_/somePathId' \
    --header 'Content-Type: application/json' \
    --data-raw '{
         "body": "{ \"name\": \"CoffeeBeans\" }"
