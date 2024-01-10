@@ -11,17 +11,17 @@
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=bugs)](https://sonarcloud.io/summary/new_code?id=muhamadto_spring-native-aws-lambda)
 [![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_spring-native-aws-lambda&metric=coverage)](https://sonarcloud.io/component_measures?id=muhamadto_spring-native-aws-lambda&metric=new_coverage&view=list)
 
-| Component     | Version  |
-|---------------|----------|
-| JDK           | 20       |
-| Spring Cloud  | 2022.0.1 |
-| Spring Boot   | 3.1.2    |
+| Component    | Version  |
+|--------------|----------|
+| JDK          | 21       |
+| Spring Cloud | 2023.0.0 |
+| Spring Boot  | 3.2.1    |
 
 ## Test
 
 ```bash
-$ sdk use java 22.2.r17-grl
-$ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
+$ sdk use java 21.0.1-graal
+$ ./mvnw -ntp clean verify -U
 ```
 
 ## Building and Running
@@ -33,12 +33,30 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
    ```shell
    $ docker-compose up
    ```
+2. Make a call
+    ```shell
+   $ curl --location --request POST 'http://localhost:4566/restapis/<restApiId>/compose/_user_request_/somePathId' \
+   --header 'Content-Type: application/json' \
+   --data-raw '{
+        "body": "{ \"name\": \"CoffeeBeans\" }"
+      }'
+    ```
+   The service responds
+   ```json
+   [
+       {
+           "name": "CoffeeBeans",
+           "saved": true
+       }
+   ]
+   ```
 
 #### Using `mvnw`
-1. Set `spring.main.web-application-type` to `servlet` for local development
-2. Run the following commands
+
+1. Run the following commands
     ```shell
-    $ ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function  --settings ./settings-spring.xml
+    $ export SPRING_PROFILES_ACTIVE=local
+    $ ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function
     $ ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
     ```
    The service starts in less than 100 ms
@@ -54,12 +72,12 @@ $ ./mvnw -ntp clean verify -U --settings ./settings-spring.xml
    2022-12-07 02:56:51.763  INFO 42417 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
    2022-12-07 02:56:51.763  INFO 42417 --- [           main] c.c.s.Application   : Started Application in 0.084 seconds (JVM running for 0.087)
    ```
-3. Make a call
+2. Make a call
     ```shell
    $ curl --location --request POST 'http://localhost:8080' \
    --header 'Content-Type: application/json' \
    --data-raw '{
-        "name": "CoffeeBeans"
+        "body": "{ \"name\": \"CoffeeBeans\" }"
       }'
     ```
    The service responds
@@ -340,42 +358,3 @@ Now that the setup is done you can deploy to AWS.
       }'
     ```
 3. Et voila! It runs with 500 ms for cold start.
-
-## Maven Repository
-
-This project uses experimental dependencies from Spring.
-
-* One way to pul them is to add `repositories` and `pluginRepositories` elements to `pom.xml`.
-
-* An alternative add them to `settings.xml` as following
-
-```xml
-
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <profiles>
-    <profile>
-      <id>spring-native-demo</id>
-      <repositories>
-        <repository>
-          <id>spring-releases</id>
-          <name>Spring Releases</name>
-          <url>https://repo.spring.io/release</url>
-        </repository>
-      </repositories>
-
-      <pluginRepositories>
-        <pluginRepository>
-          <id>spring-releases</id>
-          <name>Spring Releases</name>
-          <url>https://repo.spring.io/release</url>
-        </pluginRepository>
-      </pluginRepositories>
-    </profile>
-  </profiles>
-  <activeProfiles>
-    <activeProfile>spring-native-demo</activeProfile>
-  </activeProfiles>
-</settings>
-```

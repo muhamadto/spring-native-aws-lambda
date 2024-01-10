@@ -1,7 +1,7 @@
-target/
-!spring-native-aws-lambda-function/.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+**/target/
+cdk.out/
+volume/
+**/maven-wrapper.jar
 
 ### STS ###
 .apt_generated
@@ -30,5 +30,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-**/maven-wrapper.jar
