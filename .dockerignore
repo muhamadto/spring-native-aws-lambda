@@ -15,5 +15,5 @@ README.md
 
 settings-spring.xml
 
-spring-native-aws-lambda-infra
+spring-native-aws-service-infra
 docker-compose.yml
