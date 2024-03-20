@@ -79,8 +79,8 @@
   </properties>
 
   <modules>
-    <module>spring-native-aws-lambda-function</module>
-    <module>spring-native-aws-lambda-infra</module>
+    <module>spring-native-aws-service</module>
+    <module>spring-native-aws-service-infra</module>
   </modules>
 
   <dependencyManagement>
@@ -88,12 +88,12 @@
       <!-- SPRING-NATIVE-AWS-LAMBDA -->
       <dependency>
         <groupId>com.coffeebeans</groupId>
-        <artifactId>spring-native-aws-lambda-function</artifactId>
+        <artifactId>spring-native-aws-service</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>com.coffeebeans</groupId>
-        <artifactId>spring-native-aws-lambda-infra</artifactId>
+        <artifactId>spring-native-aws-service-infra</artifactId>
         <version>${project.version}</version>
       </dependency>
 

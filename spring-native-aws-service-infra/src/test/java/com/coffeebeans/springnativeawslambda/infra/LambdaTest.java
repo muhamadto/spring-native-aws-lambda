@@ -37,7 +37,7 @@ class LambdaTest extends TemplateSupport {
     void should_have_lambda_function() {
 
         assertThat(template)
-                .containsFunction("spring-native-aws-lambda-function")
+                .containsFunction("spring-native-aws-function")
                 .hasHandler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
                 .hasCode("test-cdk-bucket", "(.*).zip")
                 .hasRole("springnativeawslambdafunctionrole(.*)")

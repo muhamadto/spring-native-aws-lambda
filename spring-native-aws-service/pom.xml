@@ -28,7 +28,7 @@
     <version>${revision}</version>
   </parent>
 
-  <artifactId>spring-native-aws-lambda-function</artifactId>
+  <artifactId>spring-native-aws-service</artifactId>
   <name>${project.artifactId}</name>
   <packaging>jar</packaging>
   <description>Demo project for Spring cloud function with graalvm native image</description>

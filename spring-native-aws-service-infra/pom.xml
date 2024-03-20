@@ -28,7 +28,7 @@
     <version>${revision}</version>
   </parent>
 
-  <artifactId>spring-native-aws-lambda-infra</artifactId>
+  <artifactId>spring-native-aws-service-infra</artifactId>
   <name>${project.artifactId}</name>
   <packaging>jar</packaging>
   <description>Infrastructure as Code for deploying a Spring cloud function demo project with

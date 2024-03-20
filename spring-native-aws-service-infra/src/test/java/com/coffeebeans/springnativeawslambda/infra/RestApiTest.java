@@ -35,7 +35,7 @@ class RestApiTest extends TemplateSupport {
   void should_have_rest_api() {
 
     assertThat(template)
-        .containsRestApi("spring-native-aws-lambda-function-rest-api")
+        .containsRestApi("spring-native-aws-function-rest-api")
             .hasTag("COST_CENTRE", KEY_COST_CENTRE)
         .hasTag("ENV", TEST);
   }

@@ -35,13 +35,11 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public final class Application {
 
-    private static final String DEV_STACK_NAME = "spring-native-aws-lambda-function-dev-stack";
-    private static final String PRD_STACK_NAME = "spring-native-aws-lambda-function-prd-stack";
+    private static final String DEV_STACK_NAME = "spring-native-aws-function-dev";
+    private static final String PRD_STACK_NAME = "spring-native-aws-function-prd";
     private static final String ENVIRONMENT_NAME_DEV = "dev";
     private static final String ENVIRONMENT_NAME_PRD = "prd";
-    private static final String LAMBDA_CODE_PATH =
-            SpringNativeAwsLambdaStack.LAMBDA_FUNCTION_ID
-                    + "/target/spring-native-aws-lambda-function-native-zip.zip";
+    private static final String LAMBDA_CODE_PATH = "spring-native-aws-service/target/spring-native-aws-function-native-zip.zip";
     private static final String QUALIFIER = "cbcore";
     private static final String FILE_ASSETS_BUCKET_NAME = "cbcore-cdk-bucket";
 

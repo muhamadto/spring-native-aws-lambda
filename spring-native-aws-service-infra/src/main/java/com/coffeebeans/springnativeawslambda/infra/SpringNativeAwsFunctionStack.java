@@ -18,13 +18,22 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
+import com.coffeebeans.springnativeawslambda.infra.lambda.CustomRuntime2023Function;
+import org.apache.commons.lang3.StringUtils;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
+import software.amazon.awscdk.services.apigateway.LambdaRestApi;
+import software.amazon.awscdk.services.apigateway.Resource;
+import software.amazon.awscdk.services.apigateway.StageOptions;
 import software.amazon.awscdk.services.iam.IManagedPolicy;
 import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.iam.ServicePrincipal;
 import software.amazon.awscdk.services.lambda.AssetCode;
 import software.amazon.awscdk.services.lambda.Function;
+import software.amazon.awscdk.services.lambda.FunctionProps;
 import software.amazon.awscdk.services.sns.Topic;
+import software.amazon.awscdk.services.sns.Topic.Builder;
 import software.constructs.Construct;
 
 import javax.validation.constraints.NotBlank;
@@ -35,30 +44,31 @@ import java.util.Map;
 import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
 import static software.amazon.awscdk.services.iam.ManagedPolicy.fromAwsManagedPolicyName;
 import static software.amazon.awscdk.services.lambda.Code.fromAsset;
+import static software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2023;
 
-public class SpringNativeAwsLambdaStack extends ApiBaseStack {
-
-  static final String LAMBDA_FUNCTION_ID = "spring-native-aws-lambda-function";
-  private static final String REST_API_ID = LAMBDA_FUNCTION_ID + "-rest-api";
-  private static final String DEAD_LETTER_TOPIC_ID = LAMBDA_FUNCTION_ID + "-dead-letter-topic";
+public class SpringNativeAwsFunctionStack extends Stack {
+  private static final int LAMBDA_FUNCTION_TIMEOUT_IN_SECONDS = 3;
+  private static final int LAMBDA_FUNCTION_MEMORY_SIZE = 512;
+  private static final int LAMBDA_FUNCTION_RETRY_ATTEMPTS = 2;
   private static final String LAMBDA_HANDLER = "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest";
   private static final String ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE = "SPRING_PROFILES_ACTIVE";
 
-  public SpringNativeAwsLambdaStack(
+  public SpringNativeAwsFunctionStack(
       @NotNull final Construct scope,
       @NotBlank final String id,
       @NotBlank final String lambdaCodePath,
       @NotBlank final String stage,
       @NotNull final StackProps props) {
 
-    super(scope, id, props);
+    super(scope, id);
 
-    final Topic deadLetterTopic = createTopic(DEAD_LETTER_TOPIC_ID);
+    final Topic deadLetterTopic = Topic.Builder.create(this, "DeadLetterTopic")
+        .build();
 
     final List<IManagedPolicy> managedPolicies =
         List.of(fromAwsManagedPolicyName("service-role/AWSLambdaBasicExecutionRole"));
 
-    final Role role = Role.Builder.create(this, LAMBDA_FUNCTION_ID + "-role")
+    final Role role = Role.Builder.create(this, "Role")
         .assumedBy(new ServicePrincipal("lambda.amazonaws.com"))
         .managedPolicies(managedPolicies)
         .build();
@@ -68,14 +78,32 @@ public class SpringNativeAwsLambdaStack extends ApiBaseStack {
     final Map<String, String> environment =
             Map.of(ENVIRONMENT_VARIABLE_SPRING_PROFILES_ACTIVE, stage, KEY_ENV, stage);
 
-    final Function function = createFunction(
-        LAMBDA_FUNCTION_ID,
-        LAMBDA_HANDLER,
-        assetCode,
-        deadLetterTopic,
-        role,
-        environment);
+    final FunctionProps functionProps = FunctionProps.builder()
+        .runtime(PROVIDED_AL2023)
+        .description("Example of a Spring Native AWS Lambda Function using CDK")
+        .code(assetCode)
+        .handler(LAMBDA_HANDLER)
+        .role(role)
+        .environment(environment)
+        .deadLetterTopic(deadLetterTopic)
+        .timeout(Duration.seconds(LAMBDA_FUNCTION_TIMEOUT_IN_SECONDS))
+        .memorySize(LAMBDA_FUNCTION_MEMORY_SIZE)
+        .retryAttempts(LAMBDA_FUNCTION_RETRY_ATTEMPTS)
+        .build();
 
-    createLambdaRestApi(stage, REST_API_ID, "name", "POST", function, true);
+    final Function function = new CustomRuntime2023Function(this, "Lambda", functionProps)
+        .getFunction();
+
+    // point to the lambda
+    final LambdaRestApi lambdaRestApi = LambdaRestApi.Builder.create(this, "ResrApi")
+        .handler(function)
+        .proxy(true)
+        .deployOptions(StageOptions.builder().stageName(stage).build())
+        .build();
+
+    // get root resource to add methods
+    final Resource resource = lambdaRestApi.getRoot().addResource("variables");
+    resource.addMethod(StringUtils.toRootUpperCase("ANY"));
+    resource.addMethod(StringUtils.toRootUpperCase("GET"));
   }
 }

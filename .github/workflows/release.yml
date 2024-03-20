@@ -58,8 +58,8 @@ jobs:
           ENV: ${{ env.ENV }}
           COST_CENTRE: ${{ env.COST_CENTRE }}
         run: |
-          ./mvnw -ntp clean verify -DskipTests -pl spring-native-aws-lambda-infra
-          ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function
+          ./mvnw -ntp clean verify -DskipTests -pl spring-native-aws-service-infra
+          ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-function
       - name: cdk diff
         uses: muhamadto/aws-cdk-github-actions@v5
         with:

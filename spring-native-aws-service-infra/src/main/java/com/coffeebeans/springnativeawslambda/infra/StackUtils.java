@@ -31,7 +31,7 @@ import software.amazon.awscdk.StackProps;
 public final class StackUtils {
 
   @NotNull
-  public static SpringNativeAwsLambdaStack createStack(
+  public static SpringNativeAwsFunctionStack createStack(
       @NotNull final App app,
       @NotBlank final String stackName,
       @NotBlank final String lambdaCodePath,
@@ -39,7 +39,7 @@ public final class StackUtils {
       @NotBlank final String fileAssetsBucketName,
       @NotEmpty final String stage) {
     final StackProps stackProps = createStackProps(stackName, qualifier, fileAssetsBucketName);
-    return new SpringNativeAwsLambdaStack(app, stackName, lambdaCodePath, stage, stackProps);
+    return new SpringNativeAwsFunctionStack(app, stackName, lambdaCodePath, stage, stackProps);
   }
 
   @NotNull

@@ -30,7 +30,7 @@ class TopicTest extends TemplateSupport {
     @Test
     void should_have_dead_letter_topic() {
         assertThat(template)
-                .containsTopic("spring-native-aws-lambda-function-dead-letter-topic")
+                .containsTopic("spring-native-aws-function-dead-letter-topic")
                 .hasTag("COST_CENTRE", KEY_COST_CENTRE)
                 .hasTag("ENV", TEST);
     }

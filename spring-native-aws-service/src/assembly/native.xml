@@ -40,7 +40,7 @@
       <useDefaultExcludes>true</useDefaultExcludes>
       <fileMode>0775</fileMode>
       <includes>
-        <include>spring-native-aws-lambda-function</include>
+        <include>spring-native-aws-function</include>
       </includes>
     </fileSet>
   </fileSets>
