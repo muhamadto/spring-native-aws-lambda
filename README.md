@@ -1,4 +1,4 @@
-# spring-native-aws-lambda
+# spring-native-aws-function
 
 [![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml)
 [![Build](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml)
@@ -56,8 +56,8 @@ $ ./mvnw -ntp clean verify -U
 1. Run the following commands
     ```shell
     $ export SPRING_PROFILES_ACTIVE=local
-    $ ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function
-    $ ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
+    $ ./mvnw -ntp clean -DskipTests -Pnative native:compile package -pl spring-native-aws-service 
+    $ ./spring-native-aws-service/target/spring-native-aws-service
     ```
    The service starts in less than 100 ms
    ```shell
@@ -134,7 +134,7 @@ and the following trust relationship
                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
             },
             "StringLike": {
-               "token.actions.githubusercontent.com:sub": "repo:{github-account-or-org}/spring-native-aws-lambda:*"
+               "token.actions.githubusercontent.com:sub": "repo:{github-account-or-org}/spring-native-aws-service:*"
             }
          }
       }
@@ -259,7 +259,7 @@ and the following trust relationship
             "SNS:UntagResource"
          ],
          "Resource": [
-            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-dead-letter-topic"
+            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-function-dead-letter-topic"
          ]
       },
       {
@@ -281,8 +281,8 @@ and the following trust relationship
             "lambda:UpdateFunctionConfiguration"
          ],
          "Resource": [
-            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-lambda-function",
-            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-lambda-function:$LATEST"
+            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-function",
+            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-function:$LATEST"
          ]
       },
       {
@@ -310,9 +310,9 @@ and the following trust relationship
             "iam:DetachRolePolicy"
          ],
          "Resource": [
-            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-springnativeawslambdafun-*",
-            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-springnativeawslambdares-4FVJBBHF9EL2",
-            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-function-rest-api/CloudWatchRole"
+            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-service-springnativeawslambdafun-*",
+            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-service-springnativeawslambdares-4FVJBBHF9EL2",
+            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-function-rest-api/CloudWatchRole"
          ]
       },
       {
@@ -346,7 +346,7 @@ in step 4
 Now that the setup is done you can deploy to AWS.
 
 1. Create a new release in
-   Github [releases page](https://github.com/muhamadto/spring-native-aws-lambda/releases),
+   Github [releases page](https://github.com/muhamadto/spring-native-aws-service/releases),
    the [github action](.github/workflows/release.yml) will start and a deployment to AWS
    environment.
 2. Test via curl
