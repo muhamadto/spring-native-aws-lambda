@@ -37,6 +37,8 @@ import software.amazon.awscdk.Tags;
 public final class Application extends AbstractApp {
   private static final String ENVIRONMENT_NAME_DEV = "dev";
   private static final String ENVIRONMENT_NAME_PRD = "prd";
+
+
   private static final String LAMBDA_CODE_PATH = "spring-native-aws-service/target/spring-native-aws-service-native-zip.zip";
 
   public static void main(final String... args) {
