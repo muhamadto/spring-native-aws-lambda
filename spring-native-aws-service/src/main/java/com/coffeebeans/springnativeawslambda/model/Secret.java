@@ -21,7 +21,8 @@ package com.coffeebeans.springnativeawslambda.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,13 +32,25 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Response {
-
+public class Secret {
   @NotBlank
   @JsonProperty(access = Access.READ_ONLY)
-  private String name;
+  private String id;
 
-  @NotNull
-  @JsonProperty(access = Access.READ_ONLY)
-  private boolean saved;
+  @NotBlank
+  private String env;
+
+  @NotBlank
+  private String costCentre;
+
+  @NotBlank
+  private String applicationName;
+
+  @NotEmpty
+  private Map<String, String> items;
+
+  public String getId() {
+    return "%s-%s-%s".formatted(env, costCentre, applicationName).toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+  }
+
 }

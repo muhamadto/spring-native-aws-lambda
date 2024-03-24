@@ -37,13 +37,13 @@ import software.amazon.awscdk.Tags;
 public final class Application extends AbstractApp {
   private static final String ENVIRONMENT_NAME_DEV = "dev";
   private static final String ENVIRONMENT_NAME_PRD = "prd";
-  private static final String LAMBDA_CODE_PATH = "spring-native-aws-service/target/spring-native-aws-function-native-zip.zip";
+  private static final String LAMBDA_CODE_PATH = "spring-native-aws-service/target/spring-native-aws-service-native-zip.zip";
 
   public static void main(final String... args) {
     final Application app = new Application();
 
     final String env = System.getenv(KEY_ENV);
-    checkNotNull(env, "'env' environment variable is required");
+    checkNotNull(env, "'ENVIRONMENT' environment variable is required");
 
     switch (env) {
       case ENVIRONMENT_NAME_DEV -> new SpringNativeAwsFunctionStack(app, COFFEE_BEANS_DEV_111111111111_AP_SOUTHEAST_2, LAMBDA_CODE_PATH, env);

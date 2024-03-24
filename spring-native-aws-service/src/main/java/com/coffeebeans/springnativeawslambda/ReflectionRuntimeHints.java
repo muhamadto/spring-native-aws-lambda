@@ -18,25 +18,16 @@
 
 package com.coffeebeans.springnativeawslambda;
 
-import com.coffeebeans.springnativeawslambda.entity.Secret;
-import com.coffeebeans.springnativeawslambda.repository.SecretRepository;
-import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import java.util.List;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.coffeebeans.springnativeawslambda.model.Request;
-import com.coffeebeans.springnativeawslambda.model.Response;
-import java.util.Map;
+import com.coffeebeans.springnativeawslambda.model.Secret;
 import org.joda.time.DateTime;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.aot.hint.TypeReference;
 import org.springframework.lang.Nullable;
-import software.amazon.awssdk.enhanced.dynamodb.DefaultAttributeConverterProvider;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
-import software.amazon.awssdk.enhanced.dynamodb.internal.mapper.BeanTableSchemaAttributeTags;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.BeanTableSchema;
 
 public class ReflectionRuntimeHints implements RuntimeHintsRegistrar {
 
@@ -44,8 +35,7 @@ public class ReflectionRuntimeHints implements RuntimeHintsRegistrar {
   public void registerHints(final RuntimeHints hints, @Nullable final ClassLoader classLoader) {
     final List<TypeReference> typeReferences = List.of(
         TypeReference.of(DateTime.class),
-        TypeReference.of(Response.class),
-        TypeReference.of(Request.class),
+        TypeReference.of(Secret.class),
         TypeReference.of(APIGatewayProxyResponseEvent.class),
         TypeReference.of(APIGatewayProxyRequestEvent.class),
         TypeReference.of(APIGatewayProxyRequestEvent.ProxyRequestContext.class)

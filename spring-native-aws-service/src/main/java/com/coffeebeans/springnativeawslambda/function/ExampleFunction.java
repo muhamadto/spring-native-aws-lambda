@@ -20,9 +20,7 @@ package com.coffeebeans.springnativeawslambda.function;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.coffeebeans.springnativeawslambda.entity.Secret;
-import com.coffeebeans.springnativeawslambda.model.Request;
-import com.coffeebeans.springnativeawslambda.model.Response;
+import com.coffeebeans.springnativeawslambda.model.Secret;
 import com.coffeebeans.springnativeawslambda.repository.SecretRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +29,6 @@ import java.util.Map;
 import java.util.function.Function;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -66,24 +63,14 @@ public class ExampleFunction implements
   public APIGatewayProxyResponseEvent apply(final APIGatewayProxyRequestEvent proxyRequestEvent) {
     log.info("Converting request into a response...'");
 
-    final Request request = objectMapper.readValue(proxyRequestEvent.getBody(), Request.class);
+    final Secret secret = objectMapper.readValue(proxyRequestEvent.getBody(), Secret.class);
 
-    final Response response = Response.builder()
-        .name(request.getName())
-        .saved(true)
-        .build();
-
-    this.secretRepository.save(Secret.builder()
-        .env("dev")
-        .costCentre("coffeebeans")
-        .applicationName("native-lambda")
-        .variables(Map.of("ENV", "dev", "PASSWORD", "changeit"))
-        .build());
+    this.secretRepository.save(com.coffeebeans.springnativeawslambda.entity.Secret.of(secret));
 
     log.info("Converted request into a response.");
 
     return new APIGatewayProxyResponseEvent()
         .withStatusCode(200)
-        .withBody(objectMapper.writeValueAsString(response));
+        .withBody(objectMapper.writeValueAsString(secret));
   }
 }

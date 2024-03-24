@@ -358,3 +358,9 @@ Now that the setup is done you can deploy to AWS.
       }'
     ```
 3. Et voila! It runs with 500 ms for cold start.
+ 
+```shell
+   curl --location --request POST 'https://lmk0qo0xrl.execute-api.ap-southeast-2.amazonaws.com/dev/
+   --header 'Content-Type: application/json' \
+   --data-raw '{ "env": "production", "costCentre": "1234", "applicationName": "some-app", "items": [ { "key": "GITHUB_TOKEN", "value": "WOAH" }, { "key": "AWS_ACCESS_KEY_ID", "value": "OMG" }, { "key": "AWS_SECRET_ACCESS_KEY", "value": "OH, NO" } ] }'
+```
