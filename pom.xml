@@ -298,16 +298,6 @@
     </plugins>
   </build>
 
-  <repositories>
-    <repository>
-      <id>github</id>
-      <url>https://public:&#48;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@maven.pkg.github.com/muhamadto/*</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
