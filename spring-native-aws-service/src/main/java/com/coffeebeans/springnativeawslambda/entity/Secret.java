@@ -6,14 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamoDbBean
 public class Secret implements Serializable {
 
   private String env;
@@ -24,11 +21,22 @@ public class Secret implements Serializable {
 
   private String partitionKey;
 
-  private Map<String, String> variables;
+  private Map<String, String> items;
 
-  @DynamoDbPartitionKey
   public String getPartitionKey() {
     return env + costCentre + applicationName;
   }
 
+  public static Secret of(final com.coffeebeans.springnativeawslambda.model.Secret secretModel) {
+    final String env = secretModel.getEnv();
+    final String costCentre = secretModel.getCostCentre();
+    final String applicationName = secretModel.getApplicationName();
+    return Secret.builder()
+        .env(env)
+        .costCentre(costCentre)
+        .applicationName(applicationName)
+        .items(secretModel.getItems())
+        .partitionKey(secretModel.getId())
+        .build();
+  }
 }

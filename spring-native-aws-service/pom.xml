@@ -166,7 +166,6 @@
           <plugin>
             <groupId>org.graalvm.buildtools</groupId>
             <artifactId>native-maven-plugin</artifactId>
-            <version>0.10.1</version>
             <configuration>
               <mainClass>com.coffeebeans.springnativeawslambda.Application</mainClass>
               <buildArgs combine.children="append">

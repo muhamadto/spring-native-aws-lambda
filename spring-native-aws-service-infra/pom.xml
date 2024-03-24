@@ -56,8 +56,8 @@
     <!-- AWS CDK ENDS -->
 
     <dependency>
-      <groupId>com.coffeebeans</groupId>
-      <artifactId>coffeebeans-cdk-core</artifactId>
+      <groupId>io.sandpipers</groupId>
+      <artifactId>sandpipers-cdk-core</artifactId>
     </dependency>
 
     <!-- UTILS -->
@@ -99,8 +99,8 @@
 
     <!-- TEST -->
     <dependency>
-      <groupId>com.coffeebeans</groupId>
-      <artifactId>coffeebeans-cdk-assertions</artifactId>
+      <groupId>io.sandpipers</groupId>
+      <artifactId>sandpipers-cdk-assertions</artifactId>
       <scope>test</scope>
     </dependency>
 
