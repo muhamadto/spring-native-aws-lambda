@@ -49,7 +49,7 @@ services:
       '
       function package_spring_native_function() {
           if [ "$$BUILD_ARTIFACT" = "true" ]; then
-            ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl "$$FUNCTION_NAME"
+            ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl "$$FUNCTION_NAME" --settings /home/worker/.m2/settings-nonqantas.xml
           else
             print_info_message "plain" "BUILD_ARTIFACT environment variable is not set. Skipping Maven build."
           fi
