@@ -21,4 +21,4 @@ set -euo pipefail
 
 cd ${LAMBDA_TASK_ROOT:-.}
 
-./spring-native-aws-function
+./spring-native-aws-service

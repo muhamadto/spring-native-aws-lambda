@@ -43,12 +43,17 @@ $ ./mvnw -ntp clean verify -U
     ```
    The service responds
    ```json
-   [
-       {
-           "name": "CoffeeBeans",
-           "saved": true
-       }
-   ]
+   {
+      "id": "production1234someapp",
+      "env": "production",
+       "costCentre": "1234",
+       "applicationName": "some-app",
+       "items": {
+          "GITHUB_TOKEN": "WOAH",
+          "AWS_ACCESS_KEY_ID": "OMG",
+          "AWS_SECRET_ACCESS_KEY": "OH NO"
+      }
+   }
    ```
 
 #### Using `mvnw`
@@ -81,16 +86,6 @@ $ ./mvnw -ntp clean verify -U
         "body": "{ \"env\": \"production\", \"costCentre\": \"1234\", \"applicationName\": \"some-app\", \"items\": { \"GITHUB_TOKEN\": \"WOAH\", \"AWS_ACCESS_KEY_ID\": \"OMG\", \"AWS_SECRET_ACCESS_KEY\": \"OH NO\" } }"
       }'
     ```
-```shell
-curl --location --request POST 'http://localhost:8080' \
-   --header 'Content-Type: application/json' \
-   --data-raw '{
-        "httpMethod": "GET",
-        "pathParameters": {
-          "proxy": "production-1234-someapp"
-        }
-      }'
-```   
 
    The service responds
    ```json
@@ -451,8 +446,11 @@ Now that the setup is done you can deploy to AWS.
    the [github action](.github/workflows/release.yml) will start and a deployment to AWS
    environment.
 2. Test via curl
-    ```shell
-   $ curl --location --request POST 'https://lmk0qo0xrl.execute-api.ap-southeast-2.amazonaws.com/dev/' \
+
+POST
+
+```shell
+   $ curl --location --request POST 'https://{apiid}.execute-api.ap-southeast-2.amazonaws.com/dev/' \
     --header 'Content-Type: application/json' \
     --data-raw '{
         "env": "production",
@@ -464,6 +462,12 @@ Now that the setup is done you can deploy to AWS.
             "AWS_SECRET_ACCESS_KEY": "OH NO"
           }
       }'
-    ```
+```
+
+GET
+
+   ```shell
+     curl --request GET 'https://{apiid}.execute-api.ap-southeast-2.amazonaws.com/dev/production-1234-someapp'
+   ```   
 3. Et voila! It runs with 500 ms for cold start.
 

@@ -18,7 +18,6 @@
 
 package com.coffeebeans.springnativeawslambda;
 
-import java.util.List;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.coffeebeans.springnativeawslambda.model.Secret;
@@ -29,18 +28,21 @@ import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.aot.hint.TypeReference;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
+
 public class ReflectionRuntimeHints implements RuntimeHintsRegistrar {
 
-  @Override
-  public void registerHints(final RuntimeHints hints, @Nullable final ClassLoader classLoader) {
-    final List<TypeReference> typeReferences = List.of(
-        TypeReference.of(DateTime.class),
-        TypeReference.of(Secret.class),
-        TypeReference.of(APIGatewayProxyResponseEvent.class),
-        TypeReference.of(APIGatewayProxyRequestEvent.class),
-        TypeReference.of(APIGatewayProxyRequestEvent.ProxyRequestContext.class)
-    );
+    @Override
+    public void registerHints(final RuntimeHints hints, @Nullable final ClassLoader classLoader) {
+        final List<TypeReference> typeReferences = List.of(
+                TypeReference.of(DateTime.class),
+                TypeReference.of(Secret.class),
+                TypeReference.of(APIGatewayProxyResponseEvent.class),
+                TypeReference.of(APIGatewayProxyRequestEvent.class),
+                TypeReference.of(APIGatewayProxyRequestEvent.ProxyRequestContext.class),
+                TypeReference.of(APIGatewayProxyRequestEvent.RequestIdentity.class)
+        );
 
-    hints.reflection().registerTypes(typeReferences, builder -> builder.withMembers(MemberCategory.values()));
-  }
+        hints.reflection().registerTypes(typeReferences, builder -> builder.withMembers(MemberCategory.values()));
+    }
 }

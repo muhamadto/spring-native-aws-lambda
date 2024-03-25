@@ -21,17 +21,15 @@ package com.coffeebeans.springnativeawslambda.infra;
 import io.sadpipers.cdk.type.KebabCaseString;
 import io.sadpipers.cdk.type.SafeString;
 import io.sandpipers.cdk.core.AbstractEnvironment;
+import io.sandpipers.cdk.core.construct.BaseStack;
 import io.sandpipers.cdk.core.construct.dynamodb.TableV2;
 import io.sandpipers.cdk.core.construct.dynamodb.TableV2.TableProps;
 import io.sandpipers.cdk.core.construct.lambda.CustomRuntime2023Function;
 import io.sandpipers.cdk.core.construct.lambda.CustomRuntime2023Function.CustomRuntime2023FunctionProps;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import software.amazon.awscdk.DefaultStackSynthesizer;
 import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.RemovalPolicy;
-import software.amazon.awscdk.Stack;
-import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.Resource;
 import software.amazon.awscdk.services.apigateway.StageOptions;
@@ -51,7 +49,7 @@ import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
 import static software.amazon.awscdk.services.iam.ManagedPolicy.fromAwsManagedPolicyName;
 import static software.amazon.awscdk.services.lambda.Code.fromAsset;
 
-public class SpringNativeAwsFunctionStack extends Stack {
+public class SpringNativeAwsFunctionStack extends BaseStack {
 
   private static final int LAMBDA_FUNCTION_TIMEOUT_IN_SECONDS = 3;
   private static final int LAMBDA_FUNCTION_MEMORY_SIZE = 512;
@@ -63,8 +61,7 @@ public class SpringNativeAwsFunctionStack extends Stack {
       @NotNull final AbstractEnvironment environment,
       @NotBlank final String lambdaCodePath,
       @NotBlank final String stage) {
-    super(app, "SpringNativeAwsFunctionStack",
-        StackProps.builder().synthesizer(DefaultStackSynthesizer.Builder.create().qualifier("cbcore").build()).build());
+    super(app, environment);
 
     final List<IManagedPolicy> managedPolicies =
         List.of(fromAwsManagedPolicyName("service-role/AWSLambdaBasicExecutionRole"));
