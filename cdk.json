@@ -1,3 +1,6 @@
 {
-  "app": "./mvnw exec:java -pl spring-native-aws-service-infra -Dexec.mainClass=com.coffeebeans.springnativeawslambda.infra.Application"
+  "app": "./mvnw --settings /Users/muhammad/.m2/settings-nonqantas.xml exec:java -pl spring-native-aws-service-infra -Dexec.mainClass=com.coffeebeans.springnativeawslambda.infra.Application",
+  "context": {
+    "@aws-cdk/core:bootstrapQualifier": "cbcore"
+  }
 }
