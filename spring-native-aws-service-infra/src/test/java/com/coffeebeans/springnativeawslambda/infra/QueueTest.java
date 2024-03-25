@@ -20,18 +20,18 @@ package com.coffeebeans.springnativeawslambda.infra;
 
 import org.junit.jupiter.api.Test;
 
-import static com.coffeebeans.cdk.assertion.CDKStackAssert.assertThat;
-import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_COST_CENTRE;
+import static io.sandpipers.cdk.assertion.CDKStackAssert.assertThat;
 
-class TopicTest extends TemplateSupport {
+class QueueTest extends TemplateSupport {
 
     public static final String TEST = "test";
 
     @Test
     void should_have_dead_letter_topic() {
         assertThat(template)
-                .containsTopic("spring-native-aws-function-dead-letter-topic")
-                .hasTag("COST_CENTRE", KEY_COST_CENTRE)
-                .hasTag("ENV", TEST);
+                .containsQueue("^LambdaDeadLetterQueue[A-Z0-9]{8}$")
+                .hasTag("COST_CENTRE", "cbcore")
+                .hasTag("ENVIRONMENT", TEST)
+                .hasTag("APPLICATION_NAME", "spring-native-aws-function");
     }
 }

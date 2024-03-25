@@ -23,10 +23,6 @@ public class Secret implements Serializable {
 
   private Map<String, String> items;
 
-  public String getPartitionKey() {
-    return env + costCentre + applicationName;
-  }
-
   public static Secret of(final com.coffeebeans.springnativeawslambda.model.Secret secretModel) {
     final String env = secretModel.getEnv();
     final String costCentre = secretModel.getCostCentre();

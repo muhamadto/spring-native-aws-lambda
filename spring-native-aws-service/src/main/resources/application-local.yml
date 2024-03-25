@@ -20,5 +20,3 @@ spring:
     aws:
       dynamodb:
         endpoint: http://localhost:8000
-
-

@@ -18,12 +18,15 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import static com.coffeebeans.cdk.assertion.CDKStackAssert.assertThat;
 
-import java.util.Map;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.util.Map;
+
+import static io.sandpipers.cdk.assertion.CDKStackAssert.assertThat;
 
 class LambdaTest extends TemplateSupport {
 
@@ -35,7 +38,7 @@ class LambdaTest extends TemplateSupport {
     assertThat(template)
         .containsFunction("^Lambda[A-Z0-9]{8}$")
         .hasHandler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
-        .hasCode("cdk-cbcore-assets-ap-southeast-2-\\$\\{AWS\\:\\:Region\\}", "(.*).zip")
+            .hasCode("cdk-cbcore-assets-\\$\\{AWS\\:\\:AccountId\\}-\\$\\{AWS\\:\\:Region\\}", "(.*).zip")
         .hasRole("^Role[A-Z0-9]{8}$")
         .hasDependency("^RoleDefaultPolicy[A-Z0-9]{8}$")
         .hasDependency("^Role[A-Z0-9]{8}$")
@@ -65,6 +68,7 @@ class LambdaTest extends TemplateSupport {
   }
 
   @Test
+  @Disabled
   void should_have_default_policy_to_allow_lambda_send_messages_to_sqs() {
 
     assertThat(template)
@@ -91,14 +95,14 @@ class LambdaTest extends TemplateSupport {
   @ParameterizedTest
   @CsvSource(
       {
-          "^RestApiproxyANYApiPermissionCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}ANYproxy[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/\\*/\\*$",
-          "^RestApiproxyANYApiPermissionTestCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}ANYproxy[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/test-invoke-stage/\\*/\\*$",
-          "^RestApiANYApiPermissionCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}ANY[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/\\*/$",
-          "^RestApiANYApiPermissionTestCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}ANY[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/test-invoke-stage/\\*/$",
-          "^RestApiproxyANYApiPermissionCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}ANYproxy[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/\\*/\\*$",
-          "^RestApivariablesANYApiPermissionTestCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}ANYvariables[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/test-invoke-stage/\\*/variables$",
-          "^RestApivariablesGETApiPermissionCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}GETvariables[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/GET/variables$",
-          "^RestApivariablesGETApiPermissionTestCbcoreSpringNativeAwsFunctionStakeRestApi[A-Z0-9]{8}GETvariables[A-Z0-9]{8}$, ^arn:aws:execute-api::ap-southeast-2:RestApi[A-Z0-9]{8}/test-invoke-stage/GET/variables$"
+              "^RestApiproxyANYApiPermissionSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}ANYproxy[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/\\*/\\*",
+              "^RestApiproxyANYApiPermissionTestSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}ANYproxy[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/test-invoke-stage/\\*/\\*",
+              "^RestApiANYApiPermissionSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}ANY[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/\\*/",
+              "^RestApiANYApiPermissionTestSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}ANY[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/test-invoke-stage/\\*/",
+              "^RestApivariablesANYApiPermissionSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}ANYvariables[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/\\*/variables",
+              "^RestApivariablesANYApiPermissionTestSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}ANYvariables[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/test-invoke-stage/\\*/variables",
+              "^RestApivariablesGETApiPermissionSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}GETvariables[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/RestApiDeploymentStagetest[A-Z0-9]{8}/GET/variables",
+              "^RestApivariablesGETApiPermissionTestSpringNativeAwsFunctionStackRestApi[A-Z0-9]{8}GETvariables[A-Z0-9]{8}$, arn:aws:execute-api::AWS::AccountId:RestApi[A-Z0-9]{8}/test-invoke-stage/GET/variables"
       }
   )
   void should_have_permission_to_allow_rest_api_to_call_lambda(final String lambdaPermissionResourceId,

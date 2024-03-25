@@ -18,21 +18,20 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
+import io.sadpipers.cdk.type.SafeString;
+import io.sandpipers.cdk.core.AbstractApp;
+import org.jetbrains.annotations.NotNull;
+import software.amazon.awscdk.Tags;
+
+import java.util.Map;
+import java.util.Objects;
+
 import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_APPLICATION_VALUE;
 import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
 import static com.coffeebeans.springnativeawslambda.infra.Environment.COFFEE_BEANS_DEV_111111111111_AP_SOUTHEAST_2;
 import static com.coffeebeans.springnativeawslambda.infra.Environment.COFFEE_BEANS_PRD_111111111111_AP_SOUTHEAST_2;
 import static com.coffeebeans.springnativeawslambda.infra.TagUtils.createTags;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static lombok.AccessLevel.PRIVATE;
-
-import com.coffeebeans.cdk.core.AbstractApp;
-import com.coffeebeans.cdk.core.type.SafeString;
-import java.util.Map;
-import java.util.Objects;
-import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import software.amazon.awscdk.Tags;
 
 public final class Application extends AbstractApp {
   private static final String ENVIRONMENT_NAME_DEV = "dev";

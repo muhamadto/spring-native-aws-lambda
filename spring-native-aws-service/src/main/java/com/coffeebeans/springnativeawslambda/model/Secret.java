@@ -50,7 +50,23 @@ public class Secret {
   private Map<String, String> items;
 
   public String getId() {
-    return "%s-%s-%s".formatted(env, costCentre, applicationName).toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+    final String env = this.env.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+    final String costCentre = this.costCentre.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+    final String applicationName = this.applicationName.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+
+    return "%s-%s-%s".formatted(env, costCentre, applicationName);
   }
 
+  public static Secret of(final com.coffeebeans.springnativeawslambda.entity.Secret secretEntity) {
+    final String env = secretEntity.getEnv();
+    final String costCentre = secretEntity.getCostCentre();
+    final String applicationName = secretEntity.getApplicationName();
+    return Secret.builder()
+        .env(env)
+        .costCentre(costCentre)
+        .applicationName(applicationName)
+        .items(secretEntity.getItems())
+        .id(secretEntity.getPartitionKey())
+        .build();
+  }
 }

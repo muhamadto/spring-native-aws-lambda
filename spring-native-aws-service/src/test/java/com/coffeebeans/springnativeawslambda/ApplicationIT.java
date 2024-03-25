@@ -73,4 +73,20 @@ class ApplicationIT {
         .isEqualTo(objectMapper.writeValueAsString(response));
 
   }
+
+  @Test
+  void should_return_405() throws JsonProcessingException {
+
+    final APIGatewayProxyRequestEvent request = new APIGatewayProxyRequestEvent()
+        .withBody("\"name\":\"Coffeebeans\"}")
+        .withHttpMethod("PUT");
+
+    final APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
+        .withStatusCode(405)
+        .withBody("{\"message\": \"Method not allowed. Supported methods [POST, GET]\",\"errorCode\": \"METHOD_NOT_ALLOWED\"}");
+
+    assertThat(aws.exchange(objectMapper.writeValueAsString(request)).getPayload())
+        .isEqualTo(objectMapper.writeValueAsString(response));
+
+  }
 }

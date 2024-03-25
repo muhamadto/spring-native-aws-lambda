@@ -17,8 +17,8 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import com.coffeebeans.cdk.core.AbstractCostCentre;
-import com.coffeebeans.cdk.core.type.AlphanumericString;
+import io.sadpipers.cdk.type.AlphanumericString;
+import io.sandpipers.cdk.core.AbstractCostCentre;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

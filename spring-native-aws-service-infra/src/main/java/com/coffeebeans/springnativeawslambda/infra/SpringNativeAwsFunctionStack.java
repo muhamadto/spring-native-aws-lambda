@@ -18,20 +18,13 @@
 
 package com.coffeebeans.springnativeawslambda.infra;
 
-import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
-import static software.amazon.awscdk.services.iam.ManagedPolicy.fromAwsManagedPolicyName;
-import static software.amazon.awscdk.services.lambda.Code.fromAsset;
-
-import com.coffeebeans.cdk.core.AbstractEnvironment;
-import com.coffeebeans.cdk.core.construct.dynamodb.TableV2;
-import com.coffeebeans.cdk.core.construct.dynamodb.TableV2.TableProps;
-import com.coffeebeans.cdk.core.construct.lambda.CustomRuntime2023Function;
-import com.coffeebeans.cdk.core.construct.lambda.CustomRuntime2023Function.CustomRuntime2023FunctionProps;
-import com.coffeebeans.cdk.core.type.KebabCaseString;
-import com.coffeebeans.cdk.core.type.SafeString;
-import java.util.List;
-import java.util.Map;
-import javax.validation.constraints.NotBlank;
+import io.sadpipers.cdk.type.KebabCaseString;
+import io.sadpipers.cdk.type.SafeString;
+import io.sandpipers.cdk.core.AbstractEnvironment;
+import io.sandpipers.cdk.core.construct.dynamodb.TableV2;
+import io.sandpipers.cdk.core.construct.dynamodb.TableV2.TableProps;
+import io.sandpipers.cdk.core.construct.lambda.CustomRuntime2023Function;
+import io.sandpipers.cdk.core.construct.lambda.CustomRuntime2023Function.CustomRuntime2023FunctionProps;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.DefaultStackSynthesizer;
@@ -49,6 +42,14 @@ import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.iam.ServicePrincipal;
 import software.amazon.awscdk.services.lambda.AssetCode;
 import software.amazon.awscdk.services.lambda.Function;
+
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Map;
+
+import static com.coffeebeans.springnativeawslambda.infra.Constants.KEY_ENV;
+import static software.amazon.awscdk.services.iam.ManagedPolicy.fromAwsManagedPolicyName;
+import static software.amazon.awscdk.services.lambda.Code.fromAsset;
 
 public class SpringNativeAwsFunctionStack extends Stack {
 

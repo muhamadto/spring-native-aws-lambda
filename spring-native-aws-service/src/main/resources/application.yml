@@ -36,5 +36,4 @@ spring:
       dynamodb:
         enabled: true
         endpoint: https://dynamodb.ap-southeast-2.amazonaws.com
-        table-prefix: dev-coffeebeans-
 debug: false

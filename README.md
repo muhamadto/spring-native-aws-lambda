@@ -77,9 +77,21 @@ $ ./mvnw -ntp clean verify -U
    $ curl --location --request POST 'http://localhost:8080' \
    --header 'Content-Type: application/json' \
    --data-raw '{
+        "httpMethod": "POST",
         "body": "{ \"env\": \"production\", \"costCentre\": \"1234\", \"applicationName\": \"some-app\", \"items\": { \"GITHUB_TOKEN\": \"WOAH\", \"AWS_ACCESS_KEY_ID\": \"OMG\", \"AWS_SECRET_ACCESS_KEY\": \"OH NO\" } }"
       }'
     ```
+```shell
+curl --location --request POST 'http://localhost:8080' \
+   --header 'Content-Type: application/json' \
+   --data-raw '{
+        "httpMethod": "GET",
+        "pathParameters": {
+          "proxy": "production-1234-someapp"
+        }
+      }'
+```   
+
    The service responds
    ```json
    {
