@@ -1,4 +1,4 @@
-# spring-native-aws-lambda
+# spring-native-aws-function
 
 [![CodeQL](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/codeql-analysis.yml)
 [![Build](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/spring-native-aws-lambda/actions/workflows/build.yml)
@@ -43,12 +43,17 @@ $ ./mvnw -ntp clean verify -U
     ```
    The service responds
    ```json
-   [
-       {
-           "name": "CoffeeBeans",
-           "saved": true
-       }
-   ]
+   {
+      "id": "production1234someapp",
+      "env": "production",
+       "costCentre": "1234",
+       "applicationName": "some-app",
+       "items": {
+          "GITHUB_TOKEN": "WOAH",
+          "AWS_ACCESS_KEY_ID": "OMG",
+          "AWS_SECRET_ACCESS_KEY": "OH NO"
+      }
+   }
    ```
 
 #### Using `mvnw`
@@ -56,8 +61,8 @@ $ ./mvnw -ntp clean verify -U
 1. Run the following commands
     ```shell
     $ export SPRING_PROFILES_ACTIVE=local
-    $ ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function
-    $ ./spring-native-aws-lambda-function/target/spring-native-aws-lambda-function
+    $ ./mvnw -ntp clean -DskipTests -Pnative native:compile package -pl spring-native-aws-service 
+    $ ./spring-native-aws-service/target/spring-native-aws-service
     ```
    The service starts in less than 100 ms
    ```shell
@@ -77,17 +82,24 @@ $ ./mvnw -ntp clean verify -U
    $ curl --location --request POST 'http://localhost:8080' \
    --header 'Content-Type: application/json' \
    --data-raw '{
-        "body": "{ \"name\": \"CoffeeBeans\" }"
+        "httpMethod": "POST",
+        "body": "{ \"env\": \"production\", \"costCentre\": \"1234\", \"applicationName\": \"some-app\", \"items\": { \"GITHUB_TOKEN\": \"WOAH\", \"AWS_ACCESS_KEY_ID\": \"OMG\", \"AWS_SECRET_ACCESS_KEY\": \"OH NO\" } }"
       }'
     ```
+
    The service responds
    ```json
-   [
-       {
-           "name": "CoffeeBeans",
-           "saved": true
-       }
-   ]
+   {
+      "id": "production1234someapp",
+      "env": "production",
+       "costCentre": "1234",
+       "applicationName": "some-app",
+       "items": {
+          "GITHUB_TOKEN": "WOAH",
+          "AWS_ACCESS_KEY_ID": "OMG",
+          "AWS_SECRET_ACCESS_KEY": "OH NO"
+      }
+   }
    ```
 
 ### Github action
@@ -134,7 +146,7 @@ and the following trust relationship
                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
             },
             "StringLike": {
-               "token.actions.githubusercontent.com:sub": "repo:{github-account-or-org}/spring-native-aws-lambda:*"
+               "token.actions.githubusercontent.com:sub": "repo:{github-account-or-org}/spring-native-aws-service:*"
             }
          }
       }
@@ -150,67 +162,151 @@ and the following trust relationship
    "Version": "2012-10-17",
    "Statement": [
       {
-         "Sid": "ECRPermissions",
+         "Sid": "S3Permissions",
          "Effect": "Allow",
-         "Action": [
-            "ecr:CreateRepository",
-            "ecr:DeleteRepository",
-            "ecr:SetRepositoryPolicy",
-            "ecr:DescribeRepositories"
-         ],
-         "Resource": "arn:aws:ecr:{aws-region}:{aws-account-number}:repository/cdk-{qualifier}-container-assets-{aws-account-number}-{aws-region}"
-      },
-      {
-         "Sid": "IAMPermissions",
-         "Effect": "Allow",
-         "Action": [
-            "iam:GetRole",
-            "iam:CreateRole",
-            "iam:DeleteRole",
-            "iam:AttachRolePolicy",
-            "iam:PutRolePolicy",
-            "iam:DetachRolePolicy",
-            "iam:DeleteRolePolicy"
-         ],
+         "Action": "s3:GetObject",
          "Resource": [
-            "arn:aws:iam::{aws-account-number}:role/cdk-{qualifier}-lookup-role-{aws-account-number}-{aws-region}",
-            "arn:aws:iam::{aws-account-number}:role/cdk-{qualifier}-file-publishing-role-{aws-account-number}-{aws-region}",
-            "arn:aws:iam::{aws-account-number}:role/cdk-{qualifier}-image-publishing-role-{aws-account-number}-{aws-region}",
-            "arn:aws:iam::{aws-account-number}:role/cdk-{qualifier}-cfn-exec-role-{aws-account-number}-{aws-region}",
-            "arn:aws:iam::{aws-account-number}:role/cdk-{qualifier}-deploy-role-{aws-account-number}-{aws-region}"
+            "arn:aws:s3:::cdk-cbcore-assets-718055627712-ap-southeast-2",
+            "arn:aws:s3:::cdk-cbcore-assets-718055627712-ap-southeast-2/*"
          ]
       },
       {
-         "Sid": "S3Permissions",
+         "Sid": "AGWPermissions",
          "Effect": "Allow",
          "Action": [
-            "s3:PutBucketPublicAccessBlock",
-            "s3:CreateBucket",
-            "s3:DeleteBucketPolicy",
-            "s3:PutEncryptionConfiguration",
-            "s3:GetEncryptionConfiguration",
-            "s3:PutBucketPolicy",
-            "s3:DeleteBucket",
-            "s3:PutBucketVersioning"
+            "apigateway:POST",
+            "apigateway:DELETE",
+            "apigateway:GET",
+            "apigateway:PATCH",
+            "apigateway:PUT"
          ],
          "Resource": [
-            "arn:aws:s3:::{qualifier}-cdk-bucket"
+            "arn:aws:apigateway:ap-southeast-2::/restapis",
+            "arn:aws:apigateway:ap-southeast-2::/restapis/*",
+            "arn:aws:apigateway:ap-southeast-2::/account",
+            "arn:aws:apigateway:ap-southeast-2::/tags/arn:aws:apigateway:ap-southeast-2::/restapis/*"
+         ]
+      },
+      {
+         "Sid": "SNSPermissions",
+         "Effect": "Allow",
+         "Action": [
+            "SNS:CreateTopic",
+            "SNS:DeleteTopic",
+            "SNS:Subscribe",
+            "SNS:GetTopicAttributes",
+            "SNS:ListSubscriptionsByTopic",
+            "SNS:Unsubscribe",
+            "SNS:TagResource",
+            "SNS:UntagResource"
+         ],
+         "Resource": [
+            "arn:aws:sqs:ap-southeast-2:718055627712:SpringNativeAwsFunctionStack-LambdaDeadLetterTopic*"
+         ]
+      },
+      {
+         "Sid": "SQSPermissions",
+         "Effect": "Allow",
+         "Action": [
+            "sqs:GetQueueAttributes",
+            "sqs:CreateQueue",
+            "sqs:DeleteQueue",
+            "sqs:GetQueueUrl",
+            "sqs:SetQueueAttributes",
+            "sqs:ListQueues"
+         ],
+         "Resource": [
+            "arn:aws:sqs:ap-southeast-2:718055627712:SpringNativeAwsFunctionStack-LambdaDeadLetterQueue*"
+         ]
+      },
+      {
+         "Sid": "LambdaPermissions",
+         "Effect": "Allow",
+         "Action": [
+            "lambda:GetFunction",
+            "lambda:ListFunctions",
+            "lambda:DeleteFunction",
+            "lambda:CreateFunction",
+            "lambda:TagResource",
+            "lambda:AddPermission",
+            "lambda:RemovePermission",
+            "lambda:PutFunctionEventInvokeConfig",
+            "lambda:UpdateFunctionEventInvokeConfig",
+            "lambda:DeleteFunctionEventInvokeConfig",
+            "lambda:UpdateFunctionCode",
+            "lambda:ListTags",
+            "lambda:UpdateFunctionConfiguration"
+         ],
+         "Resource": [
+            "arn:aws:lambda:ap-southeast-2:718055627712:function:SpringNativeAwsFunctionStack*"
          ]
       },
       {
          "Sid": "SSMPermissions",
          "Effect": "Allow",
          "Action": [
-            "ssm:DeleteParameter",
-            "ssm:AddTagsToResource",
-            "ssm:GetParameters",
-            "ssm:PutParameter"
+            "ssm:GetParameters"
          ],
-         "Resource": "arn:aws:ssm:{aws-region}:{aws-account-number}:parameter/cdk-bootstrap/{qualifier}/version"
+         "Resource": [
+            "arn:aws:ssm:ap-southeast-2:718055627712:parameter/cdk-bootstrap/cbcore/version"
+         ]
+      },
+      {
+         "Sid": "DynamoDBPermissions",
+         "Effect": "Allow",
+         "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:CreateTable",
+            "dynamodb:DeleteTable",
+            "dynamodb:TagResource",
+            "dynamodb:UntagResource",
+            "dynamodb:ListTagsOfResource",
+            "dynamodb:DescribeTimeToLive",
+            "dynamodb:DescribeContributorInsights",
+            "dynamodb:DescribeContinuousBackups",
+            "dynamodb:DescribeKinesisStreamingDestination"
+         ],
+         "Resource": [
+            "arn:aws:dynamodb:ap-southeast-2:718055627712:table/secrets",
+            "arn:aws:dynamodb:ap-southeast-2:718055627712:table/SpringNativeAwsFunction*"
+         ]
+      },
+      {
+         "Sid": "IAMPermissions",
+         "Effect": "Allow",
+         "Action": [
+            "iam:PassRole",
+            "iam:GetRole",
+            "iam:GetRolePolicy",
+            "iam:CreateRole",
+            "iam:PutRolePolicy",
+            "iam:DeleteRole",
+            "iam:DeleteRolePolicy",
+            "iam:AttachRolePolicy",
+            "iam:DetachRolePolicy"
+         ],
+         "Resource": [
+            "arn:aws:iam::718055627712:role/SpringNativeAwsFunction*"
+         ]
+      },
+      {
+         "Sid": "CFNPermissions",
+         "Effect": "Allow",
+         "Action": "cloudformation:DescribeStacks",
+         "Resource": "arn:aws:cloudformation:ap-southeast-2:718055627712:stack/cbcore-example-function-dev-stack/*"
+      },
+      {
+         "Sid": "ApplicationAutoscalingPermissions",
+         "Effect": "Allow",
+         "Action": [
+            "application-autoscaling:DeregisterScalableTarget"
+         ],
+         "Resource": [
+            "arn:aws:application-autoscaling:ap-southeast-2:718055627712:scalable-target/*"
+         ]
       }
    ]
-}
-```
+}```
 
 4. Create an IAM managed policy `CoffeebeansCoreCdkExecutionAccess` to be used
    by `cdk-{qualifier}-cfn-exec-role-{aws-account-number}-{aws-region}` which is gonna be created by
@@ -259,7 +355,7 @@ and the following trust relationship
             "SNS:UntagResource"
          ],
          "Resource": [
-            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-lambda-function-dead-letter-topic"
+            "arn:aws:sns:{aws-region}:{aws-account-number}:spring-native-aws-function-dead-letter-topic"
          ]
       },
       {
@@ -281,8 +377,8 @@ and the following trust relationship
             "lambda:UpdateFunctionConfiguration"
          ],
          "Resource": [
-            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-lambda-function",
-            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-lambda-function:$LATEST"
+            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-function",
+            "arn:aws:lambda:{aws-region}:{aws-account-number}:function:spring-native-aws-function:$LATEST"
          ]
       },
       {
@@ -310,9 +406,9 @@ and the following trust relationship
             "iam:DetachRolePolicy"
          ],
          "Resource": [
-            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-springnativeawslambdafun-*",
-            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-springnativeawslambdares-4FVJBBHF9EL2",
-            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-lambda-function-rest-api/CloudWatchRole"
+            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-service-springnativeawslambdafun-*",
+            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-service-springnativeawslambdares-4FVJBBHF9EL2",
+            "arn:aws:iam::{aws-account-number}:role/spring-native-aws-function-rest-api/CloudWatchRole"
          ]
       },
       {
@@ -346,15 +442,32 @@ in step 4
 Now that the setup is done you can deploy to AWS.
 
 1. Create a new release in
-   Github [releases page](https://github.com/muhamadto/spring-native-aws-lambda/releases),
+   Github [releases page](https://github.com/muhamadto/spring-native-aws-service/releases),
    the [github action](.github/workflows/release.yml) will start and a deployment to AWS
    environment.
 2. Test via curl
-    ```shell
-   $ curl --location --request POST 'https://{api-id}.execute-api.ap-southeast-2.amazonaws.com/dev/name' \
-   --header 'Content-Type: application/json' \
-   --data-raw '{
-        "name": "CoffeeBeans"
+
+POST
+
+```shell
+   $ curl --location --request POST 'https://{apiid}.execute-api.ap-southeast-2.amazonaws.com/dev/' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "env": "production",
+        "costCentre": "1234",
+        "applicationName": "some-app",
+        "items": {
+            "GITHUB_TOKEN": "WOAH",
+            "AWS_ACCESS_KEY_ID": "OMG",
+            "AWS_SECRET_ACCESS_KEY": "OH NO"
+          }
       }'
-    ```
+```
+
+GET
+
+   ```shell
+     curl --request GET 'https://{apiid}.execute-api.ap-southeast-2.amazonaws.com/dev/production-1234-someapp'
+   ```   
 3. Et voila! It runs with 500 ms for cold start.
+

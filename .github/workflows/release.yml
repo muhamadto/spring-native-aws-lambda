@@ -51,6 +51,10 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v22
+        with:
+          servers: '[{ "id": "github", "password": "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" }]'
       - name: Build with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,8 +62,8 @@ jobs:
           ENV: ${{ env.ENV }}
           COST_CENTRE: ${{ env.COST_CENTRE }}
         run: |
-          ./mvnw -ntp clean verify -DskipTests -pl spring-native-aws-lambda-infra
-          ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-lambda-function
+          ./mvnw -ntp clean verify -DskipTests -pl spring-native-aws-service-infra
+          ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl spring-native-aws-service
       - name: cdk diff
         uses: muhamadto/aws-cdk-github-actions@v5
         with:
