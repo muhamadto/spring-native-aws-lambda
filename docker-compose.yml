@@ -15,8 +15,8 @@
 
 version: "3.9"
 services:
-  spring-native-aws-lambda-function-infra:
-    image: muhamadto/spring-native-amazonlinux2-builder:21-amazonlinux2-awscliv2
+  spring-native-aws-function-infra:
+    image: ghcr.io/muhamadto/spring-native-amazonlinux2-builder:21-amazonlinux2-awscliv2
     volumes:
       - ./:/app
       - ${M2_REPO}:/home/worker/.m2
@@ -29,7 +29,9 @@ services:
       AWS_SECRET_ACCESS_KEY: local
       AWS_ENDPOINT_URL: http://localstack:4566
       BUILD_ARTIFACT: 'true'
-      FUNCTION_NAME: spring-native-aws-lambda-function
+      FUNCTION_NAME: spring-native-aws-service
+      SPRING_MAIN_WEBAPPLICATIONTYPE: servlet
+      SPRING_CLOULD_AWS_DYNAMODB_ENDPOINT: http://localstack:4566
       STAGE: compose
       MAVEN_OPTS: |
         -DskipTests=true
@@ -45,7 +47,7 @@ services:
       - -c
     command: |
       '
-      function package_spring_native_lambda() {
+      function package_spring_native_function() {
           if [ "$$BUILD_ARTIFACT" = "true" ]; then
             ./mvnw -ntp clean -Pnative -DskipTests native:compile package -pl "$$FUNCTION_NAME"
           else
@@ -61,7 +63,7 @@ services:
 
       print_info_message "divider" "Package GraalVM function" &&
       
-      package_spring_native_lambda &&
+      package_spring_native_function &&
 
       print_info_message "divider" "Creating LAMBDA function" &&
       lambda_create_function "$$FUNCTION_NAME" provided.al2023 512 ./"$$FUNCTION_NAME"/target/"$$FUNCTION_NAME"-native-zip.zip "$$FUNCTION_NAME" &&

@@ -7,6 +7,6 @@
 
 <!--- Please include the following in your Pull Request when applicable: -->
 
-- [ ] Describe what you did in the pull request description
+- [ ] Describe what you did in the pull secret description
 - [ ] Add Unit and Integration Tests - at least 80% unit tests for new code.
 - [ ] Added or updated documentation
